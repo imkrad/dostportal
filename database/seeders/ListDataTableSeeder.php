@@ -224,7 +224,7 @@ class ListDataTableSeeder extends Seeder
             29 => 
             array (
                 'id' => 30,
-                'name' => 'Laborer Foreman',
+                'name' => 'Labor Foreman',
                 'type' => 'Special Order',
                 'is_active' => 1,
             ),
@@ -252,7 +252,7 @@ class ListDataTableSeeder extends Seeder
             33 => 
             array (
                 'id' => 34,
-                'name' => 'Agricultural Technician I',
+                'name' => 'Agricultural Technician II',
                 'type' => 'Special Order',
                 'is_active' => 1,
             ),
@@ -266,7 +266,7 @@ class ListDataTableSeeder extends Seeder
             35 => 
             array (
                 'id' => 36,
-                'name' => 'Laboratory General Foreman',
+                'name' => 'Labor General Foreman',
                 'type' => 'Special Order',
                 'is_active' => 1,
             ),
@@ -1115,6 +1115,13 @@ class ListDataTableSeeder extends Seeder
                 'id' => 218,
                 'name' => 'S&T Fellow V',
                 'type' => 'Administrative Order',
+                'is_active' => 1,
+            ),
+            157 => 
+            array (
+                'id' => 219,
+                'name' => 'Information Systems Researcher II',
+                'type' => 'Special Order',
                 'is_active' => 1,
             ),
         ));

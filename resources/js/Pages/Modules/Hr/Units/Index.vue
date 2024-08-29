@@ -1,8 +1,8 @@
 <template>
-    <PageHeader title="Employees" pageTitle="List" />
+    <PageHeader title="Units" pageTitle="List" />
     <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
         <div class="file-manager-content w-100 p-4 pb-0" style="height: calc(100vh - 180px); overflow: auto;" ref="box">
-            <!-- <Lists :dropdowns="dropdowns"/> -->
+            <Lists :dropdowns="dropdowns"/>
         </div>
     </div>
 </template>

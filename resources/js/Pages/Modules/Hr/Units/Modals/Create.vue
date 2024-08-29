@@ -3,31 +3,21 @@
         <form class="customform">
             <BRow>
                 <BCol lg="12" class="mt-2">
-                    <InputLabel for="region" value="Position Title (Special Order)" :message="form.errors.laboratory_type"/>
-                    <Multiselect 
-                    :options="dropdowns.specials" 
-                    v-model="form.special_id"
-                    @input="handleInput('special_id')"
-                    :searchable="true" label="name"
-                    placeholder="Select title"/>
+                    <InputLabel value="Name" :message="form.errors.name"/>
+                    <TextInput v-model="form.name" type="text" class="form-control" placeholder="Please enter name" @input="handleInput('name')" :light="true" />
                 </BCol>
                 <BCol lg="12" class="mt-2">
-                    <InputLabel for="region" value="Position Title (Administrative Order)" :message="form.errors.laboratory_type"/>
-                    <Multiselect 
-                    :options="dropdowns.administratives" 
-                    v-model="form.administrative_id"
-                    @input="handleInput('administrative_id')"
-                    :searchable="true" label="name"
-                    placeholder="Select title"/>
+                    <InputLabel value="Short" :message="form.errors.short"/>
+                    <TextInput v-model="form.short" type="text" class="form-control" placeholder="Please enter short" @input="handleInput('short')" :light="true" />
                 </BCol>
                 <BCol lg="12" class="mt-2">
-                    <InputLabel for="region" value="Salary Grade" :message="form.errors.laboratory_type"/>
+                    <InputLabel for="region" value="Unit" :message="form.errors.unit_id"/>
                     <Multiselect 
-                    :options="dropdowns.salaries" 
-                    v-model="form.salary_id"
-                    @input="handleInput('salary_id')"
+                    :options="dropdowns.units" 
+                    v-model="form.unit_id"
+                    @input="handleInput('unit_id')"
                     :searchable="true" label="name"
-                    placeholder="Select Special Order"/>
+                    placeholder="Select Unit"/>
                 </BCol>
                 <BCol lg="12"><hr class="text-muted mt-4 mb-0"/></BCol>
             </BRow>
@@ -52,10 +42,10 @@ export default {
             currentUrl: window.location.origin,
             form: useForm({
                 id: null,
-                special_id: null,
-                administrative_id: null,
-                salary_id: null,
-                option: 'rate'
+                name: null,
+                short: null,
+                unit_id: null,
+                option: 'unit'
             }),
             showModal: false,
             editable: false
@@ -90,9 +80,9 @@ export default {
         edit(data){
             this.editable = true;
             this.form.id = data.id;
-            this.form.special_id = data.special_id;
-            this.form.administrative_id = data.administrative_id;
-            this.form.salary_id = data.salary_id;
+            this.form.name = data.name;
+            this.form.short = data.short;
+            this.form.unit_id = data.unit_id;
             this.showModal = true;
         },
         handleInput(field) {

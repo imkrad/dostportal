@@ -116,6 +116,62 @@ class ListMenusTableSeeder extends Seeder
                 'is_mother' => 1,
                 'is_active' => 1,
             ),
+            7 => 
+            array (
+                'id' => 8,
+                'name' => 'Dashboard',
+                'icon' => 'ri-apps-line',
+                'route' => '/hr',
+                'path' => 'Modules/Hr/Dashboard',
+                'group' => 'Menu',
+                'module' => 'Hr',
+                'order' => 1,
+                'has_child' => 0,
+                'is_mother' => 1,
+                'is_active' => 1,
+            ),
+            8 => 
+            array (
+                'id' => 9,
+                'name' => 'Employees',
+                'icon' => 'ri-team-fill ',
+                'route' => '/hr/employees',
+                'path' => 'Modules/Hr/Employees',
+                'group' => 'Menu',
+                'module' => 'Hr',
+                'order' => 2,
+                'has_child' => 0,
+                'is_mother' => 1,
+                'is_active' => 1,
+            ),
+            9 => 
+            array (
+                'id' => 10,
+                'name' => 'Salary Rates',
+                'icon' => 'ri-apps-line',
+                'route' => '/hr/rates',
+                'path' => 'Modules/Hr/Rates',
+                'group' => 'Menu',
+                'module' => 'Hr',
+                'order' => 3,
+                'has_child' => 0,
+                'is_mother' => 1,
+                'is_active' => 1,
+            ),
+            10 => 
+            array (
+                'id' => 11,
+                'name' => 'Units',
+                'icon' => 'ri-apps-line',
+                'route' => '/hr/units',
+                'path' => 'Modules/Hr/Units',
+                'group' => 'Menu',
+                'module' => 'Hr',
+                'order' => 4,
+                'has_child' => 0,
+                'is_mother' => 1,
+                'is_active' => 1,
+            ),
         ));
 
         
