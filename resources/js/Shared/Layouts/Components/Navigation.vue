@@ -233,7 +233,15 @@ export default {
             </div>
 
             <div class="p-2">
-              <BRow class="g-0">
+              <BRow class="g-0">            
+              <BCol>
+                  <BLink class="dropdown-icon-item" @click="openInNewTab('/support-tickets')">
+                    <img src="@assets/images/apps/laboratory.png" alt="lab"/>
+                    <span>Support Tickets</span>
+                  </BLink>
+                </BCol>
+              </BRow>
+              <BRow class="g-0">            
                 <BCol>
                   <BLink class="dropdown-icon-item" @click="openInNewTab('/dashboard')">
                     <img src="@assets/images/apps/laboratory.png" alt="lab"/>

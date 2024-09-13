@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
 
         \DB::table('users')->insert([
             'username' => 'administrator',
-            'email' => 'kradjumli@gmail.com',
+            'email' => 'dost9ict@gmail.com',
             'password' => bcrypt('123456789'),
             'role' => 'Administrator',
             'is_active' => 1,
@@ -48,5 +48,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ListPositionsTableSeeder::class);
         $this->call(ListDropdownsTableSeeder::class);
         $this->call(ListUnitsTableSeeder::class);
+        $this->call(ListSystemsTableSeeder::class);
     }
 }
