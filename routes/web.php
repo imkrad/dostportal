@@ -8,6 +8,11 @@ Route::middleware(['2fa','auth','verified'])->group(function () {
     Route::resource('/profile', App\Http\Controllers\ProfileController::class);
     Route::resource('/executive', App\Http\Controllers\ExecutiveController::class);
     Route::resource('/hr', App\Http\Controllers\Modules\HrController::class);
+
+
+    //Support Tickets
+    Route::resource('/support-tickets', App\Http\Controllers\Modules\SupportTicketController::class);
+
 });
 
 require __DIR__.'/auth.php';
