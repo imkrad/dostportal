@@ -172,20 +172,7 @@ class ListMenusTableSeeder extends Seeder
                 'is_mother' => 1,
                 'is_active' => 1,
             ),
-            11 => 
-            array (
-                'id' => 12,
-                'name' => 'Support Tickets',
-                'icon' => 'ri-file-line',
-                'route' => '/support-tickets',
-                'path' => 'Portal/SupportTickets',
-                'group' => 'Menu',
-                'module' => 'Suppport-Tickets',
-                'order' => 8,
-                'has_child' => 0,
-                'is_mother' => 1,
-                'is_active' => 1,
-            ),
+
         ));
 
         

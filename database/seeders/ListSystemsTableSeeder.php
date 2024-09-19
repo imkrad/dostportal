@@ -21,12 +21,14 @@ class ListSystemsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'Finance and Administrative Information Management System(FAIMS)',
+                'name' => 'Finance and Administrative Information Management System',
+                'short_name' => 'FAIMS',
             ),
             1 => 
             array (
                 'id' => 2,
-                'name' => 'Customer Relation Management System(CRMS)',
+                'name' => 'Customer Relation Management System',
+                'short_name' => 'CRMS',
             ),
 
   

@@ -14,16 +14,18 @@ return new class extends Migration
         Schema::create('support_tickets', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->integer('system_id')->unsigned()->index();
+            $table->foreign('system_id')->references('id')->on('list_systems');
             $table->integer('requested_by')->unsigned()->index();
             $table->foreign('requested_by')->references('id')->on('users');
             $table->string('request_number');  
             $table->string('dv_number')->nullable();  
-            $table->integer('payee_id')->unsigned()->index();
-            $table->foreign('payee_id')->references('id')->on('payees');
+            $table->string('payee')->nullable(); 
             $table->decimal('amount');  
             $table->string('status'); 
             $table->string('problem_details');  
-            $table->string('corrective_actions')->nullable();  
+            $table->string('corrective_action')->nullable();  
+            $table->boolean('is_closed')->default(0);
             $table->timestamps();
         });
     }

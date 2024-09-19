@@ -240,7 +240,14 @@ export default {
                     <span>Support Tickets</span>
                   </BLink>
                 </BCol>
+                <BCol>
+                  <BLink class="dropdown-icon-item" @click="openInNewTab('/faims')">
+                    <img src="@assets/images/apps/laboratory.png" alt="lab"/>
+                    <span>FAIMS</span>
+                  </BLink>
+                </BCol>
               </BRow>
+              
               <BRow class="g-0">            
                 <BCol>
                   <BLink class="dropdown-icon-item" @click="openInNewTab('/dashboard')">

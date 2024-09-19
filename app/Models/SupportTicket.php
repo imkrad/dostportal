@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ListSystem extends Model
+class SupportTicket extends Model
 {
     use HasFactory;
-    protected $guarded = [];
-    public $timestamps = false;
-
     protected $fillable = [
+        'system_id',
         'requested_by',
         'request_number',
         'dv_number',
@@ -20,5 +18,17 @@ class ListSystem extends Model
         'status',
         'problem_details',
         'corrective_action',
+        'is_closed',
     ];
+
+
+    public function requester()
+    {
+        return $this->belongsTo('App\Models\User', 'requested_by');
+    }
+
+    public function system()
+    {
+        return $this->belongsTo('App\Models\ListSystem', 'system_id');
+    }
 }
