@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('list_systems', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->tinyIncrements('id');
+            $table->increments('id');
             $table->string('name',100);   
+            $table->string('short_name',10);  
             $table->timestamps();
         });
     }

@@ -11,7 +11,13 @@ Route::middleware(['2fa','auth','verified'])->group(function () {
 
 
     //Support Tickets
-    Route::resource('/support-tickets', App\Http\Controllers\Modules\SupportTicketController::class);
+    Route::prefix('support-tickets')->group(function () {
+        Route::controller(App\Http\Controllers\Modules\SupportTicketController::class)->group(function () {
+            Route::get('/','index')->name('support_tickets');
+            Route::post('/create','store')->name('support_ticket_store');
+            Route::put('/update','update')->name('support_ticket_update');
+        });
+    });
 
 });
 
