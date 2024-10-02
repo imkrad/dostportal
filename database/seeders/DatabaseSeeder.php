@@ -49,5 +49,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ListDropdownsTableSeeder::class);
         $this->call(ListUnitsTableSeeder::class);
         $this->call(ListSystemsTableSeeder::class);
+        $this->call(UnitTypesTableSeeder::class);
+        $this->call(ListSectionsTableSeeder::class);
+        $this->call(FundClustersTableSeeder::class);
+        $this->call(PurchaseRequestStatusesTableSeeder::class);
     }
 }

@@ -126,7 +126,6 @@ export default {
             })
             .catch(err => console.log(err));
 
-            console.log('hey',110);
         },
         openCreate(){
             this.$refs.create.show();

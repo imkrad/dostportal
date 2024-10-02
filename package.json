@@ -51,6 +51,8 @@
         "vue-draggable-next": "^2.2.1",
         "vue-flatpickr-component": "^11.0.3",
         "vue3-apexcharts": "^1.4.4",
-        "vuex": "^4.1.0"
+        "vuex": "^4.1.0",
+        "@ckeditor/ckeditor5-build-classic": "^35.4.0",
+        "@ckeditor/ckeditor5-vue": "^4.0.1"
     }
 }

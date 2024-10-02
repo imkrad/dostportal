@@ -58,7 +58,12 @@ class ListDropdownsTableSeeder extends Seeder
                 'others' => 'TOS',
                 'is_active' => 1,
             ),
+
         ));
+
+
+      
+
 
         
     }

@@ -241,7 +241,7 @@ export default {
                   </BLink>
                 </BCol>
                 <BCol>
-                  <BLink class="dropdown-icon-item" @click="openInNewTab('/faims')">
+                  <BLink class="dropdown-icon-item" @click="openInNewTab('/faims/purchase-request')">
                     <img src="@assets/images/apps/laboratory.png" alt="lab"/>
                     <span>FAIMS</span>
                   </BLink>

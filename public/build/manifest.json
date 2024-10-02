@@ -220,12 +220,12 @@
     "src": "public/images/sidebar/img-4.jpg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-CdhozduN.js",
+    "file": "assets/app-DtUdClnB.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
-      "assets/app-DHdwV1tA.css"
+      "assets/app-By3Xs1x8.css"
     ],
     "assets": [
       "assets/logo-sm-BMbbSDmV.png",

@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\FAIMS\Procurement;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ListDropdown extends Model
+class PurchaseRequestStatus extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'name',
-        'classification',
-        'type',
         'color',
-        'others',
-        'is_active',
+        'code',
     ];
+
+
+    
 }

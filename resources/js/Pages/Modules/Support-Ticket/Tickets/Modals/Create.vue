@@ -86,8 +86,10 @@ import Multiselect from "@vueform/multiselect";
 import InputError from '@/Shared/Components/Forms/InputError.vue';
 import InputLabel from '@/Shared/Components/Forms/InputLabel.vue';
 import TextInput from '@/Shared/Components/Forms/TextInput.vue';
+import CKEditor from "@ckeditor/ckeditor5-vue";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
-    components: { InputError, InputLabel, TextInput, Multiselect },
+    components: { InputError, InputLabel, TextInput, Multiselect, ckeditor: CKEditor.component } ,
     props:['dropdowns'],
     data(){
         return {
