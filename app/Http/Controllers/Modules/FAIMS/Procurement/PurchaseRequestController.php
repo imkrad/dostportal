@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Modules\FAIMS\Procurement;
 
 use Illuminate\Http\Request;
 use App\Services\FAIMS\Procurement\PurchaseRequestClass;
+use App\Services\FAIMS\Procurement\QuotationRequestClass;
+use App\Services\FAIMS\Procurement\ViewClass;
 use App\Services\FAIMS\DropdownClass;
 use App\Http\Requests\FAIMS\Procurement\PurchaseRequest;
 use App\Traits\HandlesTransaction;
@@ -14,15 +16,22 @@ class PurchaseRequestController extends Controller
 {
     use HandlesTransaction;
 
-    public function __construct(PurchaseRequestClass $purchase_request, DropdownClass $dropdown){
+    public function __construct(
+        QuotationRequestClass $quotation_request, 
+        PurchaseRequestClass $purchase_request,
+        ViewClass $view, 
+        DropdownClass $dropdown
+    ){
         $this->purchase_request = $purchase_request;
+        $this->quotation_request = $quotation_request;
         $this->dropdown = $dropdown;
+        $this->view = $view;
     }
 
     public function index(Request $request){
-        switch($request->option){
+        switch($request->option){     
             case 'purchase_request':
-                return $this->purchase_request->lists($request);
+                return $this->view->purchase_requests($request);
             break;
             case 'unit_type':
                 return $this->dropdown->unit_type($request);
@@ -30,23 +39,9 @@ class PurchaseRequestController extends Controller
             case 'sections':
                 return $this->dropdown->sections($request);
             break;
-
-            case 'print_preview':
-                dd($request->all());
-                return $this->print();
-            break;
-
-            case 'create_purchase_request':
-                return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/CreatePage', [
-                    'dropdowns' => [
-                       'unit_types' => $this->dropdown->unit_types(),
-                       'divisions' => $this->dropdown->divisions(),
-                       'fund_clusters' => $this->dropdown->fund_clusters(),
-                       'requesters' => $this->dropdown->requesters(),
-                       'approvers' => $this->dropdown->approvers(),
-                    ],
-                ]); 
-            break;
+            case 'supplier_address':
+                return $this->dropdown->supplier_address($request->supplier_id);
+            break;     
             default:
                 return inertia('Modules/FAIMS/Index', [
                     'dropdowns' => [
@@ -56,74 +51,96 @@ class PurchaseRequestController extends Controller
         }   
     }
 
+    public function create(){
+        return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/CreatePage', [
+            'dropdowns' => [
+                'unit_types' => $this->dropdown->unit_types(),
+                'divisions' => $this->dropdown->divisions(),
+                'sections' => $this->dropdown->list_sections(),
+                'fund_clusters' => $this->dropdown->fund_clusters(),
+                'requesters' => $this->dropdown->requesters(),
+                'approvers' => $this->dropdown->approvers(),
+                'suppliers' => $this->dropdown->suppliers(),
+                'supply_officers' => $this->dropdown->supply_officers(),
+            ],
+            'option' => 'create',
+        ]); 
+    }
+
+    public function show($id, Request $request){
+        return $this->view->show($id, $request);
+    }
+
     public function store(Request $request) {
         $result = $this->handleTransaction(function () use ($request) {
             return $this->purchase_request->save($request);
         });
 
-            return redirect()->route('purchase_request.index')->with([
-                'data' => $result['data'],
-                'message' => $result['message'],
-                'info' => $result['info'],
-                'status' => $result['status'],
-            ]);
+        return redirect()->route('purchase_request.index')->with([
+            'data' => $result['data'],
+            'message' => $result['message'],
+            'info' => $result['info'],
+            'status' => $result['status'],
+        ]);
 
     }
 
     
-    // public function print(){
-    //     $array = [
-    //         'data' => 'test',
-    //     ];
+    public function update($id, Request $request) {
+        $result = $this->handleTransaction(function () use ($id, $request) {
+            switch($request->option){     
+                case 'update':
+                    return $this->purchase_request->update($id, $request);
+                break;
+                case 'review':
+                    return $this->purchase_request->review($id, $request);
+                break;
+                case 'approve':
+                    return $this->purchase_request->approve($id, $request);
+                break;
+                case 'save_bids':
+                    return $this->purchase_request->save_bids($id, $request);
+                break;
+            }   
+           
+        });
 
-    //     $pdf = \PDF::loadView('FAIMS.Procurement.print',$array)->setPaper('a4', 'landscape');
-    //     return $pdf->stream('pdfname.pdf');
-    // }
-    
-    public function print()
-    {
-        $array = [
-            'data' => 'test',
-        ];
-    
-        // Generate first page (Portrait) as a string
-        $pdfPortrait = \PDF::loadView('FAIMS.Procurement.print_portrait', $array)
-                          ->setPaper('a4', 'portrait')
-                          ->output(); // Store the PDF as a string
-    
-        // Generate second page (Landscape) as a string
-        $pdfLandscape = \PDF::loadView('FAIMS.Procurement.print_landscape', $array)
-                           ->setPaper('a4', 'landscape')
-                           ->output(); // Store the PDF as a string
-    
-        // Write PDFs to temporary files
-        $tempFilePortrait = tempnam(sys_get_temp_dir(), 'pdf');
-        file_put_contents($tempFilePortrait, $pdfPortrait);
+        return redirect()->route('purchase_request.index')->with([
+            'data' => $result['data'],
+            'message' => $result['message'],
+            'info' => $result['info'],
+            'status' => $result['status'],
+        ]);
 
-        $tempFileLandscape = tempnam(sys_get_temp_dir(), 'pdf');
-        file_put_contents($tempFileLandscape, $pdfLandscape);
+    }
 
-        // Create a new FPDI instance
-        $fpdi = new Fpdi();
+       
+    public function review(Request $request) {
+        $result = $this->handleTransaction(function () use ($request) {
+            return $this->purchase_request->review($request);
+        });
 
-        // Add the portrait page
-        $fpdi->setSourceFile($tempFilePortrait); // Load the portrait file
-        $templateId = $fpdi->importPage(1);
-        $fpdi->addPage('P'); // Add a portrait page
-        $fpdi->useTemplate($templateId);
+        return redirect()->route('purchase_request.index')->with([
+            'data' => $result['data'],
+            'message' => $result['message'],
+            'info' => $result['info'],
+            'status' => $result['status'],
+        ]);
 
-        // Add the landscape page
-        $fpdi->setSourceFile($tempFileLandscape); // Load the landscape file
-        $templateId = $fpdi->importPage(1);
-        $fpdi->addPage('L'); // Add a landscape page
-        $fpdi->useTemplate($templateId);
+    }
 
-        // Clean up the temporary files
-        unlink($tempFilePortrait);
-        unlink($tempFileLandscape);
+         
+    public function approve(Request $request) {
+        $result = $this->handleTransaction(function () use ($request) {
+            return $this->purchase_request->approve($request);
+        });
 
-        // Output the merged PDF
-        return response($fpdi->output(), 200)
-                ->header('Content-Type', 'application/pdf');
+        return redirect()->route('purchase_request.index')->with([
+            'data' => $result['data'],
+            'message' => $result['message'],
+            'info' => $result['info'],
+            'status' => $result['status'],
+        ]);
+
     }
 }

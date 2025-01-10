@@ -19,7 +19,7 @@ class SectionResource extends JsonResource
             'id' => $this->id,
             'name' =>  $this->name,
             'responsibility_center_code' =>  $this->responsibility_center_code,
-            'division' =>  $this->division ? new ListDropdownResource($this->division): null,
+            'division' =>  $this->division,
         ];
     }
 }

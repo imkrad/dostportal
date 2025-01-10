@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('fund_clusters', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('id');
+            $table->tinyIncrements('id');
             $table->string('name');
             $table->string('code')->nullable();
             $table->boolean('active')->default(1);

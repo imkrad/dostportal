@@ -29,6 +29,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToGroup('menu', [
             \App\Http\Middleware\MenuMiddleware::class,
         ]);
+        $middleware->appendToGroup('menu', [
+            \App\Http\Middleware\TrackPreviousUrls::class,
+        ]);
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {

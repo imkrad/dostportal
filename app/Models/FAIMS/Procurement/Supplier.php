@@ -13,6 +13,10 @@ class Supplier extends Model
         'address',
         'contact',
         'code',
+        'mayors_permit_no',
+        'tin',
+        'philgeps_registration_no',
+        'address',
     ];
     
 }

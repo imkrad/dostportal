@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_request_item_details', function (Blueprint $table) {
+        Schema::create('purchase_request_details', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->Integer('purchase_request_id')->unsigned()->index();
+            $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
             $table->tinyInteger('unit_id')->unsigned()->index();
             $table->foreign('unit_id')->references('id')->on('sections');
             $table->tinyInteger('item_unit_type_id')->unsigned()->index();;
             $table->foreign('item_unit_type_id')->references('id')->on('list_dropdowns');
-            $table->string('item_description')->nullable();
+            $table->text('item_description')->nullable();
             $table->string('item_quantity')->nullable();
             $table->string('item_price')->nullable();
             $table->string('item_bid_price')->nullable();
             $table->string('total')->nullable();
             $table->tinyInteger('status_id')->unsigned()->index();
-            $table->foreign('status_id')->references('id')->on('list_dropdowns');
+            $table->foreign('status_id')->references('id')->on('list_statuses');
             $table->timestamps();
         });
     }
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_request_item_details');
+        Schema::dropIfExists('purchase_request_details');
     }
 };

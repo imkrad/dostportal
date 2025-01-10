@@ -14,7 +14,7 @@
         </b-col>
     </b-row>
     <div>
-        <table class="table table-nowrap align-middle mb-0">
+        <table class="table table-nowrap mb-0">
             <thead class="table-light">
                 <tr class="fs-11">
                     <th>#</th>
@@ -24,11 +24,12 @@
                     <th>Requested By</th>
                     <th>PO #</th>
                     <th>PAP Code</th>
+                    <th>Quotation Count</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-        
+
             <tbody>
                 <tr class="custom-hover-row" v-for="(list, index) in lists" :key="index">
                     <td>{{ index + 1 }}</td>
@@ -37,6 +38,7 @@
                     <td>{{ list.section.division.name }}</td>
                     <td>{{  list.requested_by }}</td>
                     <td></td>
+                    <td>{{  list.pap_code }}</td>
                     <td></td>
                     <td>
                         <b-badge 
@@ -51,27 +53,42 @@
                             <i class="ri-more-2-fill align-bottom"></i>
                             </template>
 
-                            <b-dropdown-item @click="editItem">
+                            <b-dropdown-item @click="editIPR(list)" v-if="list.status.id == 1 || list.status.id == 2">
                             <i class="ri-edit-2-fill align-bottom me-1"></i> <!-- Icon for Edit -->
                             Edit
                             </b-dropdown-item>
-                            <b-dropdown-item @click="viewItem">
-                            <i class="ri-eye-fill align-bottom me-1"></i> <!-- Icon for View -->
-                            View
-                            </b-dropdown-item>
-                            <b-dropdown-item @click="reviewItem">
+                            <b-dropdown-item @click="reviewPR(list)" v-if="list.status.id == 1">
                             <i class="ri-check-double-fill align-bottom me-1"></i> <!-- Icon for Review -->
                             Review
                             </b-dropdown-item>
-                            <b-dropdown-item @click="approveItem">
+                            
+                            <b-dropdown-item @click="approvePR(list)" v-if="list.status.id == 2">
                             <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Approve -->
                             Approve
                             </b-dropdown-item>
+
+                            <b-dropdown-item @click="quotationsPR(list)" v-if="list.status.id == 3">
+                            <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Quotation -->
+                            Quotations
+                            </b-dropdown-item>
+
+                            <b-dropdown-item @click="bidsPR(list)" v-if="list.status.id == 3">
+                            <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Bids -->
+                            Abstract of Bids
+                            </b-dropdown-item>
+
+
+                            <b-dropdown-item @click="AwardsPR(list)" v-if="list.status.id == 3">
+                            <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Approve -->
+                            Awards
+                            </b-dropdown-item>
+
                             <b-dropdown-item @click="printPreview(list)">
                             <i class="ri-printer-fill align-bottom me-1"></i> <!-- Icon for Print -->
                             Print Preview
                             </b-dropdown-item>
-                            <b-dropdown-item @click="cancelItem">
+
+                            <b-dropdown-item >
                             <i class="ri-close-fill align-bottom me-1"></i> <!-- Icon for Cancel -->
                             Cancel
                             </b-dropdown-item>
@@ -82,7 +99,8 @@
             </tbody>
         </table>
         <Pagination class="ms-2 me-2" v-if="meta" @fetch="fetch" :lists="lists.length" :links="links" :pagination="meta" />
-    </div> <Create @add="fetch()" :dropdowns="dropdowns" @items="items" ref="create"/>
+    </div> 
+    <Create @add="fetch()" :dropdowns="dropdowns" @items="items" ref="create"/>
    
 </template>
 <script>
@@ -118,11 +136,11 @@ export default {
             this.fetch();
         }, 300),
         fetch(page_url){ 
-            page_url = page_url || '/faims/purchase-request';
+            page_url = page_url || '/faims/purchase-requests';
             axios.get(page_url,{
                 params : {
                     keyword: this.filter.keyword,
-                    option: 'purchase_request'
+                    option: 'purchase_request',
                 }
             })
             .then(response => {
@@ -134,14 +152,26 @@ export default {
             })
             .catch(err => console.log(err));
 
-            console.log('hey',110);
         },
 
         goCreatePage(){
-            router.get('/faims/purchase-request', {option: 'create_purchase_request'});
+            router.get('/faims/purchase-requests/create');
         },
-        openEdit(data,index){
-            router.get('/faims/purchase-request/create/index',{} );
+        editIPR(data){
+            router.get('/faims/purchase-requests/'+data.id, { option: 'edit' });
+        },
+        reviewPR(data){
+            router.get('/faims/purchase-requests/'+data.id, { option: 'review' });
+        },
+        approvePR(data){
+            router.get('/faims/purchase-requests/'+data.id, { option: 'approve' });
+        },
+        bidsPR(data){
+            console.log(data,99);
+            router.get('/faims/bids/'+data.id, { option: 'bids' });
+        },
+        quotationsPR(data){
+            router.get('/faims/quotation-requests/'+data.id, { option: 'quotations' });
         },
         openAction(data,index){
             this.index = index;

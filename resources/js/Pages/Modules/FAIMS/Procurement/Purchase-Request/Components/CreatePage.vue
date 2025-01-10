@@ -1,5 +1,8 @@
 <template>
-    <PageHeader title="Create Purchase Request" pageTitle="List" />
+    <PageHeader v-if="option == 'create'" title="Create Purchase Request" pageTitle="PR" />
+    <PageHeader v-if="option == 'edit'" title="Edit Purchase Request" pageTitle="PR" />
+    <PageHeader v-if="option == 'review'" title="Review Purchase Request" pageTitle="PR" />
+    <PageHeader v-if="option == 'approve'" title="Approve Purchase Request" pageTitle="PR" />
     <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
         <div class="file-manager-content w-100 p-4 pb-0" style="height: calc(100vh - 180px); overflow: auto;" ref="box">
             <!-- <Lists :dropdowns="dropdowns"/>         -->
@@ -7,7 +10,7 @@
                 <BRow>
                     <BCol lg="6" class="mt-2">
                     <div>
-                        <b-card  class="bg-light">             
+                        <b-card  class="bg-light">      
                             <BRow>
                                 <BCol lg="6" class="mt-2">
                                     <InputLabel for="division" value="Division" :message="form.errors.division_id"/>
@@ -20,7 +23,7 @@
 
                                 <BCol lg="6" class="mt-2">
                                     <InputLabel value="PR Date" :message="form.errors.purchase_request_date"/>
-                                    <TextInput v-model="form.purchase_request_date" type="date" class="form-control"  :light="true" readonly/>
+                                    <TextInput v-model="form.purchase_request_date" type="text" class="form-control"  :light="true" readonly/>
                                 </BCol>
                                 <BCol lg="6" class="mt-2">
                                     <InputLabel for="section" value="Section" :message="form.errors.section_id"/>
@@ -38,6 +41,11 @@
                                     v-model="form.fund_cluster_id"
                                     :searchable="true" label="name"
                                     placeholder="Select Fund Cluster"/>
+                                </BCol>
+
+                                <BCol lg="6" class="mt-2">
+                                    <InputLabel value="PAP Code" :message="form.errors.pap_code"/>
+                                    <TextInput v-model="form.pap_code" type="text" class="form-control" placeholder="Enter PAP Code"  :light="true"/>
                                 </BCol>
                                 
                             </BRow>    
@@ -66,12 +74,13 @@
      
             </BRow>
                 <BRow>
-                    <BCol lg="3" class="mt-2 mb-2">
-                        <b-button @click="openAddItem()" variant="light" block class="bg-success w-75 text-white">Add Item</b-button>
-                    </BCol>
 
+                    <BCol lg="3" class="mt-2 mb-2"   >
+                        <b-button  @click="openAddItem()" variant="light" block class="bg-success w-75 text-white">Add Item</b-button>
+                    </BCol>
+                    <!-- <div  class="bg-info font-weight text-white" v-if="option == 'review_purchase_request'">ITEM LIST</div> -->
                     <div class="table-responsive">
-                        <table class="table table-nowrap align-middle mb-0">
+                        <table class="table table-nowrap mb-0">
                             <thead class="table-light">
                                 <tr class="fs-11">
                                     <th>#</th>
@@ -86,7 +95,7 @@
                             <tbody>
                                 <tr v-for="(item, index) in form.items" :key="index">
                                     <td>{{ index + 1 }}</td>
-                                    <td>{{ item.item_unit }}</td>
+                                    <td >{{ item.item_unit }}</td>
                                     <td>
                                         <div v-html="item.description"></div>
                                     </td>
@@ -126,18 +135,30 @@
                         </b-card>
                     </div>
             </BCol>
-            <BCol lg="3" class="mt-2 mb-2">
+            <BCol lg="3" class="mt-2 mb-2" v-if="option == 'create'">
                 <b-button @click="submit('ok')"  variant="light" block class="bg-success w-75 text-white">Save</b-button>
             </BCol>
+
+            <BCol lg="3" class="mt-2 mb-2" v-if="option == 'edit'">
+                <b-button @click="update(form)"  variant="light" block class="bg-success w-75 text-white">Update</b-button>
+            </BCol>
+
+            <BCol lg="3" class="mt-2 mb-2" v-if="option == 'review'">
+                <b-button @click="review(form)"  variant="light" block class="bg-success w-75 text-white">Review</b-button>
+            </BCol>
+
+            <BCol lg="3" class="mt-2 mb-2" v-if="option == 'approve'">
+                <b-button @click="approve(form)"  variant="light" block class="bg-success w-75 text-white">Approve</b-button>
+            </BCol>
             <BCol lg="3" class="mt-2 mb-2">
-                <b-button @click="goBackPage()" style="background-color: grey" block class=" w-75 text-white">Cancel</b-button>
+                <b-button @click="goBackPage()" style="background-color: grey" block class=" w-75 text-white">Back</b-button>
             </BCol>
                 </BRow>
+
             </form>
         </div>
     </div>
-
-    <Create :dropdowns="dropdowns"  @items="handleItems"   ref="create"/>
+    <Create :dropdowns="dropdowns"   @items="handleItems"   ref="create"/>
 </template>
 <script>
 // import Lists from './Procurement/Purchase-Request/Components/Lists.vue';
@@ -152,38 +173,66 @@ import { router } from '@inertiajs/vue3';
 
 export default {
     components: { Create, PageHeader, InputError, InputLabel, TextInput, Multiselect },
-    props: ['dropdowns' ,],
+    props: ['dropdowns' , 'option'],
     data(){
-        return {
-            currentUrl: window.location.origin,
-            form: useForm({
-                id: null,
-                request_number: null,
-                division_id : null,
-                section_id : null,
-                purchase_request_date: this.getCurrentDate(),
-                fund_cluster_id: null,
-                purchase_request_purpose: null,   
-                items: [],
-                requested_by: null,
-                approved_by: null,
-                status_id: 1,
-                option: 'purchase-request',
+        if(this.dropdowns.data){
+                return {
+                    currentUrl: window.location.origin,
+                    form: useForm({
+                        id: this.dropdowns.data.id,
+                        request_number: this.dropdowns.data.request_number,
+                        section_id : this.dropdowns.data.section.id,
+                        division_id : this.dropdowns.data.section.division_id,  
+                        purchase_request_date: this.dropdowns.data.purchase_request_date,
+                        fund_cluster_id: this.dropdowns.data.fund_cluster_id,
+                        purchase_request_purpose: this.dropdowns.data.purchase_request_purpose,   
+                        items: this.dropdowns.item_details,
+                        requested_by: this.dropdowns.data.requested_by,
+                        approved_by: this.dropdowns.data.approved_by,
+                        option: 'edit',
+                    }),              
+                    showModal: false,
+                    sections: this.getSections(this.dropdowns.data.section.division_id),
+                    unit_type : null,
+                }
+           
+        }
+        else{
+            return {
+                currentUrl: window.location.origin,
+                form: useForm({
+                    id: null,
+                    request_number:null,
+                    division_id : null,
+                    section_id : null,
+                    purchase_request_date: this.getCurrentDate(),
+                    fund_cluster_id: null,
+                    purchase_request_purpose: null,   
+                    items: null,
+                    requested_by: null,
+                    approved_by: null,
+                    pap_code: null,
+                    status_id: 1,
+                    option: 'purchase-request',
+                }),
+
                 
-            }),
-            showModal: false,
-            sections: [],
-            unit_type : null,
+                showModal: false,
+                sections: [],
+                unit_type : null,
+            }
         }
     },
 
     watch: {
         'form.division_id': function(value) {
-            if(value){
+            if(value){         
                 this.getSections(value);
             }
         }
     },
+
+
 
 
     methods: { 
@@ -199,10 +248,8 @@ export default {
             return `${year}-${month}-${day}`;
         },
 
-
-
         getSections(division_id) {
-            axios.get('/faims/purchase-request',{
+            axios.get('/faims/purchase-requests',{
                 params : {
                     division_id : division_id,
                     option: 'sections'
@@ -217,9 +264,20 @@ export default {
         },
 
         handleItems(updatedItems) {
-            // Update the parent component's `items` array
-            this.form.items = updatedItems;
-            
+            if(this.dropdowns.data){
+                this.form.items.push({
+                    item_unit_id : updatedItems[0].item_unit_id,
+                    item_unit: updatedItems[0].item_unit,
+                    description: updatedItems[0].description,
+                    quantity: updatedItems[0].quantity,
+                    unit_cost: updatedItems[0].unit_cost,
+                    total_cost: updatedItems[0].total_cost,
+                });
+
+            }
+            else{
+                this.form.items = updatedItems;
+            }     
         },
 
         removeItem(index) {
@@ -228,7 +286,24 @@ export default {
         },
 
         submit(){
-            this.form.post('/faims/purchase-request');
+            this.form.post('/faims/purchase-requests');
+            this.form.reset();    
+        },
+
+        update(data){
+            router.put('/faims/purchase-requests/'+data.id, { data: data, option: 'update' });
+            this.form.reset();    
+
+            
+        },
+
+        review(data){
+            router.put('/faims/purchase-requests/'+data.id, { data: data, option: 'review' });
+            this.form.reset();    
+        },
+
+        approve(data){
+            router.put('/faims/purchase-requests/'+data.id, { data: data, option: 'approve' });
             this.form.reset();    
         },
 
@@ -242,12 +317,23 @@ export default {
 
 
         goBackPage(){
-            router.get('/faims/purchase-request');
+            router.get('/faims/purchase-requests');
         },
 
-            
-
-       
+        getPRItemDetails(purchase_request_id){
+            axios.get('/faims/purchase-requests',{
+                params : {
+                    purchase_request_id: purchase_request_id ,
+                    option: 'pr_details'
+                }
+            })
+            .then(response => {
+                if(response){
+                    this.form.items = response.data;       
+                }
+            })
+            .catch(err => console.log(err));
+        }   
     }
 }
 </script>

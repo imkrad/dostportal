@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->tinyIncrements('id');
-            $table->string('name'); 
-            $table->string('address'); 
-            $table->string('contact'); 
+            $table->Increments('id');
+            $table->string('name')->nullable(); 
+            $table->string('mayors_permit_no')->nullable(); 
+            $table->string('tin')->nullable(); 
+            $table->string('philgeps_registration_no')->nullable(); 
+            $table->string('address')->nullable(); 
+            $table->string('contact')->nullable(); 
             $table->string('code'); 
             $table->timestamps();
         });

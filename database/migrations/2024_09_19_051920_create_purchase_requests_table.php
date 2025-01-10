@@ -15,9 +15,9 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('purchase_request_number'); 
-            $table->string('purchase_request_date'); 
+            $table->date('purchase_request_date'); 
             $table->string('request_sai_number')->nullable(); 
-            $table->dateTime('request_sai_date')->nullable(); 
+            $table->date('request_sai_date')->nullable(); 
             $table->string('purchase_request_purpose'); 
             $table->string('referrence_no')->nullable(); 
             $table->tinyInteger('division_id')->unsigned()->index();
@@ -28,15 +28,15 @@ return new class extends Migration
             $table->foreign('requested_by')->references('id')->on('users');
             $table->integer('approved_by')->unsigned()->index();
             $table->foreign('approved_by')->references('id')->on('users');
-            $table->tinyInteger('supplier_id')->unsigned()->index()->nullable();
+            $table->integer('supplier_id')->unsigned()->index()->nullable();
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->tinyInteger('fund_cluster_id')->unsigned()->index();
-            $table->foreign('fund_cluster_id')->references('id')->on('list_dropdowns');
+            $table->foreign('fund_cluster_id')->references('id')->on('fund_clusters');
             $table->string('po_number')->nullable();
             $table->string('pap_code')->nullable();
             $table->string('fund_cluster')->nullable();
             $table->tinyInteger('status_id')->unsigned()->index();
-            $table->foreign('status_id')->references('id')->on('purchase_request_statuses');
+            $table->foreign('status_id')->references('id')->on('list_statuses');
             $table->timestamps();
         });
     }
