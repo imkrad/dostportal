@@ -27,10 +27,15 @@ Route::middleware(['2fa','auth','verified'])->group(function () {
             'index' => 'quotation_request.index',
         ]);
         Route::resource('/bids', App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class);
+        Route::resource('/awards', App\Http\Controllers\Modules\FAIMS\Procurement\AwardsController::class);
+        Route::resource('/libraries/pap-codes', App\Http\Controllers\Modules\FAIMS\Procurement\PAPCodeController::class);
         
         // route for printing only
+        Route::get('/purchase-request/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\PurchaseRequestController::class, 'printPR']);
         Route::get('/quotations/request/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\QuotationRequestController::class, 'printQuotation']);
         Route::get('/bids/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printBids']);
+        Route::get('/po/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printPO']);
+        Route::get('/BACReso/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printBACReso']);
     });
 });
 

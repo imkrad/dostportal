@@ -61,8 +61,6 @@ class ViewClass
     }
 
     public function show($id, $request){
-   
-        //dd($request->all());
         $data = PurchaseRequest::with('section')->findOrFail($id);
         switch($request->option){
             case 'edit':
@@ -86,6 +84,17 @@ class ViewClass
             break;
             case 'bids':
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Bids/Lists', [
+                    'dropdowns' => [
+                        'data' => $data,
+                        'item_details' => $this->dropdown->pr_details($id),
+                        'suppliers' => $this->dropdown->suppliers(),
+                        'lists' => $this->bids->lists($id,$request),
+                    ],        
+                    'option' => $request->option,
+                ]); 
+            break;
+            case 'awards':
+                return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Awards/Lists', [
                     'dropdowns' => [
                         'data' => $data,
                         'item_details' => $this->dropdown->pr_details($id),

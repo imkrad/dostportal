@@ -58,6 +58,7 @@ class PurchaseRequestController extends Controller
                 'divisions' => $this->dropdown->divisions(),
                 'sections' => $this->dropdown->list_sections(),
                 'fund_clusters' => $this->dropdown->fund_clusters(),
+                'pap_codes' => $this->dropdown->pap_codes(),
                 'requesters' => $this->dropdown->requesters(),
                 'approvers' => $this->dropdown->approvers(),
                 'suppliers' => $this->dropdown->suppliers(),
@@ -142,5 +143,9 @@ class PurchaseRequestController extends Controller
             'status' => $result['status'],
         ]);
 
+    }
+
+    public function printPR($id, Request $request){
+        return $this->purchase_request->printPR($id, $request);
     }
 }

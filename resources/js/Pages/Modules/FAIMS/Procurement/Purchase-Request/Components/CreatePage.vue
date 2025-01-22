@@ -43,11 +43,15 @@
                                     placeholder="Select Fund Cluster"/>
                                 </BCol>
 
-                                <BCol lg="6" class="mt-2">
+                                <BCol lg="12" class="mt-2">
                                     <InputLabel value="PAP Code" :message="form.errors.pap_code"/>
-                                    <TextInput v-model="form.pap_code" type="text" class="form-control" placeholder="Enter PAP Code"  :light="true"/>
-                                </BCol>
+                                    <Multiselect 
+                                    :options="dropdowns.pap_codes" 
+                                    v-model="form.pap_code"
+                                    :searchable="true" label="code"
+                                    placeholder="Select PAP CODE"/>
                                 
+                                </BCol>
                             </BRow>    
                         </b-card>
                     </div>

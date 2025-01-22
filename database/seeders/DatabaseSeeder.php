@@ -53,5 +53,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ListSectionsTableSeeder::class);
         $this->call(FundClustersTableSeeder::class);
         $this->call(ListStatusesTableSeeder::class);
+
     }
 }

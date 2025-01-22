@@ -1,7 +1,7 @@
 <template>
-    <PageHeader v-if="option == 'bids'" title="Abstract of Bids" pageTitle="Bids" />
+    <PageHeader v-if="option == 'awards'" title="Awards" pageTitle="Bids" />
     <div>
-        <!-- <b-row class="g-2 mb-2 mt-n2">
+        <b-row class="g-2 mb-2 mt-n2">
              
              <BCol>     
                  REMARK STATUS        
@@ -29,7 +29,7 @@
                  </b-badge>  
              </BCol>
            
-         </b-row> -->
+         </b-row>
      
         <b-row class="">
            
@@ -54,7 +54,6 @@
                     <b-button type="button" variant="primary" @click="setBidPrice(dropdowns.data,'for_all_items')">
                         <i class="ri-add-circle-fill align-bottom me-1"></i> Create
                     </b-button>
-                    
                 </div>
             </b-col>
           
@@ -62,17 +61,17 @@
       
          </b-row>
          <b-row class="align-items-center">
-        <!-- Left Content -->
-        <b-col>
-            <th class="font-weight-bold;" style="border:none" >
-            PURCHASE REQUEST NO:
-            <u class="text-info">
-                <span class="bg-light p-1">
-                {{ dropdowns.data.purchase_request_number }}
-                </span>
-            </u>
-            </th>
-        </b-col>
+  <!-- Left Content -->
+  <b-col>
+    <th class="font-weight-bold">
+      PURCHASE REQUEST NO:
+      <u class="text-info">
+        <span class="bg-light p-1">
+          {{ dropdowns.data.purchase_request_number }}
+        </span>
+      </u>
+    </th>
+  </b-col>
 
         <!-- Right-Aligned Action Button -->
         <b-col class="text-end">
@@ -84,19 +83,6 @@
                 <i class="ri-printer-line align-bottom me-1"></i> 
                 Print
             </b-dropdown-item>
-            <b-dropdown-item @click="printBids(dropdowns.data)">
-                <i class="ri-check-line align-bottom me-1"></i> 
-                Award
-            </b-dropdown-item>
-            <b-dropdown-item @click="printBACReso(dropdowns.data)">
-                <i class="ri-file-line align-bottom me-1"></i> 
-                Generate BAC Resolution
-            </b-dropdown-item>
-            <b-dropdown-item @click="createPO(dropdowns.data)">
-                <i class="ri-printer-line align-bottom me-1"></i> 
-                Create Purchase Order
-            </b-dropdown-item>
-          
             </b-dropdown>
         </b-col>
         </b-row>
@@ -105,60 +91,65 @@
     <div class="horizontal-scroll-tabs">
         <b-tabs class="bg-white" card>
         <b-tab v-for="(item, index) in dropdowns.lists.data" :key="index" :title="item.supplier.name">
-            <div>
-                <div class="file-manager-content w-100 pt-2 pb-0" style="height: calc(80vh - 180px); overflow: auto;" ref="box">
+            <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n1 p-1">
+                <div class="file-manager-content w-100 p-4 pb-0" style="height: calc(80vh - 180px); overflow: auto;" ref="box">
                     <div>
-                    <table style="width:100%; border-collapse: collapse; border: 1px solid">
-                        <thead>
-                            <tr>
-                            <th>#</th>
-                            <th style="width: 20px;">Status</th>
-                            <th style="width: 500px;">Item Description</th> 
-                            <th style="width: 20px;">Quantity/Unit</th>
-                            <th style="width: 20px;">ABC</th>
-                            <th style="width: 20px;">Bid Price</th>
-                            <th style="width: 20px;">Total Bid Price</th>
-                            <th>Remarks</th> 
+                    <table class="table  mb-0">
+                        <thead class="table-light">
+                            <tr class="fs-11">
+                                <th>#</th>
+                                <th>Status</th>
+                                <th>Item Description</th> 
+                                <th>Quantity/Unit</th>
+                                <th>ABC</th>
+                                <th>Bid Price</th>
+                                <th>Total Bid Price</th>
+                                <th>Remarks</th> 
+        
                             </tr>
                         </thead>
 
+                
                         <tbody>
-                            <tr v-for="(item, index) in dropdowns.lists.data[index].bids_details" :key="index">
-                            <td>{{ index + 1 }}</td>
-                            <td>   
-                                <b-badge 
-                                v-if="item.status"
-                                :variant="getBadgeVariant(item.status.name)" 
-                                style="color: white;">
-                                {{ item.status.name }} 
-                                <i v-if="item.status.name == 'Pending for Award'" class="ri-close-line"></i>
-                                <i v-if="item.status.name == 'Not Available for Award'" class="ri-wallet-line"></i>
-                                <i v-if="item.status.name == 'Available for Award'" class="ri-check-line"></i>
-                                <i v-if="item.status.name == 'Awarded'" class="ri-check-line"></i>
-                                </b-badge>  
-                            </td>
-                            <td style="text-align:left;width: word-wrap: break-word; word-break: break-word; white-space: normal;">
-                                <span v-html="item.bids_description"></span>
-                            </td>
-                            <td>
-                                {{ item.bids_quantity }} {{ item.unit_type.name_long }} 
-                            </td>
-                            <td>
-                                {{ formatCurrency(item.bids_abc) }}
-                            </td>
-                            <td>
-                                {{ formatCurrency(item.bids_price) }}
-                            </td>
-                            <td>
-                                {{ formatCurrency(item.bids_quantity * item.bids_price) }}
-                            </td>
-                            <td>
-                                {{ item.remarks }}
-                            </td>
+                            <tr v-for="(item, index) in  dropdowns.lists.data[index].bids_details " :key="index">
+                                <td>{{ index + 1 }}</td>
+                                <td>   
+                                    <b-badge 
+                                        v-if="item.status"
+                                        :variant="getBadgeVariant(item.status.name)" 
+                                        style="color: white;">
+                                        {{ item.status.name }} 
+                                        <i v-if="item.status.name == 'Pending for Award'" class="ri-close-line"></i>
+                                        <i v-if="item.status.name == 'Not Available for Award'" class="ri-wallet-line"></i>
+                                        <i v-if="item.status.name == 'Available for Award'"class="ri-check-line"></i>
+                                        <i v-if="item.status.name == 'Awarded'"class="ri-check-line"></i>
+                                    </b-badge>  
+                                
+                                </td>      
+                                <td>
+                                    <div v-html="item.bids_description"></div>
+                                </td>
+
+                                    
+                                <td>
+                                    {{ item.bids_quantity }} {{ item.unit_type.name_long }} 
+                                 </td>
+                                <td>
+                                    {{ formatCurrency(item.bids_abc) }}
+                                </td>
+                                <td>
+                                    {{ formatCurrency(item.bids_price) }}
+                                </td>
+                                <td>
+                                    {{ formatCurrency(item.bids_quantity * item.bids_price) }}
+                                </td>
+                                <td>
+                                    {{  item.remarks }}
+                                </td>
+                              
                             </tr>
                         </tbody>
                     </table>
-
                     <Pagination class="ms-2 me-2" v-if="meta" @fetch="fetch" :lists="lists.length" :links="links" :pagination="meta" />
                     </div> 
 
@@ -171,9 +162,7 @@
 
  
 
-    <Create :dropdowns="dropdowns" :items="dropdowns.item_details" ref="createBids"/>
-    <GenerateBACResoModal  :data="form" ref="createBACReso"/>
-    <CreatePOModal :dropdowns="dropdowns"   :data="form" ref="createPO"/>
+    <Create :dropdowns="dropdowns" :items="dropdowns.item_details" ref="create"/>
 </template>
 <script>
 // import Lists from './Procurement/Purchase-Request/Components/Lists.vue';
@@ -186,12 +175,10 @@ import InputLabel from '@/Shared/Components/Forms/InputLabel.vue';
 import TextInput from '@/Shared/Components/Forms/TextInput.vue';
 import Checkbox from '@/Shared/Components/Forms/Checkbox.vue';
 import Create from '../../Modals/CreateBids.vue';
-import GenerateBACResoModal from '@/Pages/Modules/FAIMS/Procurement/Purchase-Request/Modals/GenerateBACResolution.vue';
-import CreatePOModal from '@/Pages/Modules/FAIMS/Procurement/Purchase-Request/Modals/CreatePO.vue';
 import { router } from '@inertiajs/vue3';
 
 export default {
-    components: {Create, GenerateBACResoModal, CreatePOModal, PageHeader, InputError, InputLabel, TextInput, Multiselect, Checkbox },
+    components: {Create, PageHeader, InputError, InputLabel, TextInput, Multiselect, Checkbox },
     props: ['dropdowns', 'lists' , 'option'],
     data(){
         return {
@@ -213,8 +200,7 @@ export default {
 
 
     methods: { 
-
-           // checkSearchStr: _.debounce(function(string) {
+        // checkSearchStr: _.debounce(function(string) {
         //     this.fetch();
         // }, 300),
         // fetch(page_url){ 
@@ -257,19 +243,11 @@ export default {
         // },
 
         openAddBids(){
-            this.$refs.createBids.show();
-        },
-
-        createBACReso(){
-            this.$refs.createBACReso.show();
-        },
-
-        createPO(){
-            this.$refs.createPO.show();
+            this.$refs.create.show();
         },
 
         setBidPrice(data , type){
-            this.$refs.createBids.edit(data , type);
+            this.$refs.create.edit(data , type);
            
         },
 
@@ -291,7 +269,6 @@ export default {
             currency: 'PHP',
             }).format(value);
         },
-
         getBadgeVariant(status_name) {
             switch (status_name) {
                 case 'Pending':
@@ -310,19 +287,9 @@ export default {
         },
 
         printBids(data){
+            console.log(data);
            window.open('/faims/bids/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
-        },
-
-        // printPurchaseOrder(data){
-        //    window.open('/faims/po/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
-        // },
-
-
-        printBACReso(data){
-          window.open('/faims/BACReso/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
-        },
-
-        
+        }
 
         
 
@@ -331,14 +298,6 @@ export default {
 </script>
 
 <style scoped>
-
-td, th{
-   border:1px solid;
-   padding: 5px ;
-   vertical-align: top;
-   text-align: center;
-}
-
 /* Enable horizontal scrolling for tabs */
 .horizontal-scroll-tabs {
   overflow-x: auto;
@@ -376,5 +335,4 @@ td, th{
   white-space: normal; /* Ensure tab titles wrap if they're long */
   text-align: center;
 }
-
 </style>

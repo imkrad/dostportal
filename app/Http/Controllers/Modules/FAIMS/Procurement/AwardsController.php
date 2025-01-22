@@ -11,7 +11,7 @@ use App\Traits\HandlesTransaction;
 use App\Http\Controllers\Controller;
 use setasign\Fpdi\Fpdi;
 
-class BidsController extends Controller
+class AwardsController extends Controller
 {
     use HandlesTransaction;
 
@@ -38,33 +38,8 @@ class BidsController extends Controller
         return $this->view->show($id, $request);
     }
 
-    public function store(Request $request) {
-        $result = $this->handleTransaction(function () use ($request) {
-            return $this->bids->save($request);
-        });
 
-        return back()->with([
-            'data' => $result['data'],
-            'message' => $result['message'],
-            'info' => $result['info'],
-            'status' => $result['status'],
-        ]);
 
-    }
-
-    public function printBids($id, Request $request){
-        return $this->bids->print($id, $request);
-    }
-
-    public function printPO($id, Request $request){
-        return $this->bids->printPO($id, $request);
-    }
-
-    public function printBACReso($id, Request $request){
-        return $this->bids->printBACReso($id, $request);
-    }
-
-    
 
     
 }

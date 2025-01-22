@@ -158,6 +158,23 @@ class PurchaseRequestClass
         }
     }
 
+    
+    public function printPR($id,$request)
+    {  
+        $data = PurchaseRequestDetail::with('purchase_request', 'unit_type')->where('purchase_request_id', $request->id)->get();
+        $pr = PurchaseRequest::with('fundCluster','section','requester', 'requester.user_organization.position.administrative' , 'approver.user_organization.position.administrative')->where('id', $request->id)->first();
+
+        //return $pr;
+        $array = [
+            'data' => $data,
+            'pr_no' =>$request->purchase_request_number,
+            'pr' => $pr,
+        ];
+
+        $pdf = \PDF::loadView('FAIMS.Procurement.printPR',$array)->setPaper('A4', 'portrait');
+        return $pdf->stream($request->purchase_request_number.'-BAC-Resolution.pdf');
+    }
+
   
    
 }

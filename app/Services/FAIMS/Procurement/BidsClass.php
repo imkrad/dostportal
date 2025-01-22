@@ -65,22 +65,12 @@ class BidsClass
     }
 
     public function print($id,$request){
-        //dd($request->all());
-
-        // $bids_ids = Bids::where('purchase_request_id',$request->pr_id)
-        // ->pluck('id');
-
         $data = BidsDetail::with('bids','bids.supplier','unit_type')->where('purchase_request_id', $request->pr_id)
         ->select('pr_detail_id', 'bids_id', 'bids_quantity', 'bids_unit_type_id', 'bids_price', 'bids_description')
         ->orderBy('pr_detail_id', 'asc')
         ->get()
         ->groupBy('pr_detail_id'); // Group by pr_detail_id
 
- 
-
-       
-    
-// return  $data;
         $array = [
             'data' => $data,
             'pr_no' =>$request->purchase_request_number
@@ -89,6 +79,41 @@ class BidsClass
         $pdf = \PDF::loadView('FAIMS.Procurement.printBids',$array)->setPaper('A4', 'landscape');
         return $pdf->stream($request->purchase_request_number.'.pdf');
     }
+
+    public function printPO($id,$request){
+        $data = BidsDetail::with('bids','bids.supplier','unit_type')->where('purchase_request_id', $request->pr_id)
+        ->select('pr_detail_id', 'bids_id', 'bids_quantity', 'bids_unit_type_id', 'bids_price', 'bids_description')
+        ->orderBy('pr_detail_id', 'asc')
+        ->get()
+        ->groupBy('pr_detail_id'); // Group by pr_detail_id
+
+        $array = [
+            'data' => $data,
+            'pr_no' =>$request->purchase_request_number
+        ];
+
+        $pdf = \PDF::loadView('FAIMS.Procurement.printPO',$array)->setPaper('A4', 'portrait');
+        return $pdf->stream($request->purchase_request_number.'.pdf');
+    }
+
+
+    public function printBACReso($id,$request)
+    {  
+        $data = BidsDetail::with('bids','bids.supplier','unit_type')->where('purchase_request_id', $request->pr_id)
+        ->select('pr_detail_id', 'bids_id', 'bids_quantity', 'bids_unit_type_id', 'bids_price', 'bids_description')
+        ->orderBy('pr_detail_id', 'asc')
+        ->get()
+        ->groupBy('pr_detail_id'); // Group by pr_detail_id
+
+        $array = [
+            'data' => $data,
+            'pr_no' =>$request->purchase_request_number
+        ];
+
+        $pdf = \PDF::loadView('FAIMS.Procurement.printBACReso',$array)->setPaper('A4', 'portrait');
+        return $pdf->stream($request->purchase_request_number.'-BAC-Resolution.pdf');
+    }
+
 
 
    

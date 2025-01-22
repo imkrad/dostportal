@@ -7,6 +7,8 @@ use App\Models\FAIMS\Procurement\Section;
 use App\Models\FAIMS\Procurement\FundCluster;
 use App\Models\FAIMS\Procurement\PurchaseRequestDetail;
 use App\Models\FAIMS\Procurement\Supplier;
+use App\Models\FAIMS\Libraries\ListPAPCode;
+
 use App\Models\User;
 use App\Models\ListDropdown;
 use App\Models\UserProfile;
@@ -79,6 +81,17 @@ class DropdownClass
         });
         return $data;
     }
+
+    public function pap_codes(){
+        $data = ListPAPCode::get()->map(function ($item) {
+            return [
+                'value' => $item->id,
+                'code' => $item->code,
+            ];
+        });
+        return $data;
+    }
+
 
     public function requesters(){
         $data = UserProfile::get()->map(function ($item) {

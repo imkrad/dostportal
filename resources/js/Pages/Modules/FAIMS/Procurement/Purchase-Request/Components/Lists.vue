@@ -53,6 +53,11 @@
                             <i class="ri-more-2-fill align-bottom"></i>
                             </template>
 
+                            <b-dropdown-item @click="printPR(list)">
+                            <i class="ri-printer-fill align-bottom me-1"></i> <!-- Icon for Print -->
+                            Print
+                            </b-dropdown-item>
+
                             <b-dropdown-item @click="editIPR(list)" v-if="list.status.id == 1 || list.status.id == 2">
                             <i class="ri-edit-2-fill align-bottom me-1"></i> <!-- Icon for Edit -->
                             Edit
@@ -78,20 +83,12 @@
                             </b-dropdown-item>
 
 
-                            <b-dropdown-item @click="AwardsPR(list)" v-if="list.status.id == 3">
+                            <b-dropdown-item @click="awardsPR(list)" v-if="list.status.id == 3">
                             <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Approve -->
                             Awards
                             </b-dropdown-item>
 
-                            <b-dropdown-item @click="printPreview(list)">
-                            <i class="ri-printer-fill align-bottom me-1"></i> <!-- Icon for Print -->
-                            Print Preview
-                            </b-dropdown-item>
-
-                            <b-dropdown-item >
-                            <i class="ri-close-fill align-bottom me-1"></i> <!-- Icon for Cancel -->
-                            Cancel
-                            </b-dropdown-item>
+                         
                         </b-dropdown>
                     </td>
                 </tr>
@@ -167,8 +164,10 @@ export default {
             router.get('/faims/purchase-requests/'+data.id, { option: 'approve' });
         },
         bidsPR(data){
-            console.log(data,99);
             router.get('/faims/bids/'+data.id, { option: 'bids' });
+        },
+        awardsPR(data){
+            router.get('/faims/awards/'+data.id, { option: 'awards' });
         },
         quotationsPR(data){
             router.get('/faims/quotation-requests/'+data.id, { option: 'quotations' });
@@ -194,8 +193,9 @@ export default {
             }
         },
 
-        printPreview(data){
-            router.get('/faims/purchase-request', { data: data , option: 'print_preview' });
+
+        printPR(data){
+          window.open('/faims/purchase-request/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
         },
     }
 }

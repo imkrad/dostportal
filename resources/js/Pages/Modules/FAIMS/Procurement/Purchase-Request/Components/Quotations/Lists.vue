@@ -23,7 +23,7 @@
                         <i class="bx bx-refresh search-icon"></i>
                     </span>
                     <b-button type="button" variant="primary" @click="goCreatePage(dropdowns.data)">
-                        <i class="ri-add-circle-fill align-bottom me-1"></i> Create
+                        <i class="ri-add-circle-fill align-bottom me-1"></i> New
                     </b-button>
                 </div>
             </b-col>

@@ -62,24 +62,22 @@
             <BRow>
                     <!-- <div  class="bg-info font-weight text-white" v-if="option == 'review_purchase_request'">ITEM LIST</div> -->
                     <div class="table-responsive">
-                        <table class="table table-nowrap align-middle mb-0">
+                        <table class="table align-middle mb-0">
                             <thead class="table-light">
                                 <tr class="fs-11">
                                     <th>#</th>
-                                    <th>Unit</th>
-                                    <th colspan="2">Item Description</th>
-                                    <th>Quantity</th>
+                                    <th>Quantity/Unit</th>
+                                    <th>Item Description</th>
                                     <th></th>
                                 </tr>
                             </thead>                 
-                            <tbody>
+                            <tbody style="vertical-align: top;">
                                 <tr v-for="(item, index) in form.items" :key="index">
-                                    <td>{{ index + 1 }}</td>
-                                    <td>{{ item.item_unit }}</td>
+                                    <td style="text-align:center">{{ index + 1 }}</td>
+                                    <td style="text-align:center">{{ item.quantity }} {{ item.item_unit }}</td>
                                     <td >
                                         <div v-html="item.description"></div>
                                     </td>
-                                    <td>{{ item.quantity}}</td>
                                     <td>
                                     <!-- <b-button v-if="option != 'quotations_purchase_request'" @click="removeItem(index)" variant="danger" size="sm">Remove</b-button> -->
                                     </td>

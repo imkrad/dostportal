@@ -246,6 +246,15 @@ export default {
                     <span>FAIMS</span>
                   </BLink>
                 </BCol>
+
+                <BCol>
+                  <BLink class="dropdown-icon-item" @click="openInNewTab('/faims/libraries/pap-codes')">
+                    <img src="@assets/images/apps/laboratory.png" alt="lab"/>
+                    <span>Libraries</span>
+                  </BLink>
+                </BCol>
+
+
               </BRow>
               
               <BRow class="g-0">            
