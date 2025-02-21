@@ -101,7 +101,7 @@ export default {
         },
 
         getItemUnitType(unit_type_id) {
-            axios.get('/faims/purchase-request',{
+            axios.get('/faims/purchase-requests',{
                 params : {
                     unit_type_id : unit_type_id,
                     option: 'unit_type'

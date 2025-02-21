@@ -58,7 +58,7 @@
                         <td>{{  list.date }}</td>
 
                         <td>
-                            <b-button @click="printPreview(list)">
+                            <b-button @click="printPreview(list)" size="sm">
                                 <i class="ri-printer-fill align-bottom me-1"></i> <!-- Icon for Print -->
                                 Print
                             </b-button>

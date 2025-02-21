@@ -1,5 +1,5 @@
 <template>
-    <PageHeader title="PAP Codes" pageTitle="Libraries" />
+    <PageHeader title="Suppliers" pageTitle="Libraries" />
     <b-row class="g-2 mb-3 mt-n2">
         <b-col lg>
             <div class="input-group mb-1">
@@ -20,9 +20,10 @@
             <thead class="table-light">
                 <tr class="fs-11">
                     <th>#</th>
-                    <th>PAP Codes</th>
-                    <th>Project Description/Title</th>
-                    <th>Allocated Budget</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Mayor's Permit No.</th>
+                    <th>TIN</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -30,9 +31,10 @@
             <tbody>
                     <tr class="custom-hover-row" v-for="(list, index) in lists" :key="index">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ list.code  }}</td>
-                        <td>{{ list.title  }}</td>
-                        <td>{{ formatCurrency(list.allocated_budget)  }}</td>
+                        <td>{{ list.name  }}</td>
+                        <td>{{ list.address  }}</td>
+                        <td>{{ list.mayors_permit_no  }}</td>
+                        <td>{{ list.tin  }}</td>
 
                         <td>
                             <b-button @click="editPAP(list)" size="sm">
@@ -50,18 +52,18 @@
 </div>
 
 
-<PAPCodeModal @add="fetch()" @update="fetch()" :data="form" ref="create" />
+<SupplierModal @add="fetch()" @update="fetch()" :data="form" ref="create" />
 </template>
 <script>
 import _ from 'lodash';
 import PageHeader from '@/Shared/Components/PageHeader.vue';
 import Pagination from "@/Shared/Components/Pagination.vue";
 import { router } from '@inertiajs/vue3';
-import PAPCodeModal from '@/Pages/Modules/FAIMS/Procurement/Libraries/Modals/PAPCode.vue';
+import SupplierModal from '@/Pages/Modules/FAIMS/Procurement/Libraries/Modals/Supplier.vue';
 
 export default {
 props: ['dropdowns'],
-components: { PAPCodeModal, Pagination, PageHeader },
+components: { SupplierModal, Pagination, PageHeader },
 data(){
     return {
         currentUrl: window.location.origin,
@@ -87,7 +89,7 @@ methods: {
         this.fetch();
     }, 300),
     fetch(page_url){ 
-        page_url = '/faims/libraries/pap-codes' ;
+        page_url = '/faims/libraries/suppliers' ;
         axios.get(page_url,{
             params : {
                 keyword: this.filter.keyword,

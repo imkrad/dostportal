@@ -29,7 +29,6 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-
             <tbody>
                 <tr class="custom-hover-row" v-for="(list, index) in lists" :key="index">
                     <td>{{ index + 1 }}</td>
@@ -38,15 +37,15 @@
                     <td>{{ list.section.division.name }}</td>
                     <td>{{  list.requested_by }}</td>
                     <td></td>
-                    <td>{{  list.pap_code }}</td>
-                    <td></td>
                     <td>
-                        <b-badge 
-                            :variant="getBadgeVariant(list.status.name)" 
-                            style="color: white;">
-                            {{ list.status.name }}
-                        </b-badge>  
+                        <template v-for="(code, counter) in list.pap_codes" :key="counter">
+                            <b-badge variant="primary" class="m-1 bg-red">
+                                {{ code.pap_code.code }}
+                            </b-badge>
+                        </template>
                     </td>
+                    <td></td>
+                    <td></td>
                     <td>
                         <b-dropdown size="sm" variant="success">
                             <template #button-content>
@@ -72,21 +71,16 @@
                             Approve
                             </b-dropdown-item>
 
-                            <b-dropdown-item @click="quotationsPR(list)" v-if="list.status.id == 3">
+                            <b-dropdown-item @click="quotationsPR(list)" v-if="list.status.id == 3 || list.status.id == 5">
                             <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Quotation -->
                             Quotations
                             </b-dropdown-item>
 
-                            <b-dropdown-item @click="bidsPR(list)" v-if="list.status.id == 3">
+                            <b-dropdown-item @click="bidsPR(list)" v-if="list.status.id == 5 || list.status.id == 7">
                             <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Bids -->
                             Abstract of Bids
                             </b-dropdown-item>
 
-
-                            <b-dropdown-item @click="awardsPR(list)" v-if="list.status.id == 3">
-                            <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Approve -->
-                            Awards
-                            </b-dropdown-item>
 
                          
                         </b-dropdown>
@@ -137,7 +131,7 @@ export default {
             axios.get(page_url,{
                 params : {
                     keyword: this.filter.keyword,
-                    option: 'purchase_request',
+                    option: 'lists',
                 }
             })
             .then(response => {
@@ -155,7 +149,7 @@ export default {
             router.get('/faims/purchase-requests/create');
         },
         editIPR(data){
-            router.get('/faims/purchase-requests/'+data.id, { option: 'edit' });
+            router.get('/faims/purchase-requests/'+data.id, {option: 'edit' });
         },
         reviewPR(data){
             router.get('/faims/purchase-requests/'+data.id, { option: 'review' });
@@ -165,9 +159,6 @@ export default {
         },
         bidsPR(data){
             router.get('/faims/bids/'+data.id, { option: 'bids' });
-        },
-        awardsPR(data){
-            router.get('/faims/awards/'+data.id, { option: 'awards' });
         },
         quotationsPR(data){
             router.get('/faims/quotation-requests/'+data.id, { option: 'quotations' });

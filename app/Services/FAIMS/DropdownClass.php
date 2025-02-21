@@ -7,6 +7,7 @@ use App\Models\FAIMS\Procurement\Section;
 use App\Models\FAIMS\Procurement\FundCluster;
 use App\Models\FAIMS\Procurement\PurchaseRequestDetail;
 use App\Models\FAIMS\Procurement\Supplier;
+use App\Models\FAIMS\Procurement\Bids;
 use App\Models\FAIMS\Libraries\ListPAPCode;
 
 use App\Models\User;
@@ -163,6 +164,28 @@ class DropdownClass
         });
 
         return $data;
+    }
+
+
+    public function bids($id)
+    {
+        $data = Bids::with('bids_details', 'bids_details.unit_type')->where('purchase_request_id',$id)
+        ->get()->map(function ($item) {
+            return [
+                'value' => $item->id,
+                'supplier' => $item->supplier,
+                'purchase_request' => $item->purchase_request,
+                'bids_details' => $item->bids_details,
+                'status' => $item->status,
+            ];
+        });
+
+        return $data;
+    }
+
+    public function purchase_request_title($request){
+        $data = ListPAPCode::findOrFail($request->id);
+        return $data->title;
     }
 
     

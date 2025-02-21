@@ -196,10 +196,10 @@
                         
                     </td>
                     @foreach ($item as $bid)
-                    <td style="text-align:center;padding:5px">
-                        {{ $bid->bids_price }}          
-                    </td>
-                    @endforeach  
+                        <td style="text-align:center;padding:5px">
+                            {{ number_format($bid->bids_price) == 0 ? 'No Bid' : number_format($bid->bids_price) }}
+                        </td>
+                    @endforeach
                 </tr>
                 
             @endforeach

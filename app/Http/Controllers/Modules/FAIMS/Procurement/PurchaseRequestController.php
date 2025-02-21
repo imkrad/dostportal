@@ -30,7 +30,7 @@ class PurchaseRequestController extends Controller
 
     public function index(Request $request){
         switch($request->option){     
-            case 'purchase_request':
+            case 'lists':
                 return $this->view->purchase_requests($request);
             break;
             case 'unit_type':
@@ -41,7 +41,10 @@ class PurchaseRequestController extends Controller
             break;
             case 'supplier_address':
                 return $this->dropdown->supplier_address($request->supplier_id);
-            break;     
+            break;  
+            case 'purchase_request_title':
+                return $this->dropdown->purchase_request_title($request);
+            break;  
             default:
                 return inertia('Modules/FAIMS/Index', [
                     'dropdowns' => [

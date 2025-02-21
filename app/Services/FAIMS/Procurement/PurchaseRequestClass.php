@@ -8,6 +8,7 @@ use App\Models\FAIMS\Procurement\Supplier;
 use App\Models\FAIMS\Procurement\Bids;
 use App\Models\FAIMS\Procurement\BidsDetail;
 use App\Models\FAIMS\Procurement\QuotationRequest;
+use App\Models\FAIMS\Procurement\PRPAPCode;
 use App\Http\Resources\FAIMS\Procurement\PurchaseRequestResource;
 use App\Http\Resources\FAIMS\Procurement\QuotationRequestResource;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,17 @@ class PurchaseRequestClass
         $data = PurchaseRequest::create(array_merge($request->all(), [ 'purchase_request_number' => $request_number,
                                                                         'purchase_request_date' => $request_date  ] ));
 
+        if (!empty($request->pap_code_ids) && is_array($request->pap_code_ids)) {
+            // Save PAP codes
+            foreach ($request->pap_code_ids as $pap_code_id) {
+                $pap_code = new PRPAPCode();
+                $pap_code->pap_code_id = $pap_code_id;
+                $pap_code->purchase_request_id = $data->id;
+                $pap_code->save();
+            }
+        }
+                                                                        
+      
         // Save Purchase Request Item Details       
         $this->saveItemDetails($request, $data->id);
 
@@ -34,7 +46,6 @@ class PurchaseRequestClass
     
 
     protected function saveItemDetails($request ,$purchase_request_id ){
-
         $unit_id =  $request->section_id;  
 
         foreach ($request->items as $item) {
@@ -53,6 +64,7 @@ class PurchaseRequestClass
             $item_details_data->item_description = $item_description;
             $item_details_data->total = $item_total_cost;
             $item_details_data->status_id = 4;
+            
             $item_details_data->save();
         }
     }

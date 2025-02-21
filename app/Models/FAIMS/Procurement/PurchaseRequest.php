@@ -21,7 +21,7 @@ class PurchaseRequest extends Model
         'supplier_id',
         'fund_cluster_id',
         'po_number',
-        'pap_code',
+        'pap_code_id',
         'status_id'
     ];
 
@@ -31,6 +31,7 @@ class PurchaseRequest extends Model
     {
         return $this->belongsTo('App\Models\FAIMS\Procurement\Section', 'section_id');
     }
+
 
     public function fundCluster()
     {
@@ -53,6 +54,12 @@ class PurchaseRequest extends Model
         return $this->belongsTo('App\Models\FAIMS\Procurement\Supplier', 'supplier_id');
     }
 
+
+    public function pap_codes()
+    {
+        return $this->hasMany('App\Models\FAIMS\Procurement\PRPAPCode', 'purchase_request_id')->with('pap_code');;
+    }
+    
     public function status()
     {
         return $this->belongsTo('App\Models\ListStatus', 'status_id')

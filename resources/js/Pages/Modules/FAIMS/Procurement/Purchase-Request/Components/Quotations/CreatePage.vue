@@ -1,5 +1,5 @@
 <template>
-    <PageHeader v-if="option == 'quotations'" title="Request For Quotation" pageTitle="Quotation" />
+    <PageHeader title="Request For Quotation" pageTitle="Quotation" />
     <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
         <div class="file-manager-content w-100 p-4 pb-0" style="height: calc(100vh - 180px); overflow: auto;" ref="box">
             <form class="customform">
@@ -73,8 +73,8 @@
                             </thead>                 
                             <tbody style="vertical-align: top;">
                                 <tr v-for="(item, index) in form.items" :key="index">
-                                    <td style="text-align:center">{{ index + 1 }}</td>
-                                    <td style="text-align:center">{{ item.quantity }} {{ item.item_unit }}</td>
+                                    <td >{{ index + 1 }}</td>
+                                    <td >{{ item.quantity }} {{ item.item_unit }}</td>
                                     <td >
                                         <div v-html="item.description"></div>
                                     </td>
@@ -149,6 +149,10 @@ export default {
         }
     },
 
+    mounted() {
+        this.getDateSubmissionNotLaterThan();
+    },
+
     methods: { 
         openAddItem(){
             this.$refs.create.show();
@@ -208,6 +212,25 @@ export default {
         goBackPage(data){
             this.$inertia.visit('/faims/quotation-requests/'+data.id+'?option=quotations');
         },
+
+        getDateSubmissionNotLaterThan(page_url){
+            page_url = '/faims/quotation-requests' ;
+            axios.get(page_url,{
+                params : {
+                    option: 'getDateSubmissionNotLaterThan',
+                    purchase_request_id: this.dropdowns.data.id,
+                }
+            })
+            .then(response => {
+                if(response){    
+                    this.form.submission_date= response.data;
+                }
+            })
+            .catch(err => console.log(err));
+
+        }
+
+
 
     }
 }

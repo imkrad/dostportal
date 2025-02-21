@@ -5,13 +5,16 @@ namespace App\Models\FAIMS\Libraries;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ListPAPCode extends Model
+class Supplier extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title',
+        'name',
+        'mayors_permit_no',
+        'tin',
+        'philgeps_registration_no',
+        'address',
+        'contact',
         'code',
-        'allocated_budget',
     ];
-
 }

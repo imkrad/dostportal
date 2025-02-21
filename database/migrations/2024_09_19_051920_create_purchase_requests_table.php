@@ -15,6 +15,7 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('purchase_request_number'); 
+            $table->string('purchase_request_title')->nullable(); 
             $table->date('purchase_request_date'); 
             $table->string('request_sai_number')->nullable(); 
             $table->date('request_sai_date')->nullable(); 
@@ -33,7 +34,6 @@ return new class extends Migration
             $table->tinyInteger('fund_cluster_id')->unsigned()->index();
             $table->foreign('fund_cluster_id')->references('id')->on('fund_clusters');
             $table->string('po_number')->nullable();
-            $table->string('pap_code')->nullable();
             $table->string('fund_cluster')->nullable();
             $table->tinyInteger('status_id')->unsigned()->index();
             $table->foreign('status_id')->references('id')->on('list_statuses');

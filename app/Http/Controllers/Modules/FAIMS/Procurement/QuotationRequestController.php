@@ -29,6 +29,10 @@ class QuotationRequestController extends Controller
         switch($request->option){     
             case 'quotation_request':
                 return $this->view->quotation_requests($request);
+            break; 
+            
+            case 'getDateSubmissionNotLaterThan':
+                return $this->quotation_request->getDateSubmissionNotLaterThan($request);
             break;  
 
             default:

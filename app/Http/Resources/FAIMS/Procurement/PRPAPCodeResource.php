@@ -4,8 +4,9 @@ namespace App\Http\Resources\FAIMS\Procurement;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\UserResource;
 
-class SupplierResource extends JsonResource
+class PRPAPCodeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +17,8 @@ class SupplierResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' =>  $this->name,
-            'address' =>  $this->address,
-            'contact' =>  $this->contact,
+            'purchase_request' =>  $this->purchase_request,
+            'pap_code' => $this->pap_code,
         ];
     }
 }

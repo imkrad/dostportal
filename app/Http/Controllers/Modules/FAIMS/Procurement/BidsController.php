@@ -26,6 +26,7 @@ class BidsController extends Controller
     }
 
     public function index(Request $request){
+        dd('heye');
         switch($request->option){     
             case 'lists':
                 return $this->view->lists($request);
@@ -39,10 +40,19 @@ class BidsController extends Controller
     }
 
     public function store(Request $request) {
-        $result = $this->handleTransaction(function () use ($request) {
-            return $this->bids->save($request);
-        });
-
+        switch($request->option){     
+            case 'save_award':
+                $result = $this->handleTransaction(function () use ($request) {
+                    return $this->bids->save_award($request);
+                });
+            break; 
+            default:
+                $result = $this->handleTransaction(function () use ($request) {
+                    return $this->bids->save($request);
+                });
+            break;         
+        }  
+        
         return back()->with([
             'data' => $result['data'],
             'message' => $result['message'],
@@ -50,7 +60,14 @@ class BidsController extends Controller
             'status' => $result['status'],
         ]);
 
+
     }
+
+
+
+
+
+
 
     public function printBids($id, Request $request){
         return $this->bids->print($id, $request);

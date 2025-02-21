@@ -44,12 +44,14 @@
                                 </BCol>
 
                                 <BCol lg="12" class="mt-2">
-                                    <InputLabel value="PAP Code" :message="form.errors.pap_code"/>
+                                    <InputLabel value="PAP Code" :message="form.errors.pap_code_ids"/>
                                     <Multiselect 
                                     :options="dropdowns.pap_codes" 
-                                    v-model="form.pap_code"
+                                    v-model="form.pap_code_ids"
                                     :searchable="true" label="code"
-                                    placeholder="Select PAP CODE"/>
+                                    placeholder="Select PAP CODE"
+                                    mode="tags"
+                                    />
                                 
                                 </BCol>
                             </BRow>    
@@ -66,7 +68,17 @@
                                         id="textarea"
                                         v-model="form.purchase_request_purpose"
                                         placeholder="Enter your request purpose"
-                                        rows="5"
+                                        rows="4"
+                                        max-rows="10"></b-form-textarea>
+                                </BCol>
+
+                                <BCol lg="12" class="mt-2">
+                                    <InputLabel for="purchase_request_title" value="Request Title" :message="form.errors.purchase_request_title"/>
+                                    <b-form-textarea
+                                        id="textarea"
+                                        v-model="form.purchase_request_title"
+                                        placeholder="Enter your request purpose"
+                                        rows="2"
                                         max-rows="10"></b-form-textarea>
                                 </BCol>
 
@@ -190,7 +202,9 @@ export default {
                         purchase_request_date: this.dropdowns.data.purchase_request_date,
                         fund_cluster_id: this.dropdowns.data.fund_cluster_id,
                         purchase_request_purpose: this.dropdowns.data.purchase_request_purpose,   
+                        purchase_request_title:null, 
                         items: this.dropdowns.item_details,
+                        pap_code_ids: this.dropdowns.pap_code_ids,
                         requested_by: this.dropdowns.data.requested_by,
                         approved_by: this.dropdowns.data.approved_by,
                         option: 'edit',
@@ -211,11 +225,12 @@ export default {
                     section_id : null,
                     purchase_request_date: this.getCurrentDate(),
                     fund_cluster_id: null,
-                    purchase_request_purpose: null,   
+                    purchase_request_purpose: null, 
+                    purchase_request_title:null,  
                     items: null,
                     requested_by: null,
                     approved_by: null,
-                    pap_code: null,
+                    pap_code_ids: null,
                     status_id: 1,
                     option: 'purchase-request',
                 }),
@@ -233,10 +248,18 @@ export default {
             if(value){         
                 this.getSections(value);
             }
+        },
+
+        'form.pap_code_ids': function(value) {
+            if (Array.isArray(value) && value.length > 0) {  
+                // Reset the title before adding new ones
+                this.form.purchase_request_title = "";            
+                value.forEach(id => {
+                    this.getPRTitle(id);
+                });
+            }
         }
     },
-
-
 
 
     methods: { 
@@ -291,7 +314,7 @@ export default {
 
         submit(){
             this.form.post('/faims/purchase-requests');
-            this.form.reset();    
+            //this.form.reset();    
         },
 
         update(data){
@@ -337,7 +360,28 @@ export default {
                 }
             })
             .catch(err => console.log(err));
-        }   
+        },
+
+        getPRTitle(id){
+            axios.get('/faims/purchase-requests',{
+                params : {
+                    id: id ,
+                    option: 'purchase_request_title'
+                }
+            })
+            .then(response => {
+                if(response){
+                    if (this.form.purchase_request_title) {
+                        this.form.purchase_request_title += ', ' + response.data;
+                    } else {
+                        this.form.purchase_request_title = response.data;
+                    }   
+                }
+            })
+            .catch(err => console.log(err));
+        }
+        
+        
     }
 }
 </script>

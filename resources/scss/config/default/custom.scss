@@ -131,6 +131,8 @@ File: Custom Css File
   }
 }
 
+
+
 .multiselect-search {
   color: $input-color !important;
   background: #f5f6f7 !important;
@@ -426,8 +428,8 @@ File: Custom Css File
     }
 
     &.is-pointed {
-      background-color: var(--#{$prefix}tertiary-bg) !important;
-      color: var(--#{$prefix}tertiary-color) !important;
+      background-color: var(--#{$prefix}primary) !important;
+      color: var(--#{$prefix}white) !important;
     }
   }
 }

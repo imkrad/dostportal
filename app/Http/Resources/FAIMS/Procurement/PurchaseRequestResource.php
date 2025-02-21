@@ -18,19 +18,19 @@ class PurchaseRequestResource extends JsonResource
         return [
             'id' => $this->id,
             'purchase_request_number' =>  $this->purchase_request_number,
-            'request_sai_number' =>  $this->request_sai_number,
             'purchase_request_date' => $this->purchase_request_date,
             'purchase_request_purpose' =>  $this->purchase_request_purpose,
             'referrence_no' =>  $this->referrence_no,
-            'section' =>  $this->section ? new SectionResource($this->section): null,
+            'section' =>  $this->section,
+            'division' =>  $this->division,
             'requested_by' =>  $this->requester->firstname.' '.$this->requester->middlename[0].' '.$this->requester->lastname.' '.$this->requester->suffix,
             'requested_by_id' =>  $this->requester->id,
             'approved_by' =>  $this->approver->firstname.' '.$this->requester->middlename[0].' '.$this->requester->lastname.' '.$this->requester->suffix,
             'approved_by_id' =>  $this->approver->id,
-            'supplier' =>  $this->supplier ? new SupplierResource($this->supplier): null,
+            'supplier' =>  $this->supplier,
             'fund_cluster' =>  $this->fundCluster,
             'po_number' =>  $this->po_number,
-            'pap_code' =>  $this->pap_code,
+            'pap_codes' =>  $this->pap_codes,
             'status' =>  $this->status,
         ];
     }

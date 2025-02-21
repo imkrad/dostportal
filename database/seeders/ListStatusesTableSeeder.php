@@ -43,65 +43,86 @@ class ListStatusesTableSeeder extends Seeder
             array (
                 'id' => 4,
                 'name' => 'Pending',
-                'classification' => 'pr_details',
+                'classification' => 'purchase_request',
             ),
 
             4 => 
             array (
                 'id' => 5,
                 'name' => 'For Bids',
-                'classification' => 'pr_details'
+                'classification' => 'purchase_request'
             ),
 
             5 => 
             array (
                 'id' => 6,
-                'name' => 'Awarded',
-                'classification' => 'pr_details',
+                'name' => 'For Recommendation of Award',
+                'classification' => 'purchase_request',
             ),
 
-            // Bids Status
             6 => 
             array (
                 'id' => 7,
-                'name' => 'Available for Award',
-                'classification' => 'bids',
+                'name' => 'For NOA',
+                'classification' => 'purchase_request',
             ),
-
             7 => 
             array (
                 'id' => 8,
-                'name' => 'Pending for Award',
-                'classification' => 'bids',
+                'name' => 'For BAC Resolution',
+                'classification' => 'purchase_request',
             ),
 
-            
             8 => 
             array (
                 'id' => 9,
-                'name' => 'Not Available for Award',
-                'classification' => 'bids',
+                'name' => 'Awarded',
+                'classification' => 'purchase_request',
             ),
 
+            // Bids Status
             9 => 
             array (
                 'id' => 10,
-                'name' => 'Awarded',
-                'classification' => 'bids',
+                'name' => 'Available for Award',
+                'classification' => 'bids_details',
             ),
+
 
             10 => 
             array (
-                'id' =>11,
-                'name' => 'Complete',
+                'id' => 11,
+                'name' => 'Pending for Award',
                 'classification' => 'bids_details',
             ),
 
+            
             11 => 
             array (
                 'id' => 12,
-                'name' => 'Incomplete',
+                'name' => 'Not Available for Award',
                 'classification' => 'bids_details',
+            ),
+
+            12 => 
+            array (
+                'id' => 13,
+                'name' => 'Awarded',
+                'classification' => 'bids_details',
+            ),
+
+            13 => 
+            array (
+                'id' =>14,
+                'name' => 'Completed',
+                'classification' => 'bids',
+            ),
+
+            14 => 
+            array (
+                'id' => 15,
+                'name' => 'Pending',
+                'classification' => 'bids',
             ),
 
             

@@ -24,10 +24,12 @@
                             <tr class="fs-11">
                                 <th>Remarks</th>    
                                 <th>Item Description</th> 
+                                <th></th>
                                 <th>Quantity/Unit</th>
                                 <th>ABC</th>
                                 <th>Bid Price</th>
                                 <th>Total Bid Price</th>
+                                <th>Actions</th>
                                 <th>
                                     <b-form-checkbox
                                             id="checkbox-1"
@@ -58,20 +60,21 @@
                                         </td>
                                         <!-- Item Description -->
                                         <td>
-                                            <div v-html="item.description"></div>
+                                            <div v-html="item.description"></div>   
                                         </td>
+                                        <td>
+                                            
+                                        </td>
+              
                                         <!-- Quantity and Unit -->
                                         <td>{{ item.quantity }} {{ item.item_unit }}</td>
                                         <!-- Total Cost -->
                                         <td>{{ formatCurrency(item.total_cost) }}</td>
                                         <!-- Conditional TextInput -->
                                         <td>
-                                            <TextInput 
-                                                v-if="item.is_checked" 
-                                                v-model="item.item_bid_price" 
-                                                type="text"  
-                                                style="margin-top: -10px;" 
-                                            />
+                                           <span v-if="item.item_bid_price && item.is_checked == true">
+                                            {{ formatCurrency(item.item_bid_price) }}
+                                           </span>
                                             <span v-else class="text-info"> 
                                                 not set
                                             </span>
@@ -85,6 +88,22 @@
                                                 not set
                                             </span>
                                         </td>
+                                        <td>
+                                            <b-dropdown size="sm" variant="success" v-if="item.is_checked == true">
+                                            <template #button-content>
+                                                <b>Actions</b>
+                                            </template>
+                                            <b-dropdown-item @click="openEditItemDescription(item)">
+                                                <i class="ri-check-line align-bottom me-1"></i> 
+                                                Edit Item Description
+                                            </b-dropdown-item>       
+                                            <b-dropdown-item @click="openEditItemBidPrice(item)">
+                                                <i class="ri-check-line align-bottom me-1"></i> 
+                                                Set Item Bid Price
+                                            </b-dropdown-item>                                     
+                                        
+                                            </b-dropdown>
+                                        </td>
                                         <!-- Checkbox -->
                                         <td>
                                             <b-form-checkbox
@@ -95,24 +114,25 @@
                                             >
                                             </b-form-checkbox>
                                         </td>
+                                        
                                     </tr>
                                 </tbody>
                             </template>
                     </table>
                     <Pagination class="ms-2 me-2" v-if="meta" @fetch="fetch" :lists="lists.length" :links="links" :pagination="meta" />
-                    </div> 
-
-                    
+                    </div>              
                 </div>
                 <BCol lg="12"><hr class="text-muted mt-4 mb-0"/></BCol>
-            </BRow>
-        </form>
-   
-          <template v-slot:footer>
-            <b-button @click="hide()" variant="danger" block>Close</b-button>
-            <b-button @click="saveBids(form)" variant="primary"  block>Save Bids</b-button>
-        </template>
-        
+                </BRow>
+            </form>
+
+    
+            <template v-slot:footer>
+                <b-button @click="hide()" variant="danger" block>Close</b-button>
+                <b-button @click="saveBids(form)" variant="primary"  block>Save Bids</b-button>
+            </template>
+      <EditItemModal   @update-description="updateItemDescription" @update-price="updateItemBidPrice" ref="editItem"/>
+
     </b-modal>
 </template>
 <script>
@@ -122,9 +142,10 @@ import InputError from '@/Shared/Components/Forms/InputError.vue';
 import InputLabel from '@/Shared/Components/Forms/InputLabel.vue';
 import TextInput from '@/Shared/Components/Forms/TextInput.vue';
 import { router } from '@inertiajs/vue3';
+import EditItemModal from './EditItem.vue';
 
 export default {
-    components: { InputError, InputLabel, TextInput, Multiselect  },
+    components: { InputError, InputLabel, TextInput, Multiselect, EditItemModal  },
     props:['dropdowns', 'items'],
     data(){
         return {
@@ -139,8 +160,11 @@ export default {
                 is_checked : null,
                 type: null
             }),
+            action_type: null,
             currentUrl: window.location.origin,        
             showModal: false,
+            updatedDescription: [],
+            itemsEdited: [],
         }
     },
 
@@ -152,8 +176,8 @@ export default {
         }
     },
 
-
     methods: { 
+
 
         show(){
             // this.form.reset();
@@ -169,7 +193,6 @@ export default {
         },
       
         hide(){
-            // this.form.reset();
             this.showModal = false;
         },
 
@@ -199,13 +222,49 @@ export default {
             return  this.form.total_bid_price;
         },
 
+        openEditItemDescription(item){
+            this.selectedItem = item;
+            this.$refs.editItem.edit(item , "edit_description");
+
+        },
+
+        openEditItemBidPrice(item){
+            this.selectedItem = item;
+            this.$refs.editItem.edit(item , "edit_bid_price");
+
+        },
+
         saveBids(data){
-            router.post('/faims/bids', { data, option: 'save_bids' });;
+            router.post('/faims/bids', { data, option: 'save_bids' });
           
             this.form.reset(); 
             this.hide();
-        }   
-       
+        },
+
+        updateItemDescription(updatedItem){
+            // Find the item in the list and update its description
+            const item = this.form.items.find(i => i.value === updatedItem.id);
+            if (item) {
+                item.description = updatedItem.description;
+            }
+        },
+        updateItemBidPrice(updatedItem){
+            console.log(updatedItem,333);
+            console.log(this.form.items,444);
+            // Find the item in the list and update its description
+            const item = this.form.items.find(i => i.value === updatedItem.id);
+            if (item) {
+                item.item_bid_price = updatedItem.item_bid_price;
+            }
+        }          
     }
 }
 </script>
+
+<style scoped>
+/* Custom styles for the popover */
+.custom-popover {
+  width: 100% !important; /* Full width */
+  max-width: 100% !important; /* Remove default max-width */
+}
+</style>

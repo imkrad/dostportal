@@ -23,7 +23,7 @@ class ViewClass
 
     public function purchase_requests($request){
         $data = PurchaseRequestResource::collection(
-            PurchaseRequest::query()
+            PurchaseRequest::with('section.division')
             ->when($request->keyword, function ($query, $keyword) {
                 $query->where('purchase_request_number', 'LIKE', "%{$keyword}%")
                       ->orWhere('purchase_request_date', 'LIKE', "%{$keyword}%")
@@ -61,7 +61,10 @@ class ViewClass
     }
 
     public function show($id, $request){
-        $data = PurchaseRequest::with('section')->findOrFail($id);
+
+        // dd($request->all());
+        $data = PurchaseRequest::with('section', 'pap_codes')->findOrFail($id);
+        $pap_code_ids = $data->pap_codes()->pluck('pap_code_id');
         switch($request->option){
             case 'edit':
             case 'review':
@@ -69,6 +72,7 @@ class ViewClass
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/CreatePage', [
                     'dropdowns' => [
                         'data' => $data,
+                        'pap_code_ids' => $pap_code_ids,
                         'item_details' => $this->dropdown->pr_details($id),
                         'unit_types' => $this->dropdown->unit_types(),
                         'divisions' => $this->dropdown->divisions(),
@@ -77,6 +81,7 @@ class ViewClass
                         'requesters' => $this->dropdown->requesters(),
                         'approvers' => $this->dropdown->approvers(),
                         'suppliers' => $this->dropdown->suppliers(),
+                        'pap_codes' => $this->dropdown->pap_codes(),
                         'supply_officers' => $this->dropdown->supply_officers(),
                     ],
                     'option' => $request->option,
@@ -87,6 +92,7 @@ class ViewClass
                     'dropdowns' => [
                         'data' => $data,
                         'item_details' => $this->dropdown->pr_details($id),
+                        'bids' => $this->dropdown->bids($id),
                         'suppliers' => $this->dropdown->suppliers(),
                         'lists' => $this->bids->lists($id,$request),
                     ],        
