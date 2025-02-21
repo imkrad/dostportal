@@ -19,6 +19,11 @@ class UserProfile extends Model
         return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 
+    public function user_organization()
+    {
+        return $this->HasOne('App\Models\UserOrganization', 'user_id', 'id');
+    }
+
     public function setFirstnameAttribute($value)
     {
         $this->attributes['firstname'] = ucwords(strtolower($value));

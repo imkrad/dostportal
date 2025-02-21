@@ -25,19 +25,19 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \DB::table('user_profiles')->insert([
-            'firstname' => 'Ra-ouf',
-            'lastname' => 'Jumli',
-            'middlename' => 'Indanan',
+            'firstname' => 'Reniel',
+            'lastname' => 'Tumacas',
+            'middlename' => 'Bentoy',
             'avatar' => 'avatar.jpg',
             'sex' => 'Male',
-            'birthdate' => '1994-03-11',
+            'birthdate' => '2000-02-13',
             'marital_id' => 1,
             'religion_id' => 1,
             'blood_id' => 1,
             'user_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
-        ]);
+        ]); 
        
         $this->call(LocationRegionsTableSeeder::class);
         $this->call(LocationProvincesTableSeeder::class);
@@ -49,5 +49,21 @@ class DatabaseSeeder extends Seeder
         $this->call(ListDropdownsTableSeeder::class);
         $this->call(ListUnitsTableSeeder::class);
         $this->call(ListSystemsTableSeeder::class);
+        $this->call(UnitTypesTableSeeder::class);
+        $this->call(ListSectionsTableSeeder::class);
+        $this->call(FundClustersTableSeeder::class);
+        $this->call(ListStatusesTableSeeder::class);
+
+        \DB::table('user_organizations')->insert([
+            'status_id' => 1,
+            'type_id' => 7,
+            'position_id' => 100,
+            'division_id' => 1,
+            'station_id' => 1,
+            'user_id' => 1,
+            'start_at' => '2024-02-19',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

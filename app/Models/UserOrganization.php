@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class UserOrganization extends Model
 {
     use HasFactory;
+
+    public function position()
+    {
+        return $this->belongsTo('App\Models\ListPosition', 'position_id', 'id');
+    }
+
 }

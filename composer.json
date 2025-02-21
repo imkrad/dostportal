@@ -20,6 +20,8 @@
         "maatwebsite/excel": "^3.1",
         "pragmarx/google2fa-laravel": "^2.0",
         "pragmarx/google2fa-qrcode": "^3.0",
+        "setasign/fpdf": "^1.8",
+        "setasign/fpdi": "^2.6",
         "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-backup": "^8.6",
         "torann/geoip": "^3.0"

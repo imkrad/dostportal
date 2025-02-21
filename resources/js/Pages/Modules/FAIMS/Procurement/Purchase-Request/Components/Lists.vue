@@ -1,0 +1,200 @@
+<template>
+    <b-row class="g-2 mb-2 mt-n2">
+        <b-col lg>
+            <div class="input-group mb-1">
+                <span class="input-group-text"> <i class="ri-search-line search-icon"></i></span>
+                <input type="text" v-model="filter.keyword" placeholder="Search Purchase Request" class="form-control" style="width: 60%;">
+                <span @click="refresh()" class="input-group-text" v-b-tooltip.hover title="Refresh" style="cursor: pointer;"> 
+                    <i class="bx bx-refresh search-icon"></i>
+                </span>
+                <b-button type="button" variant="primary" @click="goCreatePage()">
+                    <i class="ri-add-circle-fill align-bottom me-1"></i> Create
+                </b-button>
+            </div>
+        </b-col>
+    </b-row>
+    <div>
+        <table class="table table-nowrap mb-0">
+            <thead class="table-light">
+                <tr class="fs-11">
+                    <th>#</th>
+                    <th>Request #</th>
+                    <th>Request Purpose</th>
+                    <th>Division</th>
+                    <th>Requested By</th>
+                    <th>PO #</th>
+                    <th>PAP Code</th>
+                    <th>Quotation Count</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="custom-hover-row" v-for="(list, index) in lists" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ list.purchase_request_number }}</td>
+                    <td>{{ list.purchase_request_purpose }}</td>
+                    <td>{{ list.section.division.name }}</td>
+                    <td>{{  list.requested_by }}</td>
+                    <td></td>
+                    <td>
+                        <template v-for="(code, counter) in list.pap_codes" :key="counter">
+                            <b-badge variant="primary" class="m-1 bg-red">
+                                {{ code.pap_code.code }}
+                            </b-badge>
+                        </template>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <b-dropdown size="sm" variant="success">
+                            <template #button-content>
+                            <i class="ri-more-2-fill align-bottom"></i>
+                            </template>
+
+                            <b-dropdown-item @click="printPR(list)">
+                            <i class="ri-printer-fill align-bottom me-1"></i> <!-- Icon for Print -->
+                            Print
+                            </b-dropdown-item>
+
+                            <b-dropdown-item @click="editIPR(list)" v-if="list.status.id == 1 || list.status.id == 2">
+                            <i class="ri-edit-2-fill align-bottom me-1"></i> <!-- Icon for Edit -->
+                            Edit
+                            </b-dropdown-item>
+                            <b-dropdown-item @click="reviewPR(list)" v-if="list.status.id == 1">
+                            <i class="ri-check-double-fill align-bottom me-1"></i> <!-- Icon for Review -->
+                            Review
+                            </b-dropdown-item>
+                            
+                            <b-dropdown-item @click="approvePR(list)" v-if="list.status.id == 2">
+                            <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Approve -->
+                            Approve
+                            </b-dropdown-item>
+
+                            <b-dropdown-item @click="quotationsPR(list)" v-if="list.status.id == 3 || list.status.id == 5">
+                            <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Quotation -->
+                            Quotations
+                            </b-dropdown-item>
+
+                            <b-dropdown-item @click="bidsPR(list)" v-if="list.status.id == 5 || list.status.id == 7">
+                            <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Bids -->
+                            Abstract of Bids
+                            </b-dropdown-item>
+
+
+                         
+                        </b-dropdown>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <Pagination class="ms-2 me-2" v-if="meta" @fetch="fetch" :lists="lists.length" :links="links" :pagination="meta" />
+    </div> 
+    <Create @add="fetch()" :dropdowns="dropdowns" @items="items" ref="create"/>
+   
+</template>
+<script>
+import _ from 'lodash';
+import Create from '../Modals/Create.vue';
+import Pagination from "@/Shared/Components/Pagination.vue";
+import { router } from '@inertiajs/vue3';
+export default {
+    props: ['dropdowns'],
+    components: { Create, Pagination },
+    data(){
+        return {
+            currentUrl: window.location.origin,
+            lists: [],
+            meta: {},
+            links: {},
+            filter: {
+                keyword: null,
+            },
+            index: null
+        }
+    },
+    watch: {
+        "filter.keyword"(newVal){
+            this.checkSearchStr(newVal);
+        }
+    },
+    created(){
+        this.fetch();
+    },
+    methods: {
+        checkSearchStr: _.debounce(function(string) {
+            this.fetch();
+        }, 300),
+        fetch(page_url){ 
+            page_url = page_url || '/faims/purchase-requests';
+            axios.get(page_url,{
+                params : {
+                    keyword: this.filter.keyword,
+                    option: 'lists',
+                }
+            })
+            .then(response => {
+                if(response){
+                    this.lists = response.data.data;
+                    this.meta = response.data.meta;
+                    this.links = response.data.links;          
+                }
+            })
+            .catch(err => console.log(err));
+
+        },
+
+        goCreatePage(){
+            router.get('/faims/purchase-requests/create');
+        },
+        editIPR(data){
+            router.get('/faims/purchase-requests/'+data.id, {option: 'edit' });
+        },
+        reviewPR(data){
+            router.get('/faims/purchase-requests/'+data.id, { option: 'review' });
+        },
+        approvePR(data){
+            router.get('/faims/purchase-requests/'+data.id, { option: 'approve' });
+        },
+        bidsPR(data){
+            router.get('/faims/bids/'+data.id, { option: 'bids' });
+        },
+        quotationsPR(data){
+            router.get('/faims/quotation-requests/'+data.id, { option: 'quotations' });
+        },
+        openAction(data,index){
+            this.index = index;
+            this.$refs.create.edit(data , 'action');
+        },
+        updateData(data){
+            this.lists[this.index] = data;
+        },
+
+        getBadgeVariant(status_name) {
+            switch (status_name) {
+                case 'Created':
+                    return 'warning'; // Maps to Bootstrap's warning variant
+                case 'Reviewed':
+                    return 'info';    // Maps to Bootstrap's info variant
+                case 'Approved':
+                    return 'success';  // Maps to Bootstrap's success variant
+                default:
+                    return 'secondary'; // Default variant if none match
+            }
+        },
+
+
+        printPR(data){
+          window.open('/faims/purchase-request/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
+        },
+    }
+}
+</script>
+
+<style scoped>
+.custom-hover-row:hover {
+    background-color: hsl(0, 29%, 97%); 
+}
+
+</style>

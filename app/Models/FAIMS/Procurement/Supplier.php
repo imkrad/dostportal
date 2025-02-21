@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Models\FAIMS\Procurement;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Supplier extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'name',
+        'address',
+        'contact',
+        'code',
+        'mayors_permit_no',
+        'tin',
+        'philgeps_registration_no',
+        'address',
+    ];
+    
+}
+

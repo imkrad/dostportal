@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class ListDropdown extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'classification',
+        'type',
+        'color',
+        'others',
+        'is_active',
+    ];
 }

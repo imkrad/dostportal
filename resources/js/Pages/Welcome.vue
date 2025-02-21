@@ -1,5 +1,5 @@
 <template>
-    welcum
+   DOST
 </template>
 <script>
 export default {
