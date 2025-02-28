@@ -20,10 +20,10 @@ return new class extends Migration
             $table->foreign('pr_detail_id')->references('id')->on('purchase_request_details');
             $table->tinyInteger('bids_id')->unsigned()->index();
             $table->foreign('bids_id')->references('id')->on('bids');
-            $table->decimal('bids_abc')->nullable();
+            $table->integer('bids_abc')->nullable();
             $table->text('bids_description')->nullable();
             $table->integer('bids_quantity')->nullable();
-            $table->decimal('bids_price')->nullable();
+            $table->integer('bids_price')->nullable();
             $table->tinyInteger('bids_unit_type_id')->unsigned()->index();;
             $table->foreign('bids_unit_type_id')->references('id')->on('list_dropdowns');
             $table->string('remarks')->nullable();

@@ -35,6 +35,7 @@ return new class extends Migration
             $table->foreign('fund_cluster_id')->references('id')->on('fund_clusters');
             $table->string('po_number')->nullable();
             $table->string('fund_cluster')->nullable();
+            $table->integer('quotation_count')->nullable();
             $table->tinyInteger('status_id')->unsigned()->index();
             $table->foreign('status_id')->references('id')->on('list_statuses');
             $table->timestamps();

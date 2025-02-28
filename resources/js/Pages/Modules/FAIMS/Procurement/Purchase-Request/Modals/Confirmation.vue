@@ -11,19 +11,21 @@
                     <h5>
                         Done checking Bids Price?
                     </h5>
-                </b-form-checkbox>
+                </b-form-checkbox>    
             </div>           
         </form>
 
         <template v-slot:footer>
             <b-button @click="hide()" variant="light" block>No</b-button>
-            <b-button @click="goNext()" variant="success" block :disabled="!bothChecked">Yes</b-button>
+            <b-button @click="submit(data)" variant="success" block :disabled="!bothChecked">Yes</b-button>
         </template>
     </b-modal>
 </template>
 
 <script>
+import { router } from '@inertiajs/vue3';
 export default {
+    props:['data'],
     data(){
         return {
             showModal: false,
@@ -45,14 +47,54 @@ export default {
         hide(){
             this.showModal = false;
         },
-        goNext(data){
-            window.open('/faims/quotations/request/'+data.id + '?purchase_request_number='+data.purchase_request_number 
-                                        + '&supplier_id='+data.supplier_id 
-                                        + '&address='+data.address
-                                        + '&supplier_officer_id='+data.supply_officer_id
-                                        + '&date_submitted='+data.submission_date
-                                        + '&purchase_request_date='+data.purchase_request_date);
-        },
+
+        submit(data){
+            console.log(this.data, 5555);
+            const bidsForAward = [];
+            const bidsNotForAward = [];
+
+            this.data.forEach(item => {
+                item.bids_details.forEach(bid => {
+                    if (bid.is_checked) {
+                        bidsForAward.push({
+                            id:bid.id,
+                            purchase_request_id: item.purchase_request.id,
+                            supplier_id: item.supplier.id,
+                            supplier: item.supplier.name,
+                            bid_description: bid.bids_description,
+                            quantity: bid.bids_quantity,
+                            unit: bid.unit_type.name_long,
+                            abc: bid.bids_abc,
+                            price: bid.bids_price,
+                            total_price: bid.bids_price * bid.bids_quantity
+                        });
+                    }
+                    else{
+                        bidsNotForAward.push({
+                            id:bid.id,
+                            purchase_request_id: item.purchase_request.id,
+                            supplier_id: item.supplier.id,
+                            supplier: item.supplier.name,
+                            bid_description: bid.bids_description,
+                            quantity: bid.bids_quantity,
+                            unit: bid.unit_type.name_long,
+                            abc: bid.bids_abc,
+                            price: bid.bids_price,
+                            total_price: bid.bids_price * bid.bids_quantity
+                        });
+                    }
+                });
+            });
+
+            router.post('/faims/bids', {  
+                                        purchase_request_id: data.purchase_request_id, 
+                                        items: bidsForAward, 
+                                        itemsNotAvailableForAward: bidsNotForAward, 
+                                        option: 'save_bids_for_award' 
+                                    });
+            this.hide();
+        }
+
     }
 }
 </script>

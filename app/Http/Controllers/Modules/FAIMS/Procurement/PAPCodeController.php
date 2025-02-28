@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Modules\FAIMS\Procurement;
 
 use Illuminate\Http\Request;
+use App\Services\FAIMS\DropdownClass;
 use App\Traits\HandlesTransaction;
 use App\Services\FAIMS\Procurement\PAPCodeClass;
 use App\Http\Controllers\Controller;
@@ -14,8 +15,10 @@ class PAPCodeController extends Controller
 
     public function __construct(
         PAPCodeClass $pap_codes, 
+        DropdownClass $dropdown,
     ){
         $this->pap_codes = $pap_codes;
+        $this->dropdown = $dropdown;
     }
 
     public function index(Request $request){
@@ -24,6 +27,10 @@ class PAPCodeController extends Controller
             case 'lists':
                 return $this->pap_codes->lists($request);
             break;  
+
+            case 'mode_of_procurements':
+                return $this->dropdown->mode_of_procurements($request);
+            break; 
             
             default:
                 return inertia('Modules/FAIMS/Procurement/Libraries/PAPCodes/Lists');

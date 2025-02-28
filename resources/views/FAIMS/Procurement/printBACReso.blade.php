@@ -128,98 +128,14 @@
     <div style="margin: 100px 90px 50px 90px;text-align:justify; font-size: 16px; font-width: bold">
         <div style="text-align:center">
         <b>
-            BAC Resolution No. <u style="color: red">2024-10-0235</u>
+            BAC Resolution No. <u style="color: red">{{ $data['bac_resolution_number'] }}</u>
        </b>
         </div>
-        <p style="text-align:center">
-           <b style="margin-bottom: 20px">
-           RECOMMENDING AWARD OF CONTRACT TO LINES PRINTING SERVICES,
-            AS THE SINGLE CALCULATED AND RESPONSIVE BID FOR THE PROCUREMENT 
-            "SUPPLY AND DELIVERY OF VARIOUS SUPPLIES FOR TOKEN" UNDERTAKEN 
-            THROUGH SECTION 53.9 (SMALL VALUE PROCUREMENT) OF THE REVISED IMPLEMENTING 
-            RULES AND REGULATIONS OF R.A. 9184
-           </b>
 
-        </p>
-        <p style="text-align: justify">
-           <b> WHEREAS</b>, the Regional Director, Mr. Martin A. Wee, approved the DOST-IX Annual Procurement Plan for CY2024 upon favorable recommendation of the Bids and Awards Committee;
-        </p>
-        <p style="text-align: justify">
-            <b>WHEREAS</b>, the Annual Procurement Plan (Annex "A") contains the procurement 
-            <i style="font-size:12px">"Procurement of Complimentary Tokens for PSTO-Zamboanga Sibugay's Stakeholders and Partners for 2024 Year-End"</i>
-             with allocated budget of FIFTY ONE THOUSAND PESOS (PHP 51,000.00),
-             to be procured through Section 53.9 of the revised Implementing Rules and 
-             Regulations (IRR) of the Republic Act (RA) 9184;
-        </p>
+        <div>
+            {!! $data['body'] !!}
+        </div>
 
-        <p style="text-align: justify">
-            <b>WHEREAS</b>, the BAC has duly received an approved purchase request for the procurement titled 
-            "SUPPLY AND DELIVERY OF VARIOUS SUPPLIES FOR TOKEN" to be bid per item. Detailed technical 
-            specifications pertaining to this procurement are meticulously outlined in 
-            PR no. PR-24-10-0461 dated 07 October 2024 (refer to Annex "B");
-        </p>
-
-        <p style="text-align: justify">
-            <b>WHEREAS</b>, Bids and Awards Committee (BAC) has diligently initiated the procurement 
-            process for the aforementioned project and ensured strict adherence to the provisions of 
-            Republic Act No. 9184 and its Implementing Rules and Regulations;
-        </p>
-
-       <p style="text-align: justify">
-           <b> WHEREAS</b>, the BAC initiated the procurement through its secretariat through dissemination 
-            of the request for quotation to at least four suppliers of known qualifications in 
-            Zamboanga City to wit: LOUISE ADS, ZAMBOANGA PRINT & PAPER SPECIALISTS, DECOCRAFTERS GALLERY, 
-            and JF PRINT SHOPPE;
-       </p>
-        <p style="text-align: justify">
-            <b>WHEREAS</b>, among the above-mentioned bidders, only LINES PRINTING SERVICES responded by submitting
-            its price quotation to the BAC before opening of bids on 18th day of October 2024.
-        </p>
-
-        <p style="text-align: justify">
-            <b>WHEREAS</b>, the BAC opened its bid document and carefully evaluated its eligibility and technical document. 
-            As a result, the BAC determined its documents as "passed" in complying with all the eligibility and technical requirements;
-        </p>
-
-        <p style="text-align: justify">
-            <b>WHEREAS</b>, the BAC examined the bid price of the above mentioned bidder. As a 
-            result, the BAC determined that its bid is within the approved budget for bidding, 
-            consequently determined as Single Calculated bid;
-        </p>
-
-        <p style="text-align: justify">
-        <b>WHEREAS</b>, after verification, validation, and ascertainment of all the statement and 
-        documents submitted by the above mentioned bidder, the BAC determined its 
-        submitted document in order and passed the criteria for post qualificaton;
-        </p>
-
-        <p style="text-align: justify">
-            <b>NOW, THEREFORE,</b> We the members of the Bids and Awards Committee, by 
-            virtue of the powers vested on Us by the Law, hereby RESOLVE as it hereby 
-            RESOLVED;
-        </p>
-       <p style="text-align: justify; margin-top:-10px">
-       <ul style="list-style-type: none; padding:0;margin:0">
-            <li style="text-align: justify">
-                <b>I.</b> To declare LINES PRINTING SERVICES as Single Calculated and 
-                Responsive Bidder of the procurement for <b>"SUPPLY AND DELIVERY OF 
-                VARIOUS SUPPLIES FOR TOKEN"</b>
-            </li>
-            <br>
-            <li style="text-align: justify">
-                <b>II.</b> To recommend to the Head of Department of Science and Technology
-                Regional Office No. IX for his consideration and approval of the award 
-                of contract for the procurement <b>"SUPPLY AND DELIVERY OF VARIOUS SUPPLIES FOR TOKEN"</b>
-                to the Single Caluculated and Responsive Bid of LINES PRINTING SERVICES, with the contract
-                amount of <b>FORTY SEVEN THOUSAND TWO HUNDRED FIFTY FOUR PESOS (Php 47,254.00) </b>only.
-            </li>
-        </ul>
-       </p>
-
-        <p style="text-align: justify">
-            <b>RESOLVED</b>, at the Department of Science and Technology Regional Office IX,
-            Pettit Barracks, Zamboanga City this 21<sup>st</sup> day of October 2025,
-        </p>
 
         <p style="text-align: left;margin-bottom:40px">Recommended by:</p>  
        <table style="text-align:center;margin-bottom:50px">

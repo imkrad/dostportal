@@ -11,6 +11,14 @@
                 <TextInput v-model="form.allocated_budget" type="number" class="form-control" placeholder="0"  />
             </BCol>
             <BCol lg="12" class="mt-2">
+                    <InputLabel for="mode_of_procurement" value="Mode of Procurement"/>
+                    <Multiselect 
+                    :options="mode_of_procurements" 
+                    v-model="form.mode_of_procurement_id"
+                    :searchable="true" label="mode"
+                    placeholder="Mode of Procurement"/>
+                </BCol>
+            <BCol lg="12" class="mt-2">
                 <InputLabel value="Project Description/Title" />
                 <textarea
                     id="description"
@@ -21,6 +29,7 @@
                     ></textarea>
             </BCol>
         </BRow>
+
         </form>
    
           <template v-slot:footer>
@@ -40,7 +49,7 @@ import { router } from '@inertiajs/vue3';
 
 export default {
     components: { InputError, InputLabel, TextInput, Multiselect },
-    props:['dropdowns'],
+    props:['mode_of_procurements'],
     data(){
         return {
             currentUrl: window.location.origin,
@@ -49,11 +58,13 @@ export default {
                 title: null,
                 code: null,
                 allocated_budget: null,
+                mode_of_procurement_id: null,
             }),    
             showModal: false,
             editable: false,
         }
     },
+
 
     methods: { 
 
@@ -69,6 +80,7 @@ export default {
             this.form.title = data.title;
             this.form.code = data.code;
             this.form.allocated_budget = data.allocated_budget;
+            this.form.mode_of_procurement_id = data.mode_of_procurement.id;
             this.showModal = true;
         },
       
@@ -96,9 +108,8 @@ export default {
                 },
             });
             }
-        }
+        },
 
-       
        
     }
 }

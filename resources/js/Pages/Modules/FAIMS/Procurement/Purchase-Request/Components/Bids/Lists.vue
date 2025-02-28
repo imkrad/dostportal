@@ -1,25 +1,6 @@
 <template>
     <PageHeader v-if="option == 'bids'" title="Abstract of Bids" pageTitle="Bids" />
     <div>
-        <b-row class="">
-        <b-row class="g-2 mb-3 mt-n2">
-            <b-col lg>
-                <div class="input-group mb-1">
-                    <span class="input-group-text"> <i class="ri-search-line search-icon"></i></span>
-                    <input type="text" v-model="filter.keyword" placeholder="Search Bids" class="form-control" style="width: 60%;">
-                    <span @click="refresh()" class="input-group-text" v-b-tooltip.hover title="Refresh" style="cursor: pointer;"> 
-                        <i class="bx bx-refresh search-icon"></i>
-                    </span>
-                    <b-button type="button" variant="primary" @click="setBidPrice(dropdowns.data,'for_all_items')">
-                        <i class="ri-add-circle-fill align-bottom me-1"></i> New
-                    </b-button>
-                    
-                </div>
-            </b-col>
-          
-        </b-row>
-      
-         </b-row>
          <b-row class="align-items-center">
         <!-- Left Content -->
         <b-col>
@@ -43,19 +24,11 @@
                 <i class="ri-printer-line align-bottom me-1"></i> 
                 Print
             </b-dropdown-item>
-            <!-- <b-dropdown-item @click="printBids(dropdowns.data)">
-                <i class="ri-check-line align-bottom me-1"></i> 
-                Award
-            </b-dropdown-item> -->
-            <b-dropdown-item  @click="openRecommendBidsForAward()" v-if="dropdowns.data.status_id == 5">
+            <b-dropdown-item @click="openBACReso()" v-if="dropdowns.data.status_id == 7">
                 <i class="ri-file-line align-bottom me-1"></i> 
-                Recommend Bids for Award
+                BAC Resolution
             </b-dropdown-item>
-            <b-dropdown-item @click="printBACReso(dropdowns.data)" v-if="dropdowns.data.status_id == 7">
-                <i class="ri-file-line align-bottom me-1"></i> 
-                Generate BAC Resolution
-            </b-dropdown-item>
-            <b-dropdown-item @click="openNoticeOfAward()"  v-if="dropdowns.data.status_id == 7" >
+            <b-dropdown-item @click="openNoticeOfAward()"  v-if="dropdowns.data.status_id == 8" >
                 <i class="ri-file-line align-bottom me-1"></i> 
                 Notice of Award(NOA)
             </b-dropdown-item>
@@ -70,7 +43,7 @@
     </div>
 
     <div class="horizontal-scroll-tabs">
-        <b-tabs class="bg-white" card>
+        <b-tabs class="bg-white " card>
         <b-tab v-for="(item, index) in dropdowns.lists.data" :key="index">
             <template #title>
                 {{ item.supplier.name }}
@@ -93,57 +66,68 @@
                             <th style="width: 20px;">Bid Price</th>
                             <th style="width: 20px;">Total Bid Price</th>
                             <th>Remarks</th> 
-                            <th>For BAC Resolution?</th>
+                            <th v-if="dropdowns.data.status_id != 7">Recommend Bids For Award?</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr v-for="(bid, bidIndex) in dropdowns.lists.data[index].bids_details" :key="index" >
-                            <td v-if="bid.bids_price">{{ bidIndex + 1 }}</td>
-                            <td v-if="bid.bids_price">   
+                            <td>{{ bidIndex + 1 }}</td>
+                            <td>   
                                 <b-badge 
                                 v-if="bid.status"
                                 :variant="getBadgeVariant(bid.status.name)" 
                                 style="color: white;">
                                 {{ bid.status.name }} 
                                 <i v-if="bid.status.name == 'Pending for Award'" class="ri-close-line"></i>
-                                <i v-if="bid.status.name == 'Not Available for Award'" class="ri-wallet-line"></i>
+                                <i v-if="bid.status.name == 'Not Available for Award'" class="ri-close-line"></i>
                                 <i v-if="bid.status.name == 'Available for Award'" class="ri-check-line"></i>
                                 <i v-if="bid.status.name == 'Awarded'" class="ri-check-line"></i>
                                 </b-badge>  
                             </td>
-                            <td @click="openEditItemDescription(bid , index)" v-if="bid.bids_price"  style="text-align:left;width: break-word; word-break: break-word; white-space: normal;">
+                            <td @click="openEditItemDescription(bid , index)"  style="text-align:left;width: break-word; word-break: break-word; white-space: normal;">
                                 <span v-html="bid.bids_description"></span>
                             </td>
-                            <td v-if="bid.bids_price">
+                            <td >
                                 {{ bid.bids_quantity }} {{ bid.unit_type.name_long }} 
                             </td>
-                            <td v-if="bid.bids_price">
+                            <td>
                                 {{ formatCurrency(bid.bids_abc) }}
                             </td>
                             <td @click="openEditItemBidPrice(bid, index)">
                                 <span v-if="bid.bids_price > 0">
-                                    {{ formatCurrency(bid.bids_price) }}
+                                   <u> {{ formatCurrency(bid.bids_price) }}</u>
                                 </span>
                                 <span v-else>
                                     <b><i class="text-primary"><u>not set</u></i></b>
                                 </span>
                             </td>
-                            <td v-if="bid.bids_price">
-                                {{ formatCurrency(bid.bids_quantity * bid.bids_price) }}
+                            <td>
+                                <span v-if="bid.bids_price > 0">
+                                    {{ formatCurrency(bid.bids_quantity * bid.bids_price) }}
+                                </span>
+                                <span v-else>
+                                    <b><i class="text-primary">not set</i></b>
+                                </span>
                             </td>
                             
-                            <td v-if="bid.bids_price">
-                                {{ bid.remarks }}
+                            <td @click="openEditItemBidPrice(bid, index)">
+                                <span v-if="bid.bids_price > 0">
+                                    {{ bid.remarks }}
+                                </span>
+                                <span v-else>
+                                    <b><i class="text-primary">not set</i></b>
+                                </span>
                             </td>
 
-                            <td>
+                            <td v-if="dropdowns.data.status_id != 7">
                                 <span  class="d-flex justify-content-center">
                                     <b-form-checkbox
                                         v-model="bid.is_checked"
                                         name="checkbox"
+                                        class="border-primary bg-primary"
                                         :value="true"
-                                        :disabled="isOtherSupplierChecked(bidIndex, item)"
+                                        :disabled="isOtherSupplierChecked(bidIndex, item) || bid.bids_price ==  0"
                                         @change="handleCheckboxChange(bidIndex, item )"
                                     >
                                     </b-form-checkbox>
@@ -159,21 +143,33 @@
                 </div>
             </div>
         </b-tab>
-        <div class="d-flex justify-content-end">
-            <b-button @click="openConfirmation()" variant="primary"  block>Save For BAC Resolution</b-button>
-        </div>
+
+        <b-row>
+            <b-col>
+                <div class="d-flex justify-content-start">
+                <b-button type="button" variant="primary" style=" background: grey; color: white"@click="goBackPage()">
+                    <i class="ri-arrow-left-line align-bottom me-1"></i> Back
+                </b-button>
+            </div>
+            </b-col>
+            <b-col v-if="dropdowns.data.status_id == 5">
+                 <div class="d-flex justify-content-end">
+                    <b-button @click="openConfirmation()" :data="checkedItems"  variant="primary"  block>Save Bids For Award</b-button>
+                </div>
+            </b-col>
+        </b-row>
+       
+       
         </b-tabs>
       
     </div>
 
-    
-
     <Create :dropdowns="dropdowns" :items="dropdowns.item_details" ref="createBids"/>
-    <Confirmation :type="forBACResolution" ref="confirmation"/>
-    <GenerateBACResoModal  :data="form" ref="createBACReso"/>
-    <CreatePOModal :dropdowns="dropdowns"   :data="form" ref="createPO"/>
     <EditItemModal   @update-description="updateItemDescription" @update-price="updateItemBidPrice" ref="editItem"/>
-    
+    <Confirmation  :data="dropdowns.lists.data" ref="confirmation"/>
+    <GenerateBACResoModal  :bids="dropdowns.bids" :data="dropdowns.data" ref="BACReso"/>
+    <CreatePOModal :dropdowns="dropdowns"  :data="form" ref="createPO"/>
+      
 </template>
 <script>
 // import Lists from './Procurement/Purchase-Request/Components/Lists.vue';
@@ -208,13 +204,9 @@ export default {
             index: null,
             is_checked: false,
             checkedItems: {},
+            recommendedBidsForAward: {},
         }
     },
-
-    // created(){
-    //     this.fetch();
-    // },
-
 
     methods: { 
 
@@ -226,9 +218,6 @@ export default {
             this.$refs.confirmation.show();
         },
 
-        createBACReso(){
-            this.$refs.createBACReso.show();
-        },
 
         createPO(){
             this.$refs.createPO.show();
@@ -275,42 +264,6 @@ export default {
             this.$inertia.visit('/faims/quotation-requests');
         },
 
-        printBids(data){
-           window.open('/faims/bids/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
-        },
-
-
-        openRecommendBidsForAward(){
-            this.$refs.recommendBidsForAward.show();
-        },
-
-        // printPurchaseOrder(data){
-        //    window.open('/faims/po/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
-        // },
-
-
-        printBACReso(data){
-          window.open('/faims/BACReso/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
-        },
-
-
-        updateRecommendedBids(item) {
-            console.log(item.supplier, 99);
-            if (item.is_checked) {
-                this.recommended_bids[item.id] = { 
-                    bid_id: item.id,
-                    supplier_id: item.supplier,
-                    bid_price: item.bids_price,
-                    total_price: item.bids_quantity * item.bids_price,
-                };
-            } else {
-                delete this.recommended_bids[item.id]; // Remove unchecked items
-            }
-            console.log(this.recommended_bids, 99);
-        },
-
-
-        
        // Handle checkbox state when one is checked
        handleCheckboxChange(bidIndex, currentItem) {
             //If the current checkbox is checked, store the supplier that checked it
@@ -334,82 +287,62 @@ export default {
         },
 
         getTotalBidPrice() {
-            console.log(this.form, 88);
-            // if (!bidPrice || !quantity) return 0; // Handle missing or invalid values
             this.form.total_bid_price = this.form.item_bid_price * this.form.item_quantity;
             return  this.form.total_bid_price;
         },
 
         openEditItemDescription(item , index){
-            this.$refs.editItem.edit(item, index , "edit_description");
-
+            if(this.dropdowns.data.status_id == 5){
+                this.$refs.editItem.edit(item, index , "edit_description");
+            } 
         },
 
         openEditItemBidPrice(item , index){
-            this.$refs.editItem.edit(item , index , "edit_bid_price");
-
-        },
-        updateItemDescription(updatedItem) {
-            // Find the item in the list
-            const item = this.dropdowns.lists.data[updatedItem.index].bids_details.find(i => i.id === updatedItem.id);
-            if (item) {
-                item.bids_description = updatedItem.description;
+            if(this.dropdowns.data.status_id == 5){
+                this.$refs.editItem.edit(item , index , "edit_bid_price");
             }
+
         },
 
-        updateItemBidPrice(updatedItem){
-            // Find the item in the list and update its description
-            const item = this.dropdowns.lists.data[updatedItem.index].bids_details.find(i => i.id === updatedItem.id);
-            if (item) {
-                item.bids_price = updatedItem.item_bid_price;
+        openBACReso(){
+            if(this.dropdowns.data.status_id == 7){
+                this.$refs.BACReso.show();
             }
+
         },
 
-        saveForBACResolution(){
-            // Gather all checked bids
-            const bidsForAward = [];
-            const bidsNotForAward = [];
-
-            this.items.forEach(item => {
-                item.bids_details.forEach(bid => {
-                    if (bid.is_checked) {
-                        bidsForAward.push({
-                            id:bid.id,
-                            purchase_request_id: item.purchase_request.id,
-                            supplier_id: item.supplier.id,
-                            supplier: item.supplier.name,
-                            bid_description: bid.bids_description,
-                            quantity: bid.bids_quantity,
-                            unit: bid.unit_type.name_long,
-                            abc: bid.bids_abc,
-                            price: bid.bids_price,
-                            total_price: bid.bids_price * bid.bids_quantity
-                        });
-                    }
-                    else{
-                        bidsNotForAward.push({
-                            id:bid.id,
-                            purchase_request_id: item.purchase_request.id,
-                            supplier_id: item.supplier.id,
-                            supplier: item.supplier.name,
-                            bid_description: bid.bids_description,
-                            quantity: bid.bids_quantity,
-                            unit: bid.unit_type.name_long,
-                            abc: bid.bids_abc,
-                            price: bid.bids_price,
-                            total_price: bid.bids_price * bid.bids_quantity
-                        });
-                    }
-                });
-            });
-
-            router.post('/faims/bids', {  items: bidsForAward, itemsNotAvailableForAward: bidsNotForAward, option: 'save_award' });
-            this.hide();
+        printBids(data){
+           window.open('/faims/bids/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
         },
+
+
+    
+        
+
+        // printPurchaseOrder(data){
+        //    window.open('/faims/po/print/'+data.id+'?pr_id='+ data.id +'&purchase_request_number='+data.purchase_request_number );
+        // },
 
     }
 }
 </script>
+
+<style>
+.horizontal-scroll-tabs .nav-tabs .nav-link {
+    background-color: white !important;
+    color: black !important; /* Ensure text is visible */
+    border-bottom: 5px lightgrey solid;
+    border-top: 5px lightgrey solid;
+}
+
+/* Change background when tab is active */
+.horizontal-scroll-tabs .nav-tabs .nav-link.active {
+    border-bottom: 5px darkblue solid;
+    border-top: 5px darkblue solid;
+    font-weight: bolder;
+    color: darkblue !important;
+}
+</style>
 
 <style scoped>
 
@@ -420,42 +353,6 @@ td, th{
    text-align: center;
 }
 
-/* Enable horizontal scrolling for tabs */
-.horizontal-scroll-tabs {
-  overflow-x: auto;
-  white-space: nowrap;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-.horizontal-scroll-tabs::-webkit-scrollbar {
-  height: 8px;
-}
-
-.horizontal-scroll-tabs::-webkit-scrollbar-thumb {
-  background: #888; /* Thumb color */
-  border-radius: 4px;
-}
-
-.horizontal-scroll-tabs::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Thumb hover color */
-}
-
-/* Keep tabs in a single line */
-.horizontal-scroll-tabs .nav-tabs {
-  flex-wrap: nowrap;
-}
-
-.horizontal-scroll-tabs .nav-item {
-  display: inline-block;
-  margin-right: 5px;
-}
-
-.horizontal-scroll-tabs .nav-link {
-  white-space: normal; /* Ensure tab titles wrap if they're long */
-  text-align: center;
-}
 
 </style>

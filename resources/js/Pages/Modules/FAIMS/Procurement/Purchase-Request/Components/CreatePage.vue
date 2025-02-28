@@ -72,7 +72,7 @@
                                         max-rows="10"></b-form-textarea>
                                 </BCol>
 
-                                <BCol lg="12" class="mt-2">
+                                <BCol lg="12" class="mt-2" v-if="option == 'review'">
                                     <InputLabel for="purchase_request_title" value="Request Title" :message="form.errors.purchase_request_title"/>
                                     <b-form-textarea
                                         id="textarea"
@@ -174,6 +174,7 @@
             </form>
         </div>
     </div>
+
     <Create :dropdowns="dropdowns"   @items="handleItems"   ref="create"/>
 </template>
 <script>
@@ -202,7 +203,7 @@ export default {
                         purchase_request_date: this.dropdowns.data.purchase_request_date,
                         fund_cluster_id: this.dropdowns.data.fund_cluster_id,
                         purchase_request_purpose: this.dropdowns.data.purchase_request_purpose,   
-                        purchase_request_title:null, 
+                        purchase_request_title:this.dropdowns.data.purchase_request_title, 
                         items: this.dropdowns.item_details,
                         pap_code_ids: this.dropdowns.pap_code_ids,
                         requested_by: this.dropdowns.data.requested_by,

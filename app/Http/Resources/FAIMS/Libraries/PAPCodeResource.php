@@ -19,6 +19,7 @@ class PAPCodeResource extends JsonResource
             'title'=> $this->title,
             'code' =>  $this->code,
             'allocated_budget'=> $this->allocated_budget,
+            'mode_of_procurement' => $this->mode_of_procurement,
         ];
     }
 }

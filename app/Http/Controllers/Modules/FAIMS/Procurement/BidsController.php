@@ -26,11 +26,13 @@ class BidsController extends Controller
     }
 
     public function index(Request $request){
-        dd('heye');
         switch($request->option){     
             case 'lists':
                 return $this->view->lists($request);
             break;  
+            case 'submission_not_later_than':
+                return $this->dropdown->submission_not_later_than($request);
+            break;
             
         }   
     }
@@ -40,12 +42,28 @@ class BidsController extends Controller
     }
 
     public function store(Request $request) {
+     
         switch($request->option){     
             case 'save_award':
                 $result = $this->handleTransaction(function () use ($request) {
                     return $this->bids->save_award($request);
                 });
             break; 
+            case 'save_bids_description':
+                $result = $this->handleTransaction(function () use ($request) {
+                    return $this->bids->save_bids_description($request);
+                });
+            break;  
+            case 'save_bids_price':
+                $result = $this->handleTransaction(function () use ($request) {
+                    return $this->bids->save_bids_price($request);
+                });
+            break;  
+            case 'save_bids_for_award':
+                $result = $this->handleTransaction(function () use ($request) {
+                    return $this->bids->save_bids_for_award($request);
+                });
+            break;   
             default:
                 $result = $this->handleTransaction(function () use ($request) {
                     return $this->bids->save($request);
@@ -77,9 +95,7 @@ class BidsController extends Controller
         return $this->bids->printPO($id, $request);
     }
 
-    public function printBACReso($id, Request $request){
-        return $this->bids->printBACReso($id, $request);
-    }
+
 
     
 

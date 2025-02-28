@@ -13,6 +13,7 @@ class PurchaseRequest extends Model
         'purchase_request_date',
         'request_sai_number',
         'purchase_request_purpose',
+        'purchase_request_title',
         'referrence_no',
         'division_id',
         'section_id',
@@ -21,7 +22,7 @@ class PurchaseRequest extends Model
         'supplier_id',
         'fund_cluster_id',
         'po_number',
-        'pap_code_id',
+        'quotation_count',
         'status_id'
     ];
 
@@ -51,13 +52,13 @@ class PurchaseRequest extends Model
 
     public function supplier()
     {
-        return $this->belongsTo('App\Models\FAIMS\Procurement\Supplier', 'supplier_id');
+        return $this->belongsTo('App\Models\FAIMS\Libraries\Supplier', 'supplier_id');
     }
 
 
     public function pap_codes()
     {
-        return $this->hasMany('App\Models\FAIMS\Procurement\PRPAPCode', 'purchase_request_id')->with('pap_code');;
+        return $this->hasMany('App\Models\FAIMS\Procurement\PRPAPCode', 'purchase_request_id')->with('pap_code.mode_of_procurement');;
     }
     
     public function status()

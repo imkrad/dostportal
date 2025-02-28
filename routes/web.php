@@ -27,8 +27,7 @@ Route::middleware(['2fa','auth','verified'])->group(function () {
             'index' => 'quotation_request.index',
         ]);
         Route::resource('/bids', App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class);
-        /bids
-        // Route::resource('/awards', App\Http\Controllers\Modules\FAIMS\Procurement\AwardsController::class);
+        Route::resource('/bac-resolutions', App\Http\Controllers\Modules\FAIMS\Procurement\BACResolutionController::class);
 
         // libraries
         Route::resource('/libraries/pap-codes', App\Http\Controllers\Modules\FAIMS\Procurement\PAPCodeController::class);
@@ -39,7 +38,7 @@ Route::middleware(['2fa','auth','verified'])->group(function () {
         Route::get('/quotations/request/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\QuotationRequestController::class, 'printQuotation']);
         Route::get('/bids/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printBids']);
         Route::get('/po/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printPO']);
-        Route::get('/BACReso/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printBACReso']);
+        Route::get('/BACReso/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BACResolutionController::class, 'printBACReso']);
     });
 });
 

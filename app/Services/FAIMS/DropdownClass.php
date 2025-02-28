@@ -8,7 +8,10 @@ use App\Models\FAIMS\Procurement\FundCluster;
 use App\Models\FAIMS\Procurement\PurchaseRequestDetail;
 use App\Models\FAIMS\Procurement\Supplier;
 use App\Models\FAIMS\Procurement\Bids;
+use App\Models\FAIMS\Procurement\QuotationRequest;
 use App\Models\FAIMS\Libraries\ListPAPCode;
+use App\Models\FAIMS\Libraries\ModeOfProcurement;
+
 
 use App\Models\User;
 use App\Models\ListDropdown;
@@ -183,10 +186,33 @@ class DropdownClass
         return $data;
     }
 
+
+    public function mode_of_procurements()
+    {
+        $data = ModeOfProcurement::get()->map(function ($item) {
+            return [
+                'value' => $item->id,
+                'mode' => $item->mode,
+            ];
+        });
+
+
+        return $data;
+    }
+
     public function purchase_request_title($request){
         $data = ListPAPCode::findOrFail($request->id);
         return $data->title;
     }
+
+    
+    public function submission_not_later_than($request){
+        $data = QuotationRequest::where('purchase_request_id', $request->id)->first();
+        // get submission date
+        return $data->submission_not_later_than;
+    }
+
+    
 
     
 }

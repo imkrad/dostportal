@@ -17,6 +17,15 @@
                     ></textarea>
             </BCol>
             <BCol lg="6" class="mt-2">
+                <InputLabel value="Philgeps Registration No." />
+                <TextInput v-model="form.philgeps_registration_no" type="text" class="form-control" placeholder="Enter Philgeps Registration No."  />
+            </BCol>
+
+            <BCol lg="6" class="mt-2">
+                <InputLabel value="Contact" />
+                <TextInput v-model="form.contact" type="text" class="form-control" placeholder="Enter Contact"  />
+            </BCol>
+            <BCol lg="6" class="mt-2">
                 <InputLabel value="Mayor's Permit No." />
                 <TextInput v-model="form.mayors_permit_no" type="text" class="form-control" placeholder="Enter Mayor's Permit No."  />
             </BCol>
@@ -29,7 +38,7 @@
    
           <template v-slot:footer>
             <b-button @click="hide()" variant="light" block>Close</b-button>
-            <b-button @click="savePAP(form)" variant="success"  block>Save</b-button>
+            <b-button @click="saveSupplier(form)" variant="success"  block>Save</b-button>
         </template>
         
     </b-modal>
@@ -52,8 +61,10 @@ export default {
                 id: null,
                 name: null,
                 address: null,
+                philgeps_registration_no: null,
                 mayors_permit_no: null,
                 tin: null,
+                contact: null,
             }),    
             showModal: false,
             editable: false,
@@ -73,6 +84,8 @@ export default {
             this.form.id = data.id;
             this.form.name = data.name;
             this.form.address = data.address;
+            this.form.contact = data.contact;
+            this.form.philgeps_registration_no = data.philgeps_registration_no;
             this.form.mayors_permit_no = data.mayors_permit_no;
             this.form.tin = data.tin;
             this.showModal = true;
@@ -83,9 +96,9 @@ export default {
             this.showModal = false;
         },
 
-        savePAP(data){ 
+        saveSupplier(data){ 
             if(this.editable){
-                this.form.put(`/faims/libraries/pap-codes/`+data.id,{
+                this.form.put(`/faims/libraries/suppliers/`+data.id,{
                     preserveScroll: true,
                     onSuccess: (response) => {
                         this.$emit('update', true);
@@ -94,7 +107,7 @@ export default {
                     }
                 });
             }else{
-                this.form.post('/faims/libraries/pap-codes',{
+                this.form.post('/faims/libraries/suppliers',{
                 preserveScroll: true,
                 onSuccess: (response) => {
                     this.$emit('add',true);

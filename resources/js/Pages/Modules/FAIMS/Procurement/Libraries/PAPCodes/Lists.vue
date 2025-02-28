@@ -23,6 +23,7 @@
                     <th>PAP Codes</th>
                     <th>Project Description/Title</th>
                     <th>Allocated Budget</th>
+                    <th>Mode of Procurement</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -33,6 +34,7 @@
                         <td>{{ list.code  }}</td>
                         <td>{{ list.title  }}</td>
                         <td>{{ formatCurrency(list.allocated_budget)  }}</td>
+                        <td>{{ list.mode_of_procurement.mode }}</td>
 
                         <td>
                             <b-button @click="editPAP(list)" size="sm">
@@ -50,7 +52,7 @@
 </div>
 
 
-<PAPCodeModal @add="fetch()" @update="fetch()" :data="form" ref="create" />
+<PAPCodeModal @add="fetch()" @update="fetch()" :mode_of_procurements="mode_of_procurements" ref="create" />
 </template>
 <script>
 import _ from 'lodash';
@@ -71,6 +73,7 @@ data(){
         filter: {
             keyword: null,
         },
+        mode_of_procurements: {},
         index: null
     }
 },
@@ -79,6 +82,11 @@ watch: {
         this.checkSearchStr(newVal);
     }
 },
+
+mounted(){
+    this.getModeOfProcurements();
+},
+    
 created(){
     this.fetch();
 },
@@ -121,6 +129,20 @@ methods: {
 
     editPAP(data){
         this.$refs.create.edit(data);
+    },
+
+    getModeOfProcurements() {
+        axios.get('/faims/libraries/pap-codes',{
+            params : {
+                option: 'mode_of_procurements'
+            }
+        })
+        .then(response => {
+            if(response){
+                this.mode_of_procurements = response.data;   
+            }
+        })
+        .catch(err => console.log(err));
     },
 
     

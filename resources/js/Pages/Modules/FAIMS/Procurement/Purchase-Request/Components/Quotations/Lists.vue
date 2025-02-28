@@ -1,5 +1,5 @@
 <template>
-    
+        <PageHeader title="Quotation Requests" pageTitle="List" />
         <b-row>
             <h5>
                 <div>
@@ -71,19 +71,23 @@
         </div> 
     </div>
 
+
     <b-button type="button" variant="primary" style=" background: grey; color: white" class="m-3" @click="goBackPage()">
         <i class="ri-arrow-left-line align-bottom me-1"></i> Back
     </b-button>
+
+
     
    
 </template>
 <script>
 import _ from 'lodash';
+import PageHeader from '@/Shared/Components/PageHeader.vue';
 import Pagination from "@/Shared/Components/Pagination.vue";
 import { router } from '@inertiajs/vue3';
 export default {
     props: ['dropdowns'],
-    components: { Pagination },
+    components: { PageHeader,Pagination },
     data(){
         return {
             currentUrl: window.location.origin,
