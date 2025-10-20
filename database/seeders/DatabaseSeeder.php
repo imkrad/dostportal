@@ -54,6 +54,9 @@ class DatabaseSeeder extends Seeder
         $this->call(FundClustersTableSeeder::class);
         $this->call(ListStatusesTableSeeder::class);
         $this->call(ListModeOfProcurementTableSeeder::class);
+        $this->call(ListAppTypesTableSeeder::class);
+        $this->call(ListSuppliersTableSeeder::class);
+        $this->call(ListEndUsersTableSeeder::class);
 
         \DB::table('user_organizations')->insert([
             'status_id' => 1,

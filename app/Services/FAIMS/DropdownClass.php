@@ -2,6 +2,8 @@
 
 namespace App\Services\FAIMS;
 
+use App\Models\FAIMS\Libraries\AppType;
+use App\Models\FAIMS\Libraries\EndUser;
 use App\Models\FAIMS\Procurement\UnitType;
 use App\Models\FAIMS\Procurement\Section;
 use App\Models\FAIMS\Procurement\FundCluster;
@@ -19,6 +21,30 @@ use App\Models\UserProfile;
 
 class DropdownClass
 {   
+
+    public function app_types(){
+        $data = AppType::get()->map(function ($item) {
+            return [
+                'value' => $item->id,
+                'title' => $item->title,
+            ];
+        });
+        return $data;
+    }
+
+    public function end_users(){
+                      
+
+        $data = EndUser::get()->map(function ($item) {
+            return [
+                'value' => $item->id,
+                'title' => $item->title,
+            ];
+        });
+
+        return $data;
+    }
+
     public function unit_types(){
         $data = UnitType::get()->map(function ($item) {
             return [

@@ -15,7 +15,7 @@ class PurchaseRequestDetail extends Model
         'item_unit_type_id',
         'item_description',
         'item_quantity',
-        'item_unit_cost',
+        'item_price',
         'status_id',    
     ];
 

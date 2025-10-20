@@ -16,8 +16,8 @@ return new class extends Migration
             $table->tinyIncrements('id');
             $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
             $table->Integer('purchase_request_id')->unsigned()->index();
-            $table->foreign('pap_code_id')->references('id')->on('list_p_a_p_codes');
-            $table->tinyInteger('pap_code_id')->unsigned()->index();
+            $table->foreign('list_pap_code_id')->references('id')->on('list_pap_codes');
+            $table->integer('list_pap_code_id')->unsigned()->index();
             $table->timestamps();
         });
     }

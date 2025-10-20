@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suppliers', function (Blueprint $table) {
+        Schema::create('end_users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->Increments('id');
-            $table->string('name')->nullable(); 
-            $table->string('personnel')->nullable();
-            $table->string('address')->nullable(); 
-            $table->string('contact')->nullable(); 
-            $table->string('code'); 
+            $table->increments('id');
+            $table->string('title',100);
+            $table->string('code',20);  
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suppliers');
+        Schema::dropIfExists('end_users');
     }
 };

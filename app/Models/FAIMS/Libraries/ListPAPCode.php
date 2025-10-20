@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ListPAPCode extends Model
 {
     use HasFactory;
+    protected $table = 'list_pap_codes';
     protected $fillable = [
         'title',
         'code',

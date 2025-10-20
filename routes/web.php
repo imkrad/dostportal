@@ -32,13 +32,16 @@ Route::middleware(['2fa','auth','verified'])->group(function () {
         // libraries
         Route::resource('/libraries/pap-codes', App\Http\Controllers\Modules\FAIMS\Procurement\PAPCodeController::class);
         Route::resource('/libraries/suppliers', App\Http\Controllers\Modules\FAIMS\Procurement\SupplierController::class);
+        Route::resource('/libraries/app-types', App\Http\Controllers\Modules\FAIMS\Procurement\AppTypeController::class);
+        Route::resource('/libraries/end-users', App\Http\Controllers\Modules\FAIMS\Procurement\EndUserController::class);
+
         
         // route for printing only
-        Route::get('/purchase-request/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\PurchaseRequestController::class, 'printPR']);
-        Route::get('/quotations/request/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\QuotationRequestController::class, 'printQuotation']);
-        Route::get('/bids/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printBids']);
-        Route::get('/po/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printPO']);
-        Route::get('/BACReso/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BACResolutionController::class, 'printBACReso']);
+        // Route::get('/purchase-request/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\PurchaseRequestController::class, 'printPR']);
+        // Route::get('/quotations/request/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\QuotationRequestController::class, 'printQuotation']);
+        // Route::get('/bids/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printBids']);
+        // Route::get('/po/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BidsController::class, 'printPO']);
+        // Route::get('/BACReso/print/{id}', [ App\Http\Controllers\Modules\FAIMS\Procurement\BACResolutionController::class, 'printBACReso']);
     });
 });
 

@@ -2,22 +2,51 @@
     <b-modal v-model="showModal" header-class="p-3"  :title="editable ? 'Update PAP' : 'New PAP'" size="lg" class="v-modal-custom" modal-class="zoomIn" centered no-close-on-backdrop >
         <form class="customform">
            <BRow>
-            <BCol lg="6" class="mt-2">
+            <BCol lg="4" class="mt-2">
                 <InputLabel value="Code" />
                 <TextInput v-model="form.code" type="text" class="form-control" placeholder="Enter code"  />
             </BCol>
-            <BCol lg="6" class="mt-2">
+            <BCol lg="4" class="mt-2">
                 <InputLabel value="Allocated Budget" />
-                <TextInput v-model="form.allocated_budget" type="number" class="form-control" placeholder="0"  />
+                <Amount v-model="form.allocated_budget" type="text" class="form-control" placeholder="0"  />
             </BCol>
+
+            <BCol lg="4" class="mt-2">
+                <InputLabel value="Year" />
+                <Multiselect 
+                :options="yearOptions" 
+                v-model="form.year"
+                :searchable="true" label="text"
+                placeholder="Year"/>
+            </BCol>
+
             <BCol lg="12" class="mt-2">
-                    <InputLabel for="mode_of_procurement" value="Mode of Procurement"/>
+                    <InputLabel for="app_types" value="App Type"/>
                     <Multiselect 
-                    :options="mode_of_procurements" 
-                    v-model="form.mode_of_procurement_id"
-                    :searchable="true" label="mode"
-                    placeholder="Mode of Procurement"/>
-                </BCol>
+                    :options="app_types" 
+                    v-model="form.app_type_id"
+                    :searchable="true" label="title"
+                    placeholder="Select End Users"/>
+            </BCol>
+
+            <BCol lg="12" class="mt-2">
+                    <InputLabel for="end_users" value="End Users"/>
+                    <Multiselect 
+                    :options="end_users" 
+                    v-model="form.end_user_ids"
+                    :searchable="true" label="title"
+                    mode="tags"
+                    placeholder="Select End Users"/>
+            </BCol>
+
+            <BCol lg="12" class="mt-2">
+                <InputLabel for="mode_of_procurement" value="Mode of Procurement"/>
+                <Multiselect 
+                :options="mode_of_procurements" 
+                v-model="form.mode_of_procurement_id"
+                :searchable="true" label="mode"
+                placeholder="Mode of Procurement"/>
+            </BCol>
             <BCol lg="12" class="mt-2">
                 <InputLabel value="Project Description/Title" />
                 <textarea
@@ -45,10 +74,10 @@ import Multiselect from "@vueform/multiselect";
 import InputError from '@/Shared/Components/Forms/InputError.vue';
 import InputLabel from '@/Shared/Components/Forms/InputLabel.vue';
 import TextInput from '@/Shared/Components/Forms/TextInput.vue';
-import { router } from '@inertiajs/vue3';
+import Amount from '@/Shared/Components/Forms/Amount.vue';
 
 export default {
-    components: { InputError, InputLabel, TextInput, Multiselect },
+    components: { InputError, InputLabel, TextInput, Multiselect ,Amount },
     props:['mode_of_procurements'],
     data(){
         return {
@@ -58,15 +87,39 @@ export default {
                 title: null,
                 code: null,
                 allocated_budget: null,
+                year: null,
+                end_user_ids : [],
                 mode_of_procurement_id: null,
-            }),    
+            }),   
+            app_types: [], 
+            end_users: [], 
             showModal: false,
             editable: false,
         }
     },
 
+    mounted() {
+        this.generateYearOptions();
+        this.getAppTypes();
+        this.getEndUsers();
+    },
 
     methods: { 
+
+        generateYearOptions() {
+            const currentYear = new Date().getFullYear();
+            const startYear = currentYear - 8;
+            const endYear = currentYear + 2;
+
+            this.yearOptions = [];
+
+            for (let year = endYear; year >= startYear; year--) {
+                this.yearOptions.push({ value: year, text: year.toString() });
+            }
+
+            // Set default selected year to current year
+            this.form.year = currentYear;
+        },
 
         show(){
             this.editable = false;
@@ -108,6 +161,34 @@ export default {
                 },
             });
             }
+        },
+
+        getAppTypes() {
+            axios.get('/faims/libraries/app-types',{
+                params : {
+                    option: 'app_types'
+                }
+            })
+            .then(response => {
+                if(response){
+                    this.app_types = response.data; 
+                }
+            })
+            .catch(err => console.log(err));
+        },
+
+        getEndUsers() {
+            axios.get('/faims/libraries/end-users',{
+                params : {
+                    option: 'end_users'
+                }
+            })
+            .then(response => {
+                if(response){
+                    this.end_users = response.data; 
+                }
+            })
+            .catch(err => console.log(err));
         },
 
        

@@ -24,6 +24,7 @@
                     <th>Project Description/Title</th>
                     <th>Allocated Budget</th>
                     <th>Mode of Procurement</th>
+                    <th>End Users</th>
                     <th>Actions</th>
                 </tr>
             </thead>

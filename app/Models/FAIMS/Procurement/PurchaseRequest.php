@@ -26,8 +26,6 @@ class PurchaseRequest extends Model
         'status_id'
     ];
 
-
-
     public function section()
     {
         return $this->belongsTo('App\Models\FAIMS\Procurement\Section', 'section_id');
@@ -95,12 +93,10 @@ class PurchaseRequest extends Model
             $month = date("m", strtotime("now"));
         }
     
-        // $count = self::whereYear('purchase_request_date', date("Y", strtotime($date ?? "now")))
-        //              ->whereMonth('purchase_request_date', $month)
-        //              ->count() + 1;
+        $count = self::whereYear('purchase_request_date', date("Y", strtotime($date ?? "now")))
+                     ->whereMonth('purchase_request_date', $month)
+                     ->count() + 1;
     
-        // return $year . '-' . $month . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
-        $count = 1;
-        return $year . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+        return 'PR-' . $year . '-' . $month . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
     }
 }

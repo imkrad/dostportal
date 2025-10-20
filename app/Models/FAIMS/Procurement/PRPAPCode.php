@@ -12,6 +12,7 @@ class PRPAPCode extends Model
     protected $fillable = [
         'purchase_request_id',
         'pap_code_id',   
+        
     ];
 
     public function purchase_request()
