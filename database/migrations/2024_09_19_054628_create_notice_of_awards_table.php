@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bac_resolutions', function (Blueprint $table) {
+        Schema::create('notice_of_awards', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->tinyIncrements('id');
-            $table->string('bac_resolution_number')->unique(); 
-            $table->text('body'); 
+            $table->increments('id');
+            $table->string('noa_no')->unique(); 
             $table->integer('purchase_request_id')->unsigned()->index();
             $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
             $table->integer('created_by_id')->unsigned()->index();
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bac_resolutions');
+        Schema::dropIfExists('notice_of_awards');
     }
 };

@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('supply_officer_id')->references('id')->on('user_profiles');
             $table->Integer('purchase_request_id')->unsigned()->index();
             $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
+            $table->tinyInteger('status_id')->unsigned()->index();
+            $table->foreign('status_id')->references('id')->on('list_statuses');
             $table->timestamps();
         });
     }

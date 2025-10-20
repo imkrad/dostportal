@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bac_resolutions', function (Blueprint $table) {
+        Schema::create('bid_items', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->tinyIncrements('id');
-            $table->string('bac_resolution_number')->unique(); 
-            $table->text('body'); 
-            $table->integer('purchase_request_id')->unsigned()->index();
+            $table->increments('id');
+            $table->Integer('purchase_request_id')->unsigned()->index();
             $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
-            $table->integer('created_by_id')->unsigned()->index();
-            $table->foreign('created_by_id')->references('id')->on('users');
-            $table->integer('approved_by_id')->unsigned()->index();
-            $table->foreign('approved_by_id')->references('id')->on('users');
+            $table->Integer('supplier_id')->unsigned()->index();
+            $table->foreign('supplier_id')->references('id')->on('suppliers');
+            $table->Integer('pr_item_id')->unsigned()->index();
+            $table->foreign('pr_item_id')->references('id')->on('purchase_request_items');
             $table->tinyInteger('status_id')->unsigned()->index();
             $table->foreign('status_id')->references('id')->on('list_statuses');
             $table->timestamps();
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bac_resolutions');
+        Schema::dropIfExists('bid_items');
     }
 };

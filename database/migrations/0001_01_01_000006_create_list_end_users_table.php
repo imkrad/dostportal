@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('list_p_a_p_codes', function (Blueprint $table) {
+        Schema::create('list_end_users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->tinyIncrements('id');
             $table->string('title',100);
             $table->string('code',20);  
-            $table->integer('year'); 
-            $table->integer('allocated_budget');   
-            $table->tinyInteger('mode_of_procurement_id')->unsigned()->index();
-            $table->foreign('mode_of_procurement_id')->references('id')->on('mode_of_procurements');
-            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('list_p_a_p_codes');
+        Schema::dropIfExists('list_end_users');
     }
 };
