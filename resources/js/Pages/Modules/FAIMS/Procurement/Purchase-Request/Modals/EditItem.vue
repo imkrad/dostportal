@@ -9,14 +9,24 @@
                     <InputLabel value="Bid Price"/>
                     <TextInput v-model="form.item_bid_price"  type="Number" class="form-control"  :light="true" />
                 </BCol>
+                <BCol lg="12" class="mt-2" v-if="action_type == 'edit_bid_price'">
+                    <InputLabel value="Remarks"/>
+                    <b-form-textarea
+                    id="textarea"
+                    v-model="form.remarks"
+                    placeholder="Enter your remarks"
+                    rows="5"
+                    max-rows="10"></b-form-textarea>
+                       
+                </BCol>
                 <BCol lg="12"><hr class="text-muted mt-4 mb-0"/></BCol>
             </BRow>
         </form>
 
           <template v-slot:footer>
             <b-button @click="hide()" variant="light" block>Cancel</b-button>
-            <b-button v-if="action_type == 'edit_description'" @click="updateItemDescription()" variant="primary" :disabled="form.processing" block>update</b-button>
-            <b-button v-if="action_type == 'edit_bid_price'" @click="updateItemBidPrice()" variant="primary" :disabled="form.processing" block>update</b-button>
+            <b-button v-if="action_type == 'edit_description'" @click="updateItemDescription(form)" variant="primary" :disabled="form.processing" block>update</b-button>
+            <b-button v-if="action_type == 'edit_bid_price'" @click="updateItemBidPrice(form)" variant="primary" :disabled="form.processing" block>update</b-button>
         </template>
     </b-modal>
 </template>
@@ -29,6 +39,7 @@ import TextInput from '@/Shared/Components/Forms/TextInput.vue';
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { maxBy } from 'lodash';
+import { router } from '@inertiajs/vue3';
 
 
 export default {
@@ -42,6 +53,7 @@ export default {
                 index: null,
                 description: '',
                 item_bid_price: null,
+                remarks: null,
             }),
             action_type: null,
             showModal: false,
@@ -66,7 +78,6 @@ export default {
         },
 
         edit(data, index, action_type){
-            console.log(data, 334);
             this.showModal = true;
             this.action_type = action_type;
             this.form.id= data.id;
@@ -76,27 +87,18 @@ export default {
             }
             else if(action_type == "edit_bid_price"){
                 this.form.item_bid_price= data.bids_price;
+                this.form.remarks= data.remarks;
             }
          
         },
 
-        updateItemDescription(){
-            // Emit the updated description with item ID
-            this.$emit('update-description', {
-                id: this.form.id,
-                index: this.form.index,
-                description: this.form.description
-            });
+        updateItemDescription(data){
+            router.post('/faims/bids' , { data: data, option: 'save_bids_description'});
             this.hide();
         },
     
-        updateItemBidPrice(){
-            //Emit the updated bid price with item ID
-            this.$emit('update-price', {
-                id: this.form.id,
-                index: this.form.index,
-                item_bid_price: this.form.item_bid_price
-            });
+        updateItemBidPrice(data){
+            router.post('/faims/bids' , { data: data, option: 'save_bids_price'});
             this.hide();
         },
     

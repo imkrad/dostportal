@@ -1,4 +1,292 @@
 {
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-bottom.svg": {
+    "file": "assets/align-bottom-DuR6yMYr.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-bottom.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-center.svg": {
+    "file": "assets/align-center-5xHwGNHl.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-center.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-justify.svg": {
+    "file": "assets/align-justify-CsuItI3A.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-justify.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-left.svg": {
+    "file": "assets/align-left-DxbAPcvM.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-left.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-middle.svg": {
+    "file": "assets/align-middle-DhacUDVK.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-middle.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-right.svg": {
+    "file": "assets/align-right-CXz0uSJD.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-right.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-top.svg": {
+    "file": "assets/align-top-Dw0rZ4w7.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/align-top.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/bold.svg": {
+    "file": "assets/bold-C__-uolr.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/bold.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/bookmark.svg": {
+    "file": "assets/bookmark-DaTf9OKn.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/bookmark.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/bookmark_inline.svg": {
+    "file": "assets/bookmark_inline-C3aCISLN.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/bookmark_inline.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/browse-files.svg": {
+    "file": "assets/browse-files-D4juz5KK.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/browse-files.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/bulletedlist.svg": {
+    "file": "assets/bulletedlist-Cp2QOGQJ.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/bulletedlist.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/cancel.svg": {
+    "file": "assets/cancel-DxSK63-A.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/cancel.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/caption.svg": {
+    "file": "assets/caption-Dh2IW8O2.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/caption.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/check.svg": {
+    "file": "assets/check-Dh2bGPSL.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/check.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/codeblock.svg": {
+    "file": "assets/codeblock-mMxJtyDr.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/codeblock.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/cog.svg": {
+    "file": "assets/cog-CIahRx-D.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/cog.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/color-palette.svg": {
+    "file": "assets/color-palette-TqxLYnH4.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/color-palette.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/drag-indicator.svg": {
+    "file": "assets/drag-indicator-CbL9SYVW.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/drag-indicator.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/emoji.svg": {
+    "file": "assets/emoji-ct9zntai.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/emoji.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/eraser.svg": {
+    "file": "assets/eraser-D14TvVeO.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/eraser.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading1.svg": {
+    "file": "assets/heading1-DMZOaq6a.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading1.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading2.svg": {
+    "file": "assets/heading2-obXQAKcx.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading2.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading3.svg": {
+    "file": "assets/heading3-CJkfUdMK.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading3.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading4.svg": {
+    "file": "assets/heading4-FzOoPJSn.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading4.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading5.svg": {
+    "file": "assets/heading5-CS5-FWBB.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading5.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading6.svg": {
+    "file": "assets/heading6-CRJqCzEb.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/heading6.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/history.svg": {
+    "file": "assets/history-CCupG7om.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/history.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/horizontalline.svg": {
+    "file": "assets/horizontalline-hhO93Hbm.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/horizontalline.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/html.svg": {
+    "file": "assets/html-BDSKWA8i.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/html.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/image-asset-manager.svg": {
+    "file": "assets/image-asset-manager-Y9kLUyqV.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/image-asset-manager.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/image-upload.svg": {
+    "file": "assets/image-upload-B9RVDmX6.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/image-upload.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/image-url.svg": {
+    "file": "assets/image-url-DFgEUovr.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/image-url.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/image.svg": {
+    "file": "assets/image-DqL2wV6P.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/image.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/importexport.svg": {
+    "file": "assets/importexport-BzxmctVd.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/importexport.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/indent.svg": {
+    "file": "assets/indent-B_NUZPpy.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/indent.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/loupe.svg": {
+    "file": "assets/loupe-CBlqXucs.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/loupe.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/low-vision.svg": {
+    "file": "assets/low-vision-BESD_q4W.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/low-vision.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/next-arrow.svg": {
+    "file": "assets/next-arrow-LXHKiAnG.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/next-arrow.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/numberedlist.svg": {
+    "file": "assets/numberedlist-BcVtUh5S.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/numberedlist.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-center.svg": {
+    "file": "assets/object-center-CO-86Hb7.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-center.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-full-width.svg": {
+    "file": "assets/object-full-width-BCGStnAu.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-full-width.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-inline-left.svg": {
+    "file": "assets/object-inline-left-BWZCvx9z.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-inline-left.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-inline-right.svg": {
+    "file": "assets/object-inline-right-CSMAnh4w.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-inline-right.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-inline.svg": {
+    "file": "assets/object-inline-CDVdsQCc.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-inline.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-left.svg": {
+    "file": "assets/object-left-zRD8TGpK.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-left.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-right.svg": {
+    "file": "assets/object-right-Ck-Ds-TL.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-right.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-custom.svg": {
+    "file": "assets/object-size-custom-DSA5_XBk.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-custom.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-full.svg": {
+    "file": "assets/object-size-full-faqgN87F.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-full.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-large.svg": {
+    "file": "assets/object-size-large-5mbzpHnm.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-large.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-medium.svg": {
+    "file": "assets/object-size-medium-C-vWdwSU.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-medium.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-small.svg": {
+    "file": "assets/object-size-small-CgpVrPy9.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/object-size-small.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/outdent.svg": {
+    "file": "assets/outdent-CO6rQwkY.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/outdent.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/paragraph.svg": {
+    "file": "assets/paragraph-Bs7Ynw0s.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/paragraph.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/pencil.svg": {
+    "file": "assets/pencil-BOMGBWqR.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/pencil.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/pilcrow.svg": {
+    "file": "assets/pilcrow-CAXTEk9Y.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/pilcrow.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/plus.svg": {
+    "file": "assets/plus-Dk9iBk16.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/plus.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/previous-arrow.svg": {
+    "file": "assets/previous-arrow-ChF3iCLF.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/previous-arrow.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/quote.svg": {
+    "file": "assets/quote-C3zsh5Zx.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/quote.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/redo.svg": {
+    "file": "assets/redo-BQXYJvAQ.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/redo.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/remove.svg": {
+    "file": "assets/remove-D9AksCwx.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/remove.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/source.svg": {
+    "file": "assets/source-B26c8g1q.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/source.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/table.svg": {
+    "file": "assets/table-C0O5wgX5.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/table.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/text-alternative.svg": {
+    "file": "assets/text-alternative-CmYrvKHf.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/text-alternative.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/text.svg": {
+    "file": "assets/text-DsKh-DlE.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/text.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/three-vertical-dots.svg": {
+    "file": "assets/three-vertical-dots-DQUqCYMo.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/three-vertical-dots.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/todolist.svg": {
+    "file": "assets/todolist-BCiw8diJ.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/todolist.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/undo.svg": {
+    "file": "assets/undo-eIXQ706X.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-core/theme/icons/undo.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-ui/theme/icons/accessibility.svg": {
+    "file": "assets/accessibility-Cy_AR-u0.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-ui/theme/icons/accessibility.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-ui/theme/icons/color-tile-check.svg": {
+    "file": "assets/color-tile-check-uJln0yRF.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-ui/theme/icons/color-tile-check.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-ui/theme/icons/dropdown-arrow.svg": {
+    "file": "assets/dropdown-arrow-O0-4Kfej.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-ui/theme/icons/dropdown-arrow.svg"
+  },
+  "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-ui/theme/icons/project-logo.svg": {
+    "file": "assets/project-logo-DIMNCQAH.svg",
+    "src": "node_modules/@ckeditor/ckeditor5-alignment/node_modules/@ckeditor/ckeditor5-ui/theme/icons/project-logo.svg"
+  },
   "node_modules/leaflet/dist/images/layers-2x.png": {
     "file": "assets/layers-2x-Bpkbi35X.png",
     "src": "node_modules/leaflet/dist/images/layers-2x.png"
@@ -220,15 +508,19 @@
     "src": "public/images/sidebar/img-4.jpg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-CoubxSvE.js",
+    "file": "assets/app-DBZYMzGm.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
-      "assets/app-COVh-JDd.css"
+      "assets/app-DNg9242d.css"
     ],
     "assets": [
       "assets/logo-sm-BMbbSDmV.png",
+      "assets/cancel-DxSK63-A.svg",
+      "assets/check-Dh2bGPSL.svg",
+      "assets/loupe-CBlqXucs.svg",
+      "assets/dropdown-arrow-O0-4Kfej.svg",
       "assets/logo-dark-DGKr6nTV.png",
       "assets/logo-light-CqfqkvTN.png",
       "assets/laboratory-DGebyxyk.png",

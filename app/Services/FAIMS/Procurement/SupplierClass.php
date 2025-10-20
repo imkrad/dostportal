@@ -24,37 +24,35 @@ class SupplierClass
 
     public function save($request)
     { 
-        $data = Supplier::create([
-            'title' =>  $request->title,
-            'code' => $request->code,
-            'allocated_budget' =>  $request->allocated_budget,
-        ]);
-
+        $code = Supplier::generateCode();
+        $data = Supplier::create(array_merge($request->all(), [ 'code' => $code ]));
 
         return [
             'data' =>new SupplierResource($data),
-            'message' => 'PAP Code created successfully!', 
-            'info' => "You've successfully added new PAP Code.",
+            'message' => 'Supplier created successfully!', 
+            'info' => "You've successfully added new Supplier.",
         ];
     }
 
     public function update($request, $id)
     {
-
         // Find the record by its ID
         $data = Supplier::findOrFail($id);
 
         // Update the record with the provided data
         $data->update([
-            'title' => $request->title,
-            'code' => $request->code,
-            'allocated_budget' => $request->allocated_budget,
+            'name' =>  $request->name,
+            'mayors_permit_no' => $request->mayors_permit_no,
+            'tin' =>  $request->tin,
+            'philgeps_registration_no' => $request->philgeps_registration_no,
+            'address' => $request->address,
+            'contact' => $request->contact,
         ]);
     
         return [
             'data' => new SupplierResource($data),
-            'message' => 'PAP Code updated successfully!',
-            'info' => "You've successfully updated the PAP Code.",
+            'message' => 'Supplier updated successfully!',
+            'info' => "You've successfully updated the Supplier.",
         ];
     }
    

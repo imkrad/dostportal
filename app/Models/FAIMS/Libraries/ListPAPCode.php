@@ -12,6 +12,12 @@ class ListPAPCode extends Model
         'title',
         'code',
         'allocated_budget',
+        'mode_of_procurement_id'
     ];
+
+    public function mode_of_procurement()
+    {
+        return $this->belongsTo('App\Models\FAIMS\Libraries\ModeOfProcurement', 'mode_of_procurement_id' );
+    }
 
 }

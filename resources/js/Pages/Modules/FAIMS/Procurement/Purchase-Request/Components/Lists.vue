@@ -23,8 +23,8 @@
                     <th>Division</th>
                     <th>Requested By</th>
                     <th>PO #</th>
-                    <th>PAP Code</th>
-                    <th>Quotation Count</th>
+                    <th class="text-center">PAP Code</th>
+                    <th class="text-center">Quotation Count</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -37,15 +37,28 @@
                     <td>{{ list.section.division.name }}</td>
                     <td>{{  list.requested_by }}</td>
                     <td></td>
-                    <td>
+                    <td class="d-flex justify-content-center align-items-center flex-wrap">
                         <template v-for="(code, counter) in list.pap_codes" :key="counter">
-                            <b-badge variant="primary" class="m-1 bg-red">
+                            <b-badge variant="primary" class="m-1">
                                 {{ code.pap_code.code }}
                             </b-badge>
                         </template>
                     </td>
-                    <td></td>
-                    <td></td>
+
+
+                    <td class="text-center">{{ list.quotation_count }}</td>
+                    <td>
+                        <b-badge 
+                                v-if="list.status"
+                                :variant="getBadgeVariant(list.status.name)" 
+                                style="color: white;">
+                                {{ list.status.name }} 
+                                <i v-if="list.status.name == 'For Bids'"></i>
+                                <i v-if="list.status.name == 'For BAC Resolution'"></i>
+                                <i v-if="list.status.name == 'For NOA'" ></i>
+                                <i v-if="list.status.name == 'Awarded'"></i>
+                                </b-badge>  
+                    </td>
                     <td>
                         <b-dropdown size="sm" variant="success">
                             <template #button-content>
@@ -79,6 +92,11 @@
                             <b-dropdown-item @click="bidsPR(list)" v-if="list.status.id == 5 || list.status.id == 7">
                             <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Bids -->
                             Abstract of Bids
+                            </b-dropdown-item>
+
+                            <b-dropdown-item @click="bacResolutionsPR(list)" v-if="list.status.id == 8">
+                            <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Quotation -->
+                            BAC Resolutions
                             </b-dropdown-item>
 
 
@@ -163,6 +181,9 @@ export default {
         quotationsPR(data){
             router.get('/faims/quotation-requests/'+data.id, { option: 'quotations' });
         },
+        bacResolutionsPR(data){
+            router.get('/faims/bac-resolutions/'+data.id, { option: 'bac_resolutions' });
+        }, 
         openAction(data,index){
             this.index = index;
             this.$refs.create.edit(data , 'action');
@@ -179,6 +200,12 @@ export default {
                     return 'info';    // Maps to Bootstrap's info variant
                 case 'Approved':
                     return 'success';  // Maps to Bootstrap's success variant
+                case 'For Bids':
+                    return 'success'; 
+                case 'For BAC Resolution':
+                    return 'success'; 
+                case 'For NOA':
+                    return 'success'; 
                 default:
                     return 'secondary'; // Default variant if none match
             }

@@ -33,9 +33,6 @@ class BidsClass
 
     public function save($request)
     {
-        //dd($request->all());
-        //dd($request->data['items']);
-
         $data = Bids::create([
             'supplier_id' =>  $request->data['supplier_id'],
             'purchase_request_id' => $request->data['pr_id'],
@@ -63,12 +60,43 @@ class BidsClass
             'info' => "You've successfully set the Item Bid Price.",
         ];
     }
+    public function save_bids_description($request){
+        $bid_details = BidsDetail::findOrFail($request->data['id']);
+        if($bid_details){
+            // update bids description for bids details
+            $bid_details->bids_description = $request->data['description'];
+            $bid_details->update();
+        }
 
-    public function save_award($request){
+        return [
+            'data' => $bid_details,
+            'message' => 'Bids Description updated successfuly!', 
+            'info' => "You've successfully updated the Bids Description.",
+        ];
+    }
+
+    public function save_bids_price($request){
+        $bid_details = BidsDetail::findOrFail($request->data['id']);
+        if($bid_details){
+            // update bids description for bids details
+            $bid_details->bids_price = $request->data['item_bid_price'];
+            $bid_details->remarks = $request->data['remarks'];
+            $bid_details->update();
+        }
+
+        return [
+            'data' => $bid_details,
+            'message' => 'Bids Data updated successfuly!', 
+            'info' => "You've successfully updated the Bids Data.",
+        ];
+    }
+    
+  
+    public function save_bids_for_award($request){
         foreach ($request->items as $item) {
             $purchase_request = PurchaseRequest::findOrFail($item['purchase_request_id']);
             if($purchase_request){
-                 // update status to Awarded for bids details
+                 // update status to For BAC Resolution for bids details
                  $purchase_request->status_id = 7;
                  $purchase_request->update();
             }
@@ -79,7 +107,7 @@ class BidsClass
             $bid_details = BidsDetail::findOrFail($item['id']);
             if($bid_details){
                 // update status to Awarded for bids details
-                $bid_details->status_id = 10;
+                $bid_details->status_id = 13;
                 $bid_details->update();
             }
         }
@@ -92,11 +120,10 @@ class BidsClass
             $bid_details = BidsDetail::findOrFail($item['id']);
             if($bid_details){
                 // update status to Awarded for bids details
-                $bid_details->status_id = 9;
+                $bid_details->status_id = 12;
                 $bid_details->update();
             }
         }
-
 
         return [
             'data' => $request->items,
@@ -104,7 +131,6 @@ class BidsClass
             'info' => "You've successfully awarded the Items.",
         ];
     }
-
 
     
 
@@ -141,22 +167,8 @@ class BidsClass
     }
 
 
-    public function printBACReso($id,$request)
-    {  
-        $data = BidsDetail::with('bids','bids.supplier','unit_type')->where('purchase_request_id', $request->pr_id)
-        ->select('pr_detail_id', 'bids_id', 'bids_quantity', 'bids_unit_type_id', 'bids_price', 'bids_description')
-        ->orderBy('pr_detail_id', 'asc')
-        ->get()
-        ->groupBy('pr_detail_id'); // Group by pr_detail_id
 
-        $array = [
-            'data' => $data,
-            'pr_no' =>$request->purchase_request_number
-        ];
-
-        $pdf = \PDF::loadView('FAIMS.Procurement.printBACReso',$array)->setPaper('A4', 'portrait');
-        return $pdf->stream($request->purchase_request_number.'-BAC-Resolution.pdf');
-    }
+    
 
 
 

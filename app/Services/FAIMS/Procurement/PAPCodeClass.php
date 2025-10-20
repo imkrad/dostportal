@@ -25,11 +25,11 @@ class PAPCodeClass
     public function save($request)
     { 
         $data = ListPAPCode::create([
-            'title' =>  $request->title,
+            'title' => $request->title,
             'code' => $request->code,
-            'allocated_budget' =>  $request->allocated_budget,
+            'allocated_budget' => $request->allocated_budget,
+            'mode_of_procurement_id' => $request->mode_of_procurement_id,
         ]);
-
 
         return [
             'data' =>new PAPCodeResource($data),
@@ -49,6 +49,7 @@ class PAPCodeClass
             'title' => $request->title,
             'code' => $request->code,
             'allocated_budget' => $request->allocated_budget,
+            'mode_of_procurement_id' => $request->mode_of_procurement_id,
         ]);
     
         return [

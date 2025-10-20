@@ -21,7 +21,8 @@
                 <tr class="fs-11">
                     <th>#</th>
                     <th>Name</th>
-                    <th>Address</th>
+                    <th>Address/Contact</th>
+                    <th>Philgeps Registration No.</th>
                     <th>Mayor's Permit No.</th>
                     <th>TIN</th>
                     <th>Actions</th>
@@ -32,8 +33,9 @@
                     <tr class="custom-hover-row" v-for="(list, index) in lists" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ list.name  }}</td>
-                        <td>{{ list.address  }}</td>
-                        <td>{{ list.mayors_permit_no  }}</td>
+                        <td>{{ list.address  }} <br> {{ list.contact  }}</td>
+                        <td>{{ list.philgeps_registration_no  }}</td>
+                        <td>{{ list.mayors_permit_no }}</td>
                         <td>{{ list.tin  }}</td>
 
                         <td>

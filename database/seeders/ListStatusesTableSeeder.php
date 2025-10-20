@@ -63,15 +63,17 @@ class ListStatusesTableSeeder extends Seeder
             6 => 
             array (
                 'id' => 7,
-                'name' => 'For NOA',
-                'classification' => 'purchase_request',
-            ),
-            7 => 
-            array (
-                'id' => 8,
                 'name' => 'For BAC Resolution',
                 'classification' => 'purchase_request',
             ),
+
+            7 => 
+            array (
+                'id' => 8,
+                'name' => 'For NOA',
+                'classification' => 'purchase_request',
+            ),
+         
 
             8 => 
             array (

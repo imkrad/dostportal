@@ -61,8 +61,6 @@ class ViewClass
     }
 
     public function show($id, $request){
-
-        // dd($request->all());
         $data = PurchaseRequest::with('section', 'pap_codes')->findOrFail($id);
         $pap_code_ids = $data->pap_codes()->pluck('pap_code_id');
         switch($request->option){
@@ -114,6 +112,15 @@ class ViewClass
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Quotations/Lists', [
                     'dropdowns' => [
                        'data' => $data,
+                    ],
+                    'option' => $request->option,
+                ]); 
+            break;
+            case 'bac_resolutions':
+                return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/BAC-Resolutions/Lists', [
+                    'dropdowns' => [
+                       'data' => $data,
+                       'bids' => $this->dropdown->bids($id),
                     ],
                     'option' => $request->option,
                 ]); 

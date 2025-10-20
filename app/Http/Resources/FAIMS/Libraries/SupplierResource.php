@@ -19,6 +19,10 @@ class SupplierResource extends JsonResource
             'name' =>  $this->name,
             'address' =>  $this->address,
             'contact' =>  $this->contact,
+            'philgeps_registration_no' =>  $this->philgeps_registration_no,
+            'mayors_permit_no' =>  $this->mayors_permit_no,
+            'tin' =>  $this->tin,
+            'code' =>  $this->code,
         ];
     }
 }

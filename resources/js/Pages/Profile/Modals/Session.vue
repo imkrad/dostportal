@@ -55,7 +55,7 @@
                 </div>
             </form>
         </div>
-            <template v-slot:footer>
+        <template v-slot:footer>
             <b-button @click="closeModal" variant="light" block>Cancel</b-button>
             <b-button @click="logoutOtherBrowserSessions" variant="primary" :disabled="form.processing" block><i class="ri-save-3-line align-bottom me-1"></i>Confirm</b-button>
         </template>

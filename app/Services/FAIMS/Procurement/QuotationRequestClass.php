@@ -27,6 +27,7 @@ class QuotationRequestClass
 
         $pr = PurchaseRequest::findOrFail($request->data['id']);
         // update Purchase Request status to FOR BIDS
+        $pr->quotation_count = $pr->quotation_count+1;
         $pr->status_id = 5;
         $pr->update();
 

@@ -16,7 +16,9 @@ return new class extends Migration
             $table->tinyIncrements('id');
             $table->string('title',100);
             $table->string('code',20);  
-            $table->integer('allocated_budget');  
+            $table->integer('allocated_budget');   
+            $table->tinyInteger('mode_of_procurement_id')->unsigned()->index();
+            $table->foreign('mode_of_procurement_id')->references('id')->on('mode_of_procurements');
             $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
