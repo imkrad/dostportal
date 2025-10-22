@@ -39,8 +39,8 @@ class PurchaseRequestController extends Controller
             case 'sections':
                 return $this->dropdown->sections($request);
             break;
-            case 'supplier_address':
-                return $this->dropdown->supplier_address($request->supplier_id);
+            case 'approved_by':
+                return $this->purchase_request->regional_director();
             break;  
             case 'purchase_request_title':
                 return $this->dropdown->purchase_request_title($request);

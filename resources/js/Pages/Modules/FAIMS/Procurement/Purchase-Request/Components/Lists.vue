@@ -22,7 +22,6 @@
                     <th>Request Purpose</th>
                     <th>Division</th>
                     <th>Requested By</th>
-                    <th>PO #</th>
                     <th class="text-center">PAP Code</th>
                     <th class="text-center">Quotation Count</th>
                     <th>Status</th>
@@ -36,7 +35,6 @@
                     <td>{{ list.purchase_request_purpose }}</td>
                     <td>{{ list.section.division.name }}</td>
                     <td>{{  list.requested_by }}</td>
-                    <td></td>
                     <td class="d-flex justify-content-center align-items-center flex-wrap">
                         <template v-for="(code, counter) in list.pap_codes" :key="counter">
                             <b-badge variant="primary" class="m-1">

@@ -37,7 +37,6 @@ class ViewClass
     }
 
     public function quotation_requests($request){
-    
         $data = QuotationRequestResource::collection(
             QuotationRequest::query()
             ->with('supplier' ,'supply_officer')
@@ -61,17 +60,15 @@ class ViewClass
     }
 
     public function show($id, $request){
-        $data = PurchaseRequest::with('section', 'pap_codes')->findOrFail($id);
-        $pap_code_ids = $data->pap_codes()->pluck('pap_code_id');
+        $purchase_request = PurchaseRequest::with('section', 'pap_codes')->findOrFail($id);
+        $pap_code_ids = $purchase_request->pap_codes()->pluck('list_pap_code_id');
         switch($request->option){
             case 'edit':
             case 'review':
             case 'approve':
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/CreatePage', [
                     'dropdowns' => [
-                        'data' => $data,
                         'pap_code_ids' => $pap_code_ids,
-                        'item_details' => $this->dropdown->pr_details($id),
                         'unit_types' => $this->dropdown->unit_types(),
                         'divisions' => $this->dropdown->divisions(),
                         'sections' => $this->dropdown->list_sections(),
@@ -82,44 +79,44 @@ class ViewClass
                         'pap_codes' => $this->dropdown->pap_codes(),
                         'supply_officers' => $this->dropdown->supply_officers(),
                     ],
+                    'purchase_request' => $purchase_request,
+                    'items' => $this->dropdown->pr_items($id),
                     'option' => $request->option,
                 ]); 
             break;
             case 'bids':
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Bids/Lists', [
                     'dropdowns' => [
-                        'data' => $data,
-                        'item_details' => $this->dropdown->pr_details($id),
-                        'bids' => $this->dropdown->bids($id),
                         'suppliers' => $this->dropdown->suppliers(),
                         'lists' => $this->bids->lists($id,$request),
-                    ],        
+                    ],
+                    'purchase_request' => $purchase_request, 
+                    'items' => $this->dropdown->pr_items($id),       
+                    'bid_items' => $this->dropdown->bid_items($id),
                     'option' => $request->option,
                 ]); 
             break;
-            case 'awards':
-                return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Awards/Lists', [
-                    'dropdowns' => [
-                        'data' => $data,
-                        'item_details' => $this->dropdown->pr_details($id),
-                        'suppliers' => $this->dropdown->suppliers(),
-                        'lists' => $this->bids->lists($id,$request),
-                    ],        
-                    'option' => $request->option,
-                ]); 
-            break;
+            // case 'awards':
+            //     return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Awards/Lists', [
+            //         'dropdowns' => [
+            //             'purchase_request' => $purchase_request,
+            //             'item_details' => $this->dropdown->pr_details($id),
+            //             'suppliers' => $this->dropdown->suppliers(),
+            //             'lists' => $this->bids->lists($id,$request),
+            //         ],        
+            //         'option' => $request->option,
+            //     ]); 
+            // break;
             case 'quotations':
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Quotations/Lists', [
-                    'dropdowns' => [
-                       'data' => $data,
-                    ],
+                    'purchase_request' => $purchase_request,
                     'option' => $request->option,
                 ]); 
             break;
             case 'bac_resolutions':
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/BAC-Resolutions/Lists', [
                     'dropdowns' => [
-                       'data' => $data,
+                       'purchase_request' => $purchase_request,
                        'bids' => $this->dropdown->bids($id),
                     ],
                     'option' => $request->option,
@@ -128,11 +125,11 @@ class ViewClass
             case 'create_rfq':
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Quotations/CreatePage', [
                     'dropdowns' => [
-                       'data' => $data,
-                       'item_details' => $this->dropdown->pr_details($id),
                        'suppliers' => $this->dropdown->suppliers(),
                        'supply_officers' => $this->dropdown->supply_officers(),
                     ],
+                    'purchase_request' => $purchase_request,
+                    'items' => $this->dropdown->pr_items($id),
                     'option' => $request->option,
                 ]); 
             break;

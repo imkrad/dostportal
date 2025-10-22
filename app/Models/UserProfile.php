@@ -39,6 +39,13 @@ class UserProfile extends Model
         $this->attributes['middlename'] = ucwords(strtolower($value));
     }
 
+    public function getFullNameAttribute()
+    {
+        $middle = $this->middlename ? ' ' . $this->middlename : '';
+        $suffix = $this->suffix ? ' ' . $this->suffix : '';
+        return "{$this->lastname}, {$this->firstname}{$middle}{$suffix}";
+    }
+
     protected static $recordEvents = ['updated'];
     public function getActivitylogOptions(): LogOptions {
         return LogOptions::defaults()

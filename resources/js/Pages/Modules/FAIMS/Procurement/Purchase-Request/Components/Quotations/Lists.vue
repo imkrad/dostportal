@@ -7,7 +7,7 @@
                             PR REQUEST NO:
                             <u class="text-info">
                             <span class="bg-light  p-1">
-                                {{  dropdowns.data.purchase_request_number }}
+                                {{  purchase_request.purchase_request_number }}
                             </span>
                         </u>
                     </span>
@@ -22,7 +22,7 @@
                     <span @click="refresh()" class="input-group-text" v-b-tooltip.hover title="Refresh" style="cursor: pointer;"> 
                         <i class="bx bx-refresh search-icon"></i>
                     </span>
-                    <b-button type="button" variant="primary" @click="goCreatePage(dropdowns.data)">
+                    <b-button type="button" variant="primary" @click="goCreatePage(purchase_request)">
                         <i class="ri-add-circle-fill align-bottom me-1"></i> New
                     </b-button>
                 </div>
@@ -86,7 +86,7 @@ import PageHeader from '@/Shared/Components/PageHeader.vue';
 import Pagination from "@/Shared/Components/Pagination.vue";
 import { router } from '@inertiajs/vue3';
 export default {
-    props: ['dropdowns'],
+    props: ['purchase_request'],
     components: { PageHeader,Pagination },
     data(){
         return {
@@ -118,7 +118,7 @@ export default {
                 params : {
                     keyword: this.filter.keyword,
                     option: 'quotation_request',
-                    purchase_request_id: this.dropdowns.data.id,
+                    purchase_request_id: this.purchase_request.id,
                 }
             })
             .then(response => {

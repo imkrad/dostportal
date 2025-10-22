@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\UnitTypeResource;
 
-class PurchaseRequestDetailResource extends JsonResource
+class PurchaseRequestItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,8 +22,7 @@ class PurchaseRequestDetailResource extends JsonResource
             'item_unit_type' =>  $this->unit_type,
             'item_description' =>  $this->item_description,
             'item_quantity' =>  $this->item_quantity,
-            'item_price' =>  $this->pap_code,
-            'status' =>  $this->status,
+            'item_unit_cost' =>  $this->item_unit_cost,
         ];
     }
 }

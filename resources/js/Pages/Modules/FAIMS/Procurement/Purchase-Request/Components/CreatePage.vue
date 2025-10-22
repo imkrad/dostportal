@@ -92,14 +92,14 @@
                 <BRow>
 
                     <BCol lg="3" class="mt-2 mb-2"   >
-                        <b-button  @click="openAddItem()" variant="light" block class="bg-success w-75 text-white">Add Item</b-button>
+                        <b-button :disabled="!form.division_id || !form.section_id || !form.fund_cluster_id  || !form.purchase_request_purpose"  @click="openAddItem()" variant="light" block class="bg-success w-75 text-white">Add Item</b-button>
                     </BCol>
                     <!-- <div  class="bg-info font-weight text-white" v-if="option == 'review_purchase_request'">ITEM LIST</div> -->
                     <div class="table-responsive">
                         <table class="table table-nowrap mb-0">
                             <thead class="table-light">
                                 <tr class="fs-11">
-                                    <th>#</th>
+                                    <th>Item No.</th>
                                     <th>Unit</th>
                                     <th>Item Description</th>
                                     <th>Quantity</th>
@@ -107,20 +107,37 @@
                                     <th>Total Cost</th>
                                     <th></th>
                                 </tr>
-                            </thead>                 
+                            </thead>     
                             <tbody>
                                 <tr v-for="(item, index) in form.items" :key="index">
-                                    <td>{{ index + 1 }}</td>
-                                    <td >{{ item.item_unit }}</td>
+                                <td>{{ index + 1 }}</td>
+                              <td>
+                                {{ item.item_quantity > 1 ? item.item_unit_type?.name_long : item.item_unit_type?.name_short }}
+                                </td>
                                     <td>
-                                        <div v-html="item.description"></div>
+                                        <div v-html="item.item_description"></div>
                                     </td>
-                                    <td>{{ item.quantity}}</td>
-                                    <td>{{ formatCurrency(item.unit_cost) }}</td>
+                                    <td>{{ item.item_quantity}}</td>
+                                    <td>{{ formatCurrency(item.item_unit_cost) }}</td>
                                     <td>{{ formatCurrency(item.total_cost) }}</td>
+
                                     <td>
-                                    <b-button @click="removeItem(index)" variant="danger" size="sm">Remove</b-button>
+                                    <b-button @click="removeItem(index)" variant="success" size="sm" class="me-2">
+                                         <i class="ri-edit-2-line"></i>
+                                    </b-button>
+
+                                    <b-button @click="removeItem(index)" variant="danger" size="sm" >
+                                         <i class="ri-delete-bin-line"></i>
+                                    </b-button>
+                                    
                                     </td>
+                                </tr>
+                                <tr >
+                                    <td colspan="5" class="text-end"><strong>Total:</strong></td>
+                                    <td>
+                                        <strong>{{ formatCurrency(totalCostSum) }}</strong>
+                                    </td>
+                                    <td></td>
                                 </tr>
                                 </tbody>
                         </table>
@@ -131,18 +148,18 @@
                         <b-card title="ASSIGNATOREES"  class="bg-light">             
                             <BRow>
                                 <BCol lg="6" class="mt-2">
-                                    <InputLabel for="division" value="Requested By" :message="form.errors.requested_by"/>
+                                    <InputLabel for="requested_by" value="Requested By" :message="form.errors.requested_by_id"/>
                                     <Multiselect 
                                     :options="dropdowns.requesters" 
-                                    v-model="form.requested_by"
+                                    v-model="form.requested_by_id"
                                     :searchable="true" label="name"
                                     placeholder="Select Requester"/>
                                 </BCol>
                                 <BCol lg="6" class="mt-2">
-                                    <InputLabel for="division" value="Approved By" :message="form.errors.approved_by"/>
+                                    <InputLabel for="approved_by" value="Approved By" :message="form.errors.approved_by_id"/>
                                     <Multiselect 
                                     :options="dropdowns.approvers" 
-                                    v-model="form.approved_by"
+                                    v-model="form.approved_by_id"
                                     :searchable="true" label="name"
                                     placeholder="Select Approver"/>
                                 </BCol>
@@ -151,8 +168,10 @@
                         </b-card>
                     </div>
             </BCol>
+
             <BCol lg="3" class="mt-2 mb-2" v-if="option == 'create'">
-                <b-button @click="submit('ok')"  variant="light" block class="bg-success w-75 text-white">Save</b-button>
+                <b-button :disabled="!form.division_id || !form.section_id || !form.fund_cluster_id  || !form.purchase_request_purpose || !form.requested_by_id || !form.approved_by_id || !form.items.length > 0" 
+                 @click="submit('ok')"  variant="light" block class="bg-success w-75 text-white">Save</b-button>
             </BCol>
 
             <BCol lg="3" class="mt-2 mb-2" v-if="option == 'edit'">
@@ -160,7 +179,7 @@
             </BCol>
 
             <BCol lg="3" class="mt-2 mb-2" v-if="option == 'review'">
-                <b-button @click="review(form)"  variant="light" block class="bg-success w-75 text-white">Review</b-button>
+                <b-button @click="review(form)"  variant="light" block class="bg-success w-75 text-white">Confirm</b-button>
             </BCol>
 
             <BCol lg="3" class="mt-2 mb-2" v-if="option == 'approve'">
@@ -175,7 +194,7 @@
         </div>
     </div>
 
-    <Create :dropdowns="dropdowns"   @items="handleItems"   ref="create"/>
+    <Create :dropdowns="dropdowns"   @refresh="getDataFromLocalStorage()"   ref="create"/>
 </template>
 <script>
 // import Lists from './Procurement/Purchase-Request/Components/Lists.vue';
@@ -190,61 +209,39 @@ import { router } from '@inertiajs/vue3';
 
 export default {
     components: { Create, PageHeader, InputError, InputLabel, TextInput, Multiselect },
-    props: ['dropdowns' , 'option'],
+    props: ['purchase_request', 'items', 'dropdowns' , 'option', 'user' ],
     data(){
-        if(this.dropdowns.data){
-                return {
-                    currentUrl: window.location.origin,
-                    form: useForm({
-                        id: this.dropdowns.data.id,
-                        request_number: this.dropdowns.data.request_number,
-                        section_id : this.dropdowns.data.section.id,
-                        division_id : this.dropdowns.data.section.division_id,  
-                        purchase_request_date: this.dropdowns.data.purchase_request_date,
-                        fund_cluster_id: this.dropdowns.data.fund_cluster_id,
-                        purchase_request_purpose: this.dropdowns.data.purchase_request_purpose,   
-                        purchase_request_title:this.dropdowns.data.purchase_request_title, 
-                        items: this.dropdowns.item_details,
-                        pap_code_ids: this.dropdowns.pap_code_ids,
-                        requested_by: this.dropdowns.data.requested_by,
-                        approved_by: this.dropdowns.data.approved_by,
-                        option: 'edit',
-                    }),              
-                    showModal: false,
-                    sections: this.getSections(this.dropdowns.data.section.division_id),
-                    unit_type : null,
-                }
-           
-        }
-        else{
-            return {
+        return {
                 currentUrl: window.location.origin,
                 form: useForm({
                     id: null,
-                    request_number:null,
-                    division_id : null,
-                    section_id : null,
-                    purchase_request_date: this.getCurrentDate(),
-                    fund_cluster_id: null,
+                    purchase_request_number:null,
                     purchase_request_purpose: null, 
                     purchase_request_title:null,  
+                    purchase_request_date: this.getCurrentDate(),
+                    division_id : null,
+                    section_id : null,
+                    fund_cluster_id: null,
                     items: null,
-                    requested_by: null,
-                    approved_by: null,
+                    requested_by_id: this.user.data.id,
+                    approved_by_id: null,
                     pap_code_ids: null,
                     status_id: 1,
                     option: 'purchase-request',
                 }),
-
-                
+                action: null,
                 showModal: false,
                 sections: [],
                 unit_type : null,
             }
-        }
     },
 
     watch: {
+        'user.data.id': function(value) {
+            this.form.requested_by_id = value;
+        },
+
+
         'form.division_id': function(value) {
             if(value){         
                 this.getSections(value);
@@ -259,14 +256,139 @@ export default {
                     this.getPRTitle(id);
                 });
             }
+        },
+
+        'action': function(value) {
+                if(value  == 'edit' || value  == 'review' || value  == 'approve'  ){         
+                    this.form.id = this.purchase_request.id;
+                    this.form.purchase_request_number = this.purchase_request.purchase_request_number;
+                    this.form.purchase_request_purpose = this.purchase_request.purchase_request_purpose;
+                    this.form.purchase_request_title = this.purchase_request.purchase_request_title;
+                    this.form.purchase_request_date = this.purchase_request.purchase_request_date;
+                    this.form.division_id = this.purchase_request.division_id;
+                    this.form.section_id = this.purchase_request.section_id;
+                    this.form.fund_cluster_id = this.purchase_request.fund_cluster_id;
+                    this.form.pap_code_ids = this.dropdowns.pap_code_ids;
+                    this.getDataFromLocalStorage();
+                }
+            },
+        },
+
+    mounted(){
+        // Load from localStorage on component mount
+       this.getDataFromLocalStorage();
+       this.getApprovedBy();
+
+       this.action = this.option;
+    },
+
+    computed: {
+        totalCostSum() {
+            if (!Array.isArray(this.form.items)) return 0;
+
+            return this.form.items.reduce((sum, item) => {
+            return sum + (parseFloat(item.total_cost) || 0);
+            }, 0);
+        }
+        
+    },
+
+    methods: { 
+
+        openAddItem(){
+            this.$refs.create.show();
+        },
+
+        removeItem(index) {
+            let items = JSON.parse(localStorage.getItem('itemsAdded')) || [];
+
+            if (index >= 0 && index < items.length) {
+                items.splice(index, 1); // Remove 1 item at that index
+                localStorage.setItem('itemsAdded', JSON.stringify(items));
+            }
+
+            this.getDataFromLocalStorage();
+
+
+        },
+
+        handleItems() {
+            form.items = localStorage.getItem('items');  
+        },
+
+        submit(){
+            this.form.post('/faims/purchase-requests');
+            //this.form.reset();    
+        },
+
+        update(data){
+            router.put('/faims/purchase-requests/'+data.id, { data: data, option: 'update' });
+            this.form.reset();    
+        },
+
+        review(data){
+            this.form.option = 'review';
+            this.form.put('/faims/purchase-requests/'+data.id);
+            this.form.reset();    
+        },
+
+        approve(data){
+            router.put('/faims/purchase-requests/'+data.id, { data: data, option: 'approve' });
+            this.form.reset();    
+        },
+
+        
+        formatCurrency(value) {
+            return new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP',
+            }).format(value);
+        },
+
+
+        goBackPage(){
+            router.get('/faims/purchase-requests');
+        },
+
+        getPRTitle(id){
+            axios.get('/faims/purchase-requests',{
+                params : {
+                    id: id ,
+                    option: 'purchase_request_title'
+                }
+            })
+            .then(response => {
+                if(response){
+                    if (this.form.purchase_request_title) {
+                        this.form.purchase_request_title += ', ' + response.data;
+                    } else {
+                        this.form.purchase_request_title = response.data;
+                    }   
+                }
+            })
+            .catch(err => console.log(err));
+        },
+
+      getDataFromLocalStorage() {
+        const savedItems = localStorage.getItem('itemsAdded');
+        const hasAddedDbItems = localStorage.getItem('hasAddedDbItems');
+
+        // Load existing saved items if they exist
+        this.form.items = savedItems ? JSON.parse(savedItems) : [];
+
+        // Only push from DB if not already added
+        if (!hasAddedDbItems && this.items && this.items.length > 0) {
+            this.form.items.push(...this.items);
+
+            // Optional: deduplicate if needed
+
+            // Save updated list and set the flag
+            localStorage.setItem('itemsAdded', JSON.stringify(this.form.items));
+            localStorage.setItem('hasAddedDbItems', 'true');
         }
     },
 
 
-    methods: { 
-        openAddItem(){
-            this.$refs.create.show();
-        },
 
         getCurrentDate() {
             const today = new Date();
@@ -291,96 +413,19 @@ export default {
             .catch(err => console.log(err));
         },
 
-        handleItems(updatedItems) {
-            if(this.dropdowns.data){
-                this.form.items.push({
-                    item_unit_id : updatedItems[0].item_unit_id,
-                    item_unit: updatedItems[0].item_unit,
-                    description: updatedItems[0].description,
-                    quantity: updatedItems[0].quantity,
-                    unit_cost: updatedItems[0].unit_cost,
-                    total_cost: updatedItems[0].total_cost,
-                });
-
-            }
-            else{
-                this.form.items = updatedItems;
-            }     
-        },
-
-        removeItem(index) {
-        // Removes an item from the array based on its index
-            this.form.items.splice(index, 1);
-        },
-
-        submit(){
-            this.form.post('/faims/purchase-requests');
-            //this.form.reset();    
-        },
-
-        update(data){
-            router.put('/faims/purchase-requests/'+data.id, { data: data, option: 'update' });
-            this.form.reset();    
-
-            
-        },
-
-        review(data){
-            router.put('/faims/purchase-requests/'+data.id, { data: data, option: 'review' });
-            this.form.reset();    
-        },
-
-        approve(data){
-            router.put('/faims/purchase-requests/'+data.id, { data: data, option: 'approve' });
-            this.form.reset();    
-        },
-
-        
-        formatCurrency(value) {
-            return new Intl.NumberFormat('en-PH', {
-            style: 'currency',
-            currency: 'PHP',
-            }).format(value);
-        },
-
-
-        goBackPage(){
-            router.get('/faims/purchase-requests');
-        },
-
-        getPRItemDetails(purchase_request_id){
+        getApprovedBy() {
             axios.get('/faims/purchase-requests',{
                 params : {
-                    purchase_request_id: purchase_request_id ,
-                    option: 'pr_details'
+                    option: 'approved_by'
                 }
             })
             .then(response => {
                 if(response){
-                    this.form.items = response.data;       
+                    this.form.approved_by_id = response.data[0].value; 
                 }
             })
             .catch(err => console.log(err));
         },
-
-        getPRTitle(id){
-            axios.get('/faims/purchase-requests',{
-                params : {
-                    id: id ,
-                    option: 'purchase_request_title'
-                }
-            })
-            .then(response => {
-                if(response){
-                    if (this.form.purchase_request_title) {
-                        this.form.purchase_request_title += ', ' + response.data;
-                    } else {
-                        this.form.purchase_request_title = response.data;
-                    }   
-                }
-            })
-            .catch(err => console.log(err));
-        }
         
         
     }

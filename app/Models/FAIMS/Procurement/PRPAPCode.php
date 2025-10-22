@@ -11,7 +11,7 @@ class PRPAPCode extends Model
     protected $table = 'pr_pap_codes';
     protected $fillable = [
         'purchase_request_id',
-        'pap_code_id',   
+        'list_pap_code_id',   
         
     ];
 
@@ -22,7 +22,7 @@ class PRPAPCode extends Model
 
     public function pap_code()
     {
-        return $this->belongsTo('App\Models\FAIMS\Libraries\ListPAPCode', 'pap_code_id');
+        return $this->belongsTo('App\Models\FAIMS\Libraries\ListPAPCode', 'list_pap_code_id');
     }
 
 

@@ -9,38 +9,28 @@
                         <b-card  class="bg-light">             
                             <BRow>
                                 <BCol lg="6" class="mt-2">
-                                    <InputLabel for="supplier" value="Supplier" :message="form.errors.supplier_id"/>
+                                    <InputLabel for="supplier" value="Supplier" />
                                     <Multiselect 
                                     :options="dropdowns.suppliers" 
-                                    v-model="form.supplier_id"
+                                    v-model="form.supplier_ids"
                                     :searchable="true" label="name"
+                                    mode="tags"
                                     placeholder="Select Supplier"/>
                                 </BCol>
 
                                 <BCol lg="6" class="mt-2">
-                                    <InputLabel value="PR Number" :message="form.errors.purchase_request_date"/>
-                                    <TextInput v-model="form.purchase_request_number" type="text" class="form-control"  :light="true" readonly/>
+                                    <InputLabel value="PR Number" />
+                                    <TextInput v-model="purchase_request.purchase_request_number" type="text" class="form-control"  :light="true" readonly/>
                                 </BCol>
 
                                 <BCol lg="6" class="mt-2">
-                                    <InputLabel for="address" value="Address" :message="form.errors.address"/>
-                                    <b-form-textarea
-                                        id="textarea"
-                                        v-model="form.address"
-                                        placeholder="Enter Address"
-                                        rows="2"
-                                        max-rows="10">
-                                    </b-form-textarea>
-                                </BCol>
-
-                                <BCol lg="6" class="mt-2">
-                                    <InputLabel value="Date" :message="form.errors.purchase_request_date"/>
-                                    <TextInput v-model="form.purchase_request_date" type="text" class="form-control"  :light="true" readonly/>
+                                    <InputLabel value="Date" />
+                                    <TextInput v-model="purchase_request.purchase_request_date" type="text" class="form-control"  :light="true" readonly/>
                                 </BCol>
 
                                 <BCol lg="6" class="mt-2">
                                     <InputLabel value="Submissions not Later than " :message="form.errors.submission_date"/>
-                                    <TextInput v-model="form.submission_date" type="date" class="form-control"  :light="true" />
+                                    <TextInput v-model="form.submission_not_later_than" type="date" class="form-control"  :light="true" />
                                 </BCol>
 
                                 <BCol lg="6" class="mt-2">
@@ -59,13 +49,14 @@
 
      
             </BRow>
+
             <BRow>
                     <!-- <div  class="bg-info font-weight text-white" v-if="option == 'review_purchase_request'">ITEM LIST</div> -->
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
                             <thead class="table-light">
                                 <tr class="fs-11">
-                                    <th>#</th>
+                                    <th>Item No</th>
                                     <th>Quantity/Unit</th>
                                     <th>Item Description</th>
                                     <th></th>
@@ -73,10 +64,14 @@
                             </thead>                 
                             <tbody style="vertical-align: top;">
                                 <tr v-for="(item, index) in form.items" :key="index">
-                                    <td >{{ index + 1 }}</td>
-                                    <td >{{ item.quantity }} {{ item.item_unit }}</td>
+                                    <td >{{ item.item_no }}</td>
+                                  <td>
+                                        {{ item.item_quantity }} 
+                                        {{ item.item_quantity > 1 ? item.item_unit_type.name_long : item.item_unit_type.name_short }}
+                                    </td>
+
                                     <td >
-                                        <div v-html="item.description"></div>
+                                        <div v-html="item.item_description"></div>
                                     </td>
                                     <td>
                                     <!-- <b-button v-if="option != 'quotations_purchase_request'" @click="removeItem(index)" variant="danger" size="sm">Remove</b-button> -->
@@ -118,39 +113,29 @@ import { router } from '@inertiajs/vue3';
 
 export default {
     components: { Confirm, PageHeader, InputError, InputLabel, TextInput, Multiselect, Checkbox },
-    props: ['dropdowns' , 'option'],
+    props: ['purchase_request' ,'items','dropdowns' , 'option' , 'user'],
     data(){
         return {
                 currentUrl: window.location.href,
                 form: useForm({
-                    id:  this.dropdowns.data.id,
-                    supplier_id: null,
-                    purchase_request_number: this.dropdowns.data.purchase_request_number ,
-                    address: null,
-                    purchase_request_date: this.dropdowns.data.purchase_request_date,
-                    submission_date: null,
-                    supply_officer_id: null,
-                    items: this.dropdowns.item_details,
+                    id:  null,
+                    purchase_request_id: this.purchase_request.id,
+                    supplier_ids: null,
+                    submission_not_later_than: this.getDatePlusWorkingDays(7),
+                    supply_officer_id: this.user.data.id,
+                    items: this.items,
                     option: 'quotation_request',
                 }),
 
-                
                 showModal: false,
                 sections: [],
                 unit_type : null,
             }
     }, 
 
-    watch: {
-        'form.supplier_id': function(value) {
-            if(value){         
-                this.getAddress(value);
-            }
-        }
-    },
 
     mounted() {
-        this.getDateSubmissionNotLaterThan();
+        //this.getDateSubmissionNotLaterThan();
     },
 
     methods: { 
@@ -185,26 +170,14 @@ export default {
             }
         },
 
-        getAddress(supplier_id){
-            axios.get('/faims/purchase-requests',{
-                params : {
-                    supplier_id : supplier_id,
-                    option: 'supplier_address'
-                }
-            })
-            .then(response => {
-                if(response){
-                    this.form.address = response.data[0].address;   
-                }
-            })
-            .catch(err => console.log(err));
-        },
 
         createQuotation(data){
-            router.post('/faims/quotation-requests', { data : data, option: 'save_rfq' });
-            setTimeout(() => {
-                this.$inertia.visit('/faims/quotation-requests/'+data.id+'?option=quotations');
-            }, 2000); // Delay in milliseconds (2000 ms = 2 seconds)
+            this.form.option = 'save_rfq';
+            this.form.post('/faims/quotation-requests');
+            
+            // setTimeout(() => {
+            //     this.$inertia.visit('/faims/quotation-requests/'+data.id+'?option=quotations');
+            // }, 2000); // Delay in milliseconds (2000 ms = 2 seconds)
           
             this.form.reset();   
         },
@@ -218,20 +191,39 @@ export default {
             axios.get(page_url,{
                 params : {
                     option: 'getDateSubmissionNotLaterThan',
-                    purchase_request_id: this.dropdowns.data.id,
+                    purchase_request_id: this.purchase_request.id,
                 }
             })
             .then(response => {
                 if(response){    
-                    this.form.submission_date= response.data;
+                    this.form.submission_not_later_than= response.data;
                 }
             })
             .catch(err => console.log(err));
 
+        },
+
+        getDatePlusWorkingDays(days) {
+            let date = new Date();
+            let addedDays = 0;
+
+            while (addedDays < days) {
+                date.setDate(date.getDate() + 1);
+                const dayOfWeek = date.getDay();
+                if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                    addedDays++;
+                }
+            }
+
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+
+            return `${year}-${month}-${day}`;
         }
 
 
-
+        
     }
 }
 </script>

@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_request_items', function (Blueprint $table) {
+        Schema::create('quotation_requests', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->string('rfq_no')->unique(); 
+            $table->date('submission_not_later_than'); 
+            $table->Integer('supplier_id')->unsigned()->index();
+            $table->foreign('supplier_id')->references('id')->on('suppliers');
+            $table->Integer('supply_officer_id')->unsigned()->index();
+            $table->foreign('supply_officer_id')->references('id')->on('user_profiles');
             $table->Integer('purchase_request_id')->unsigned()->index();
             $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
-            $table->tinyInteger('item_unit_type_id')->unsigned()->index();;
-            $table->foreign('item_unit_type_id')->references('id')->on('list_dropdowns');
-            $table->text('item_description')->nullable();
-            $table->string('item_quantity')->nullable();
-            $table->decimal('item_unit_cost')->nullable();
-            $table->decimal('item_bid_price')->nullable();
-            $table->decimal('total_cost')->nullable();
             $table->tinyInteger('status_id')->unsigned()->index();
             $table->foreign('status_id')->references('id')->on('list_statuses');
             $table->timestamps();
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_request_items');
+        Schema::dropIfExists('quotation_requests');
     }
 };

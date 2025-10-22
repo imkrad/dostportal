@@ -9,7 +9,6 @@ class QuotationRequest extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'date',
         'rfq_no',
         'submission_not_later_than',
         'purchase_request_purpose',
@@ -20,7 +19,7 @@ class QuotationRequest extends Model
 
     public function supplier()
     {
-        return $this->belongsTo('App\Models\FAIMS\Procurement\Supplier', 'supplier_id' , 'id');
+        return $this->belongsTo('App\Models\FAIMS\Procurement\Supplier', 'supplier_id');
     }
 
     public function supply_officer()
@@ -34,20 +33,21 @@ class QuotationRequest extends Model
     }
 
 
-    public static function generateRFQNumber($date = null)
+  public static function generateRFQNumber()
     {
-        if ($date) {
-            $year = date("Y", strtotime($date));  // 'y' gives the last two digits of the year
-            $month = date("m", strtotime($date));
-        } else {
-            $year = date("Y", strtotime("now"));  // 'y' gives the last two digits of the year
-            $month = date("m", strtotime("now"));
-        }
-    
-        $count = self::whereYear('date', date("Y", strtotime($date ?? "now")))
-                     ->whereMonth('date', $month)
-                     ->count() + 1;
-    
-        return $year . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+        $now = now(); // Laravel's Carbon instance
+        $year = $now->format('y'); // Last two digits of year
+        $month = $now->format('m');
+
+        // Count existing RFQs for this year and month
+        $count = self::whereYear('created_at', $now->year)
+                    ->whereMonth('created_at', $month)
+                    ->count() + 1;
+
+        $sequence = str_pad($count, 4, '0', STR_PAD_LEFT);
+
+        return "PR-{$year}-{$month}-{$sequence}";
     }
+
+
 }

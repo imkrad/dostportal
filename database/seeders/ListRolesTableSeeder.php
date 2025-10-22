@@ -21,10 +21,44 @@ class ListRolesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'Budget Staff',
+                'name' => 'Administrator',
                 'type' => 'n/a',
                 'definition' => '',
             ),
+
+            1 => 
+            array (
+                'id' => 2,
+                'name' => 'Procurement Staff',
+                'type' => 'n/a',
+                'definition' => '',
+            ),
+
+            2 => 
+            array (
+                'id' => 3,
+                'name' => 'Supply Officer',
+                'type' => 'n/a',
+                'definition' => '',
+            ),
+
+            3 => 
+            array (
+                'id' => 4,
+                'name' => 'Regional Director',
+                'type' => 'n/a',
+                'definition' => '',
+            ),
+
+            
+            4 => 
+            array (
+                'id' => 5,
+                'name' => 'User',
+                'type' => 'n/a',
+                'definition' => '',
+            ),
+
 
         ));
         

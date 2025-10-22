@@ -8,7 +8,7 @@
             </BCol>
             <BCol lg="4" class="mt-2">
                 <InputLabel value="Allocated Budget" />
-                <Amount v-model="form.allocated_budget" type="text" class="form-control" placeholder="0"  />
+                <Amount @amount="amount" />
             </BCol>
 
             <BCol lg="4" class="mt-2">
@@ -89,6 +89,7 @@ export default {
                 allocated_budget: null,
                 year: null,
                 end_user_ids : [],
+                app_type_id: null,
                 mode_of_procurement_id: null,
             }),   
             app_types: [], 
@@ -105,6 +106,20 @@ export default {
     },
 
     methods: { 
+
+        amount(val){
+            this.form.allocated_budget = this.cleanCurrency(val);
+        },
+
+        cleanCurrency(value) {
+            if (!value) return 0;
+
+            // Remove ₱, commas, and spaces
+            const cleaned = value.toString().replace(/[^0-9.]/g, '');
+
+            return parseFloat(cleaned);
+        },
+
 
         generateYearOptions() {
             const currentYear = new Date().getFullYear();
@@ -133,6 +148,7 @@ export default {
             this.form.title = data.title;
             this.form.code = data.code;
             this.form.allocated_budget = data.allocated_budget;
+            this.form.app_type_id = data.app_type_id;
             this.form.mode_of_procurement_id = data.mode_of_procurement.id;
             this.showModal = true;
         },

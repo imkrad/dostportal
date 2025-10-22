@@ -4,8 +4,9 @@ namespace App\Services\FAIMS\Procurement;
 
 use App\Models\FAIMS\Procurement\PurchaseRequest;
 use App\Models\FAIMS\Procurement\PurchaseRequestDetail;
-use App\Models\FAIMS\Procurement\Bids;
-use App\Models\FAIMS\Procurement\BidsDetail;
+use App\Models\FAIMS\Procurement\Bid;
+use App\Models\FAIMS\Procurement\BidItem;
+use App\Models\FAIMS\Procurement\BidOffer;
 use App\Models\FAIMS\Procurement\Supplier;
 use App\Models\FAIMS\Procurement\QuotationRequest;
 use App\Http\Resources\FAIMS\Procurement\QuotationRequestResource;
@@ -15,46 +16,59 @@ use App\Models\UserProfile;
 class QuotationRequestClass
 {
     public function save($request){
-        // save Request for Quotation(RFQ)
-        $data = new QuotationRequest();
-        $data->date =  now();
-        $data->rfq_no = QuotationRequest::generateRFQNumber();
-        $data->submission_not_later_than = $request->data['submission_date'];
-        $data->supplier_id = $request->data['supplier_id'];
-        $data->supply_officer_id = $request->data['supply_officer_id'];
-        $data->purchase_request_id = $request->data['id'];
-        $data->save();
+        //dd($request->all());
 
-        $pr = PurchaseRequest::findOrFail($request->data['id']);
-        // update Purchase Request status to FOR BIDS
-        $pr->quotation_count = $pr->quotation_count+1;
-        $pr->status_id = 5;
-        $pr->update();
+        // create initial bids 
+        foreach ($request->supplier_ids as $supplier_id) {
 
-        // create initial bids with 0 price
-        $bid = New Bids();
-        $bid->supplier_id = $data->supplier_id;
-        $bid->purchase_request_id =  $data->purchase_request_id;
-        $bid->status_id = 15;
-        $bid->save();
+            // save Request for Quotation(RFQ)
+            $rfq_no= QuotationRequest::generateRFQNumber();
 
-        $pr_details = PurchaseRequestDetail::where('purchase_request_id', $bid->purchase_request_id )->get();
-        foreach ($pr_details as $itemData) {
-            BidsDetail::create([
-                'bids_id' =>  $bid->id,
-                'purchase_request_id' =>  $itemData['purchase_request_id'],
-                'pr_detail_id' => $itemData['id'],
-                'bids_description' => $itemData['item_description'],
-                'bids_quantity' => $itemData['item_quantity'],
-                'bids_price' => 0,
-                'bids_abc' => $itemData['total'],
-                'bids_unit_type_id' => $itemData['item_unit_type_id'],
-                'status_id' => 10,
-            ]);   
-        }           
+            $quotation_request = new QuotationRequest();
+            $quotation_request->submission_not_later_than = $request->submission_not_later_than;
+            $quotation_request->supply_officer_id = $request->supply_officer_id;
+            $quotation_request->purchase_request_id = $request->purchase_request_id;
+            $quotation_request->rfq_no = $rfq_no;
+            $quotation_request->supplier_id = $supplier_id;
+            $quotation_request->status_id = 19; 
+            $quotation_request->save();
+
+
+            //create initital bid
+            $bid = new Bid();
+            $bid->purchase_request_id = $request->purchase_request_id;
+            $bid->quotation_request_id = $quotation_request->id;
+            $bid->save();
+
+
+            // and bid items 
+            foreach ($request->items as $item) {
+                // create initial bid item
+                $bid_item = new BidItem();
+                $bid_item->bid_id = $bid->id;
+                $bid_item->pr_item_id = $item['value'];
+                $bid_item->status_id = 9; // set status to "available for award"
+                $bid_item->save();
+
+                dd($bid_item);
+
+                // create initial bid offer
+                $bid_offer = new BidOffer();
+                $bid_offer->bid_item_id = $bid_item->id;
+                $bid_offer->save();
+            }
+        }
+
+        $purchase_request = PurchaseRequest::findOrFail($request->purchase_request_id);
+        // update Purchase Request status to 'FOR BIDS'
+        $purchase_request->quotation_count = $purchase_request->quotation_count+1;
+        $purchase_request->status_id = 4;
+        $purchase_request->update();
+
+       
 
         return [
-            'data' => new QuotationRequestResource($data),
+            'data' => new QuotationRequestResource($quotation_request),
             'message' => 'Request for Quotations successfuly saved!', 
             'info' => "You've successfully created the Request for Quotation.",
         ];

@@ -23,7 +23,7 @@
                     <th>PAP Codes</th>
                     <th>Project Description/Title</th>
                     <th>Allocated Budget</th>
-                    <th>Mode of Procurement</th>
+                    <th>Mode of Procurement / APP Type</th>
                     <th>End Users</th>
                     <th>Actions</th>
                 </tr>
@@ -35,7 +35,17 @@
                         <td>{{ list.code  }}</td>
                         <td>{{ list.title  }}</td>
                         <td>{{ formatCurrency(list.allocated_budget)  }}</td>
-                        <td>{{ list.mode_of_procurement.mode }}</td>
+                        <td>
+                            <span>{{ list.mode_of_procurement.mode }}</span> <br>
+                            <span class="text-muted">{{ list.app_type.title }}</span>
+                        </td>
+                        <td>
+                            <div v-for="(end_user, index) in list.end_users">
+                                <b-badge>
+                                    {{ end_user.end_user?.title }}
+                                </b-badge>
+                            </div>
+                        </td>
 
                         <td>
                             <b-button @click="editPAP(list)" size="sm">

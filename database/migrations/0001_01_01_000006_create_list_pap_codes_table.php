@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title',100);
             $table->string('code',20);  
             $table->integer('year'); 
-            $table->integer('allocated_budget');   
+            $table->decimal('allocated_budget', 10, 2);
             $table->integer('app_type_id')->unsigned()->index();
             $table->foreign('app_type_id')->references('id')->on('app_types');
             $table->tinyInteger('mode_of_procurement_id')->unsigned()->index();

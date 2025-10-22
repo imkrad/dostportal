@@ -1,25 +1,45 @@
 <template>
-    <b-modal v-model="showModal" header-class="p-3" title="Add Item" size="lg" class="v-modal-custom" modal-class="zoomIn" centered no-close-on-backdrop >
+    <b-modal v-model="showModal" header-class="p-3" title="Add Item" :size="modal_size" class="v-modal-custom" modal-class="zoomIn" centered no-close-on-backdrop >
         <form class="customform">
+            <div>
+               
+              <b-form-group label="Select Modal Size:">
+                <b-form-radio-group
+                    v-model="modal_size"
+                    name="some-radios"
+                    buttons
+                    size="sm"
+                    button-variant="outline-primary"
+                >
+                    <b-form-radio value="lg">Large</b-form-radio>
+                    <b-form-radio value="xl">X Large</b-form-radio>
+                    <b-form-radio value="fullscreen">Fullscreen</b-form-radio>
+                </b-form-radio-group>
+                </b-form-group>
+
+            </div>
+
             <BRow>
-                <BCol lg="12" class="mt-2">
+                <BCol lg="12" class="mt-3">
+                    <InputLabel value="Description" :message="form.errors.item_description"/>
                     <ckeditor v-model="form.item_description" :editor="editor"></ckeditor>
                 </BCol>
-                <BCol lg="12" class="mt-2">
-                    <InputLabel for="unit_type" value="Unit Type"/>
-                    <Multiselect 
-                    :options="dropdowns.unit_types" 
-                    v-model="form.item_unit_id"
-                    :searchable="true" label="name_long"
-                    placeholder="Select Item Unit Type"/>
-                </BCol>
-                <BCol lg="6" class="mt-2">
+                <BCol lg="4" class="mt-2">
                     <InputLabel value="Quantity" />
                     <TextInput v-model="form.item_quantity" type="number" class="form-control" placeholder="0"  />
                 </BCol>
-                <BCol lg="6" class="mt-2">
-                    <InputLabel value="Price"/>
-                    <TextInput v-model="form.item_price" type="number" class="form-control" placeholder="0.00"/>
+                <BCol lg="4" class="mt-2">
+                    <InputLabel for="unit_type" value="Unit Type"/>
+                    <Multiselect 
+                    :options="dropdowns.unit_types" 
+                    v-model="form.item_unit_type_id"
+                    :searchable="true" :label="unitTypeLabel"
+                    placeholder="Select Item Unit Type"/>
+                </BCol>
+
+                <BCol lg="4" class="mt-2">
+                    <InputLabel value="Unit Cost"/>
+                    <Amount @amount="amount" />
                 </BCol>
                 <BCol lg="12"><hr class="text-muted mt-4 mb-0"/></BCol>
             </BRow>
@@ -29,7 +49,7 @@
    
           <template v-slot:footer>
             <b-button @click="hide()" variant="light" block>Cancel</b-button>
-            <b-button @click="addItem('ok')" variant="primary" :disabled="form.processing" block>add</b-button>
+            <b-button @click="addItem(form)" variant="primary" :disabled="form.processing" block>add</b-button>
         </template>
     </b-modal>
 </template>
@@ -41,63 +61,82 @@ import InputLabel from '@/Shared/Components/Forms/InputLabel.vue';
 import TextInput from '@/Shared/Components/Forms/TextInput.vue';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import Amount from '@/Shared/Components/Forms/Amount.vue';
 
 
 export default {
-    components: { InputError, InputLabel, TextInput, Multiselect, ckeditor: CKEditor.component  },
-    props:['dropdowns'],
+    components: { Amount, InputError, InputLabel, TextInput, Multiselect, ckeditor: CKEditor.component  },
+    props:['dropdowns' , 'refresh'],
     data(){
         return {
             currentUrl: window.location.origin,
             form: useForm({
                 id: null,
-                pr_id: null,
                 item_description: '',
-                item_unit: null,
-                item_unit_id: null,
-                item_quantity: 0,
-                item_price: null,
-                total_cost : 0
+                item_unit_type: null,
+                item_unit_type_id: null,
+                item_quantity: null,
+                item_unit_cost: null,
+                total_cost : null
             }),
             itemsAdded: [],
-            unit_type: null,
             showModal: false,
 		    editor: ClassicEditor,
+            modal_size: 'lg'
         }
     },
 
     watch: {
-        'form.item_unit_id': function(value) {
+        'form.item_unit_type_id': function(value) {
             if(value){
                 this.getItemUnitType(value);
             }
-        }
+        },
+
     },
 
 
-
+    computed: {
+        unitTypeLabel() {
+            return this.form.item_quantity > 1 ? 'name_long' : 'name_short';
+        }
+    },
 
     methods: { 
+        amount(val){
+            this.form.item_unit_cost = this.cleanCurrency(val);
+            this.form.total_cost = this.form.item_quantity * this.form.item_unit_cost;    
+        },
+
+        cleanCurrency(value) {
+            if (!value) return 0;
+            // Remove ₱, commas, and spaces
+            const cleaned = value.toString().replace(/[^0-9.]/g, '');
+            return parseFloat(cleaned);
+        },
+
 
         show(){
             this.form.reset();
             this.showModal = true;
         },
 
-        addItem() {
-            // Adds a new item object with default values
-            this.itemsAdded.push({
-                item_unit: this.form.item_unit,
-                item_unit_id: this.form.item_unit_id,
-                description: this.form.item_description,
-                quantity: this.form.item_quantity,
-                unit_cost: this.form.item_price,
-                total_cost: this.form.item_price * this.form.item_quantity,
-            });
+       addItem(item) {
+            // Step 1: Get and parse the existing array from localStorage, or initialize an empty one
+            this.itemsAdded = JSON.parse(localStorage.getItem('itemsAdded')) || [];
 
-            this.$emit('items', this.itemsAdded);
+            // Step 2: Add the new item
+            this.itemsAdded.push(item);
+
+            // Step 3: Save it back to localStorage
+            localStorage.setItem('itemsAdded', JSON.stringify(this.itemsAdded));
+
+            // Step 4: Notify parent to refresh data
+            this.$emit('refresh');
+
+            // Step 5: Hide modal or reset form
             this.hide();
-        },
+         },
 
         getItemUnitType(unit_type_id) {
             axios.get('/faims/purchase-requests',{
@@ -108,7 +147,7 @@ export default {
             })
             .then(response => {
                 if(response){
-                    this.form.item_unit = response.data[0].name_long;         
+                    this.form.item_unit_type = response.data[0];
                 }
             })
             .catch(err => console.log(err));
@@ -117,6 +156,7 @@ export default {
       
         hide(){
             this.form.reset();
+            this.form.item_unit_cost = 0.00;
             this.showModal = false;
         },
 

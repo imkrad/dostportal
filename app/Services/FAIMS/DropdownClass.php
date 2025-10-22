@@ -7,9 +7,9 @@ use App\Models\FAIMS\Libraries\EndUser;
 use App\Models\FAIMS\Procurement\UnitType;
 use App\Models\FAIMS\Procurement\Section;
 use App\Models\FAIMS\Procurement\FundCluster;
-use App\Models\FAIMS\Procurement\PurchaseRequestDetail;
+use App\Models\FAIMS\Procurement\PurchaseRequestItem;
 use App\Models\FAIMS\Procurement\Supplier;
-use App\Models\FAIMS\Procurement\Bids;
+use App\Models\FAIMS\Procurement\BidItem;
 use App\Models\FAIMS\Procurement\QuotationRequest;
 use App\Models\FAIMS\Libraries\ListPAPCode;
 use App\Models\FAIMS\Libraries\ModeOfProcurement;
@@ -143,22 +143,19 @@ class DropdownClass
         return $data;
     }
 
-    public function pr_details($id)
+    public function pr_items($id)
     {
-        $data = PurchaseRequestDetail::with('unit_type')->where('purchase_request_id',$id)
+        $data = PurchaseRequestItem::with('unit_type')->where('purchase_request_id',$id)
         ->get()->map(function ($item) {
             return [
                 'value' => $item->id,
-                'purchase_request' => $item->purchase_request,
-                'unit_id' => $item->unit_id,
-                'item_unit_id' => $item->unit_type['id'],
-                'item_unit' => $item->unit_type['name_long'],
-                'description' => $item->item_description,
-                'quantity' => $item->item_quantity,
-                'unit_cost' => $item->item_price,
+                'item_no' => $item->item_no,
+                'item_unit_type' => $item->unit_type,
+                'item_description' => $item->item_description,
+                'item_quantity' => $item->item_quantity,
+                'item_unit_cost' => $item->item_unit_cost,
                 'item_bid_price' => $item->item_bid_price,
-                'total_cost' => $item->total,
-                'status' => $item->status,
+                'total_cost' => $item->total_cost,
             ];
         });
 
@@ -185,26 +182,15 @@ class DropdownClass
         return $data;
     }
 
-    public function supplier_address($supplier_id){
-        $data = Supplier::where('id',$supplier_id)->get()->map(function ($item) {
-            return [
-                'address' => $item->address
-            ];
-        });
 
-        return $data;
-    }
-
-
-    public function bids($id)
+    public function bid_items($id)
     {
-        $data = Bids::with('bids_details', 'bids_details.unit_type')->where('purchase_request_id',$id)
+        $data = BidItem::with('bids_items', 'bids_items.unit_type')->where('purchase_request_id',$id)
         ->get()->map(function ($item) {
             return [
                 'value' => $item->id,
                 'supplier' => $item->supplier,
-                'purchase_request' => $item->purchase_request,
-                'bids_details' => $item->bids_details,
+                'bids_items' => $item->bids_items,
                 'status' => $item->status,
             ];
         });
@@ -237,6 +223,8 @@ class DropdownClass
         // get submission date
         return $data->submission_not_later_than;
     }
+
+ 
 
     
 

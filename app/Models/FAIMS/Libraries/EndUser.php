@@ -12,4 +12,10 @@ class EndUser extends Model
         'title',
     ];
 
+    public function end_user()
+    {
+        return $this->belongsTo('App\Models\FAIMS\Libraries\EndUser');
+    }
+
+
 }

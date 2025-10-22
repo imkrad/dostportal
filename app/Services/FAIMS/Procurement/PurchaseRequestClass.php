@@ -3,7 +3,7 @@
 namespace App\Services\FAIMS\Procurement;
 
 use App\Models\FAIMS\Procurement\PurchaseRequest;
-use App\Models\FAIMS\Procurement\PurchaseRequestDetail;
+use App\Models\FAIMS\Procurement\PurchaseRequestItem;
 use App\Models\FAIMS\Procurement\Supplier;
 use App\Models\FAIMS\Procurement\Bids;
 use App\Models\FAIMS\Procurement\BidsDetail;
@@ -12,30 +12,28 @@ use App\Models\FAIMS\Procurement\PRPAPCode;
 use App\Http\Resources\FAIMS\Procurement\PurchaseRequestResource;
 use App\Http\Resources\FAIMS\Procurement\QuotationRequestResource;
 use Illuminate\Support\Facades\Auth;
-use App\Models\UserProfile;
+use App\Models\User;
 
 class PurchaseRequestClass
 {
     public function save($request){
+
         $user = Auth::user();
-        $request_number = PurchaseRequest::generatePurchaseRequestNumber();
-        $request_date = now();
-        $data = PurchaseRequest::create(array_merge($request->all(), [ 'purchase_request_number' => $request_number,
-                                                                        'purchase_request_date' => $request_date  ] ));
+        $purchase_request_number = PurchaseRequest::generatePurchaseRequestNumber();
+        $data = PurchaseRequest::create(array_merge($request->all(), [ 'purchase_request_number' => $purchase_request_number, ] ));
 
         if (!empty($request->pap_code_ids) && is_array($request->pap_code_ids)) {
             // Save PAP codes
             foreach ($request->pap_code_ids as $pap_code_id) {
                 $pap_code = new PRPAPCode();
-                $pap_code->pap_code_id = $pap_code_id;
+                $pap_code->list_pap_code_id = $pap_code_id;
                 $pap_code->purchase_request_id = $data->id;
                 $pap_code->save();
             }
         }
                                                                         
-      
         // Save Purchase Request Item Details       
-        $this->saveItemDetails($request, $data->id);
+        $this->savePRItems($request, $data->id);
 
         return [
             'data' => new PurchaseRequestResource($data),
@@ -45,38 +43,28 @@ class PurchaseRequestClass
     }
     
 
-    protected function saveItemDetails($request ,$purchase_request_id ){
-        $unit_id =  $request->section_id;  
-
-        foreach ($request->items as $item) {
-            $item_unit_id =  $item['item_unit_id']; 
-            $item_price =  $item['unit_cost']; 
-            $item_qty =  $item['quantity'];  
-            $item_description =  $item['description'];  
-            $item_total_cost =  $item['total_cost'];  
-    
-            $item_details_data = new PurchaseRequestDetail();
-            $item_details_data->purchase_request_id  = $purchase_request_id;
-            $item_details_data->unit_id  = $unit_id;
-            $item_details_data->item_unit_type_id = $item_unit_id;
-            $item_details_data->item_price = $item_price;
-            $item_details_data->item_quantity = $item_qty;
-            $item_details_data->item_description = $item_description;
-            $item_details_data->total = $item_total_cost;
-            $item_details_data->status_id = 4;
-            
-            $item_details_data->save();
+    protected function savePRItems($request ,$purchase_request_id ){
+        foreach ($request->items as $index => $item) {
+            $data = new PurchaseRequestItem();
+            $data->item_no = $index + 1;
+            $data->purchase_request_id  = $purchase_request_id;
+            $data->item_unit_type_id =  $item['item_unit_type_id'];
+            $data->item_unit_cost = $item['item_unit_cost'];
+            $data->item_quantity = $item['item_quantity'];
+            $data->item_description = $item['item_description'];
+            $data->total_cost = $item['total_cost'];
+            $data->save();
         }
+
     }
     
     public function update($id , $request)
     {
-
         // update Purchase Request
         $data = $this->updatePR($id , $request);
 
         // update Purchase Request Item Details       
-        $this->updateItemDetails($id, $request , $request->data['items'] );
+        $this->updatePRItems($id, $request , $request);
 
         return [
             'data' => new PurchaseRequestResource($data),
@@ -92,7 +80,7 @@ class PurchaseRequestClass
         $data = $this->updatePR($id , $request);
 
         // update Purchase Request Item Details       
-        $this->updateItemDetails($id, $request , $request->data['items'] );
+        $this->updatePRItems($id, $request);
 
         //  update status to reviewed
         $data->status_id  = 2;
@@ -112,7 +100,7 @@ class PurchaseRequestClass
         $data = $this->updatePR($id , $request);
 
         // update Purchase Request Item Details       
-        $this->updateItemDetails($id, $request , $request->data['items'] );
+        $this->updatePRItems($id, $request);
 
         //  update status to reviewed
         $data->status_id  = 3;
@@ -129,51 +117,54 @@ class PurchaseRequestClass
        
     protected function updatePR($id, $request ){
         $data = PurchaseRequest::findOrFail($id);
-        $data->division_id  = $request->data['division_id'];
-        $data->section_id  = $request->data['section_id'];
-        $data->fund_cluster_id  = $request->data['fund_cluster_id'];
-        $data->purchase_request_purpose  = $request->data['purchase_request_purpose'];
-        $data->requested_by  = $request->data['requested_by'];
-        $data->approved_by  = $request->data['approved_by'];    
-        $data->update();
+
+        $data->update(array_merge($request->only(
+            'purchase_request_purpose',
+            'purchase_request_title',
+            'division_id',
+            'section_id',
+            'fund_cluster_id',
+            'approved_by_id'
+        )));
 
         return  $data;
     }
 
-    protected function updateItemDetails($purchase_request_id, $request , $item_details ){
-        $unit_id =  $request->data['section_id'];
-           
-        if($item_details){
-            //  Delete all existing items for this purchase request ID
-            PurchaseRequestDetail::where('purchase_request_id', $purchase_request_id)->delete();
-      
-            // Then, loop through the new items and add them
-            foreach ($item_details as $item) {
-                $item_unit_id = $item['item_unit_id'];
-                $item_price = $item['unit_cost'];
-                $item_qty = $item['quantity'];
-                $item_description = $item['description'];
-                $item_total_cost = $item['total_cost'];
+    protected function updatePRItems($id, $request ){
+  
+        $data = PurchaseRequestItem::findOrFail($id);
+  
+        $data->update(array_merge($request->only(
+            'item_description',
+            'item_unit_type_id',
+            'item_quantity',
+            'item_unit_cost',
+            'total_cost',
+        )));
 
-                // Create a new PurchaseRequestDetail instance for each item
-                $item_details_data = new PurchaseRequestDetail();
-                $item_details_data->purchase_request_id = $purchase_request_id;
-                $item_details_data->unit_id = $unit_id;
-                $item_details_data->item_unit_type_id = $item_unit_id;
-                $item_details_data->item_price = $item_price;
-                $item_details_data->item_quantity = $item_qty;
-                $item_details_data->item_description = $item_description;
-                $item_details_data->total = $item_total_cost;
-                $item_details_data->status_id = 4;
-                $item_details_data->save();
-            }
-        }
+        return  $data;
     }
+
+    public function regional_director(){
+        //  fetch user with role id 4 or regionaldirector
+       $data = User::with('user_roles' , 'profile')
+        ->whereHas('user_roles', function ($query) {
+            $query->where('role_id', 4);
+        })->get()->map(function ($item) {
+            return [
+                'value' => $item->id,
+                'name' => $item->profile->firstname.' '.$item->profile->middlename[0].'. '.$item->profile->lastname.' '.$item->profile->suffix ,
+            ];
+        });
+        return $data;
+    }
+
+    
 
     
     public function printPR($id,$request)
     {  
-        $data = PurchaseRequestDetail::with('purchase_request', 'unit_type')->where('purchase_request_id', $request->id)->get();
+        $data = PurchaseRequestItem::with('purchase_request', 'unit_type')->where('purchase_request_id', $request->id)->get();
         $pr = PurchaseRequest::with('fundCluster','section','requester', 'requester.user_organization.position.administrative' , 'approver.user_organization.position.administrative')->where('id', $request->id)->first();
 
         //return $pr;

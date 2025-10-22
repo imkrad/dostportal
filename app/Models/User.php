@@ -46,9 +46,20 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne('App\Models\UserProfile', 'user_id');
     }
 
+    public function user_roles()
+{
+        return $this->hasMany('App\Models\UserRole', 'user_id');
+    }
+
+
     public function authentications()
     {
         return $this->haMany('App\Models\AuthenticationLog', 'user_id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->profile?->full_name;
     }
 
     public function getActivitylogOptions(): LogOptions {

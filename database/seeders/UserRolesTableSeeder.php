@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class ListRolesTableSeeder extends Seeder
+class UserRolesTableSeeder extends Seeder
 {
     /**
      * Auto generated seeder file.
@@ -23,6 +23,13 @@ class ListRolesTableSeeder extends Seeder
                 'id' => 1,
                 'user_id' => 1,
                 'role_id' => 1,
+            ),
+
+            1 => 
+            array (
+                'id' => 2,
+                'user_id' => 1,
+                'role_id' => 4,
             ),
 
     

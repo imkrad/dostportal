@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('bid_items', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->Integer('purchase_request_id')->unsigned()->index();
-            $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
-            $table->Integer('supplier_id')->unsigned()->index();
-            $table->foreign('supplier_id')->references('id')->on('suppliers');
+            $table->Integer('bid_id')->unsigned()->index();
+            $table->foreign('bid_id')->references('id')->on('purchase_requests');
             $table->Integer('pr_item_id')->unsigned()->index();
             $table->foreign('pr_item_id')->references('id')->on('purchase_request_items');
             $table->tinyInteger('status_id')->unsigned()->index();
