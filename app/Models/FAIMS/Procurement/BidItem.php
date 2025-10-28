@@ -18,22 +18,21 @@ class BidItem extends Model
     {
         return $this->belongsTo('App\Models\FAIMS\Procurement\Bid', 'bid_id' );
     }
+    
 
     public function pr_item()
     {
         return $this->belongsTo('App\Models\FAIMS\Procurement\PurchaseRequestItem', 'pr_item_id');
     }
 
-
-    public function supplier()
+     public function bid_offer()
     {
-        return $this->belongsTo('App\Models\FAIMS\Procurement\Supplier', 'supplier_id' , 'id');
+        return $this->HasOne('App\Models\FAIMS\Procurement\BidOffer', 'bid_item_id');
     }
-
 
     public function status()
     {
-        return $this->belongsTo('App\Models\ListStatus', 'status_id' , 'id');
+        return $this->belongsTo('App\Models\ListStatus', 'status_id' );
     }
 
 }

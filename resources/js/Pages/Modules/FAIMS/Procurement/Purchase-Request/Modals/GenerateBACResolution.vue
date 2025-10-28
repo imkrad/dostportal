@@ -32,7 +32,6 @@ import InputLabel from '@/Shared/Components/Forms/InputLabel.vue';
 import TextInput from '@/Shared/Components/Forms/TextInput.vue';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { router } from '@inertiajs/vue3';
 
 export default {
     components: { InputError, InputLabel, TextInput, Multiselect, ckeditor: CKEditor.component  },
@@ -224,18 +223,18 @@ export default {
             const budget_in_words = this.numberToWords(this.data.pap_codes[0].pap_code.allocated_budget);
             const rfq_date = this.rfq_date;
             // Filter only awarded suppliers
-            const awardedBids = this.bids.filter(bid => 
-                bid.bids_details.some(detail => detail.status_id == 13)
-            );
+            // const awardedBids = this.bids.filter(bid => 
+            //     bid.bid_details.some(detail => detail.status_id == 9)
+            // );
 
             // Generate a comma-separated list of awarded supplier names
-            const awardedSupplierNames = awardedBids.map(bid => bid.supplier.name).join(", ");
-            const bidsPrice = awardedBids.map(bid => bid.bids_price).join(", ");
+            // const awardedSupplierNames = awardedBids.map(bid => bid.supplier.name).join(", ");
+            // const bidsPrice = awardedBids.map(bid => bid.bid_unit_cost).join(", ");
 
-            const allBids = this.bids;
+            // const allBids = this.bids;
 
              // Generate a comma-separated list of not awarded supplier names
-             const allPRSupplierNames = allBids.map(bid => bid.supplier.name).join(", ");
+            //  const allPRSupplierNames = allBids.map(bid => bid.supplier.name).join(", ");
 
             // purchase date format
             const prDate = new Date(this.data.purchase_request_date).toLocaleDateString('en-GB', {
@@ -274,24 +273,23 @@ export default {
 
             let counter = 2; // Start from II (2)
 
-            const awardedBidsList = awardedBids.map(bid => {
-                // Filter bid details where status_id === 13
-                const filteredBidDetails = bid.bids_details.filter(detail => detail.status_id === 13);
+            // const awardedBidsList = awardedBids.map(bid => {
+            //     // Filter bid details where status_id === 13
+            //     const filteredBidDetails = bid.bids_details.filter(detail => detail.status_id === 13);
 
-                // Map over filtered bid details and generate HTML
-                const bidDetailsList = filteredBidDetails.map(detail => `
-                    <li style="text-align: justify">
-                        <b>${toRoman(counter++)}.</b> To recommend to the Head of Department of Science and Technology
-                        Regional Office No. IX for his consideration and approval of the award 
-                        of contract for the procurement <b>"${this.data.purchase_request_title.toUpperCase()}"</b>
-                        to the Single Calculated and Responsive Bid of <b>${bid.supplier.name}</b>
-                        with the contract amount of <b>Php ${Number(detail.bids_price).toLocaleString()}</b> only.
-                    </li>
-                `).join(""); // Join filtered bid details into a string
+            //     // Map over filtered bid details and generate HTML
+            //     const bidDetailsList = filteredBidDetails.map(detail => `
+            //         <li style="text-align: justify">
+            //             <b>${toRoman(counter++)}.</b> To recommend to the Head of Department of Science and Technology
+            //             Regional Office No. IX for his consideration and approval of the award 
+            //             of contract for the procurement <b>"${this.data.purchase_request_title.toUpperCase()}"</b>
+            //             to the Single Calculated and Responsive Bid of <b>${bid.supplier.name}</b>
+            //             with the contract amount of <b>Php ${Number(detail.bids_price).toLocaleString()}</b> only.
+            //         </li>
+            //     `).join(""); // Join filtered bid details into a string
 
-                return bidDetailsList; // Return the combined bid details for this supplier
-            }).join(""); // Joins all suppliers' bid details into one string
-
+            //     return bidDetailsList; // Return the combined bid details for this supplier
+            // }).join(""); // Joins all suppliers' bid details into one string
 
 
             this.editorData = `

@@ -15,6 +15,7 @@ class QuotationRequest extends Model
         'supplier_id',
         'supply_officer_id',
         'purchase_request_id',
+        'status_id'
     ];
 
     public function supplier()
@@ -30,6 +31,17 @@ class QuotationRequest extends Model
     public function purchase_request()
     {
         return $this->belongsTo('App\Models\FAIMS\Procurement\PurchaseRequest', 'purchase_request_id', 'id');
+    }
+
+    public function bids()
+    {
+        return $this->hasMany('App\Models\FAIMS\Procurement\Bid', 'purchase_request_id', 'quotation_request_id');
+    }
+
+    
+    public function status()
+    {
+        return $this->belongsTo('App\Models\ListStatus', 'status_id' , 'id');
     }
 
 

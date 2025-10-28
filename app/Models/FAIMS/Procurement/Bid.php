@@ -10,19 +10,26 @@ class Bid extends Model
     use HasFactory;
     protected $fillable = [
         'purchase_request_id',
-        'supplier_id',
+        'quotation_request_id',
     ];
 
     public function purchase_request()
     {
-        return $this->belongsTo('App\Models\FAIMS\Procurement\PurchaseRequest', 'purchase_request_id' , 'id');
+        return $this->belongsTo('App\Models\FAIMS\Procurement\PurchaseRequest', 'purchase_request_id');
     }
 
 
-    public function supplier()
+    public function quotation_request()
     {
-        return $this->belongsTo('App\Models\FAIMS\Procurement\Supplier', 'supplier_id' , 'id');
+        return $this->belongsTo('App\Models\FAIMS\Procurement\QuotationRequest', 'quotation_request_id');
     }
+
+    
+    public function bid_items()
+    {
+        return $this->hasMany('App\Models\FAIMS\Procurement\BidItem', 'bid_id');
+    }
+
 
 
 }

@@ -33,24 +33,20 @@ class QuotationRequestClass
             $quotation_request->status_id = 19; 
             $quotation_request->save();
 
-
             //create initital bid
             $bid = new Bid();
             $bid->purchase_request_id = $request->purchase_request_id;
             $bid->quotation_request_id = $quotation_request->id;
             $bid->save();
 
-
             // and bid items 
             foreach ($request->items as $item) {
-                // create initial bid item
+                // create initial bid item        
                 $bid_item = new BidItem();
                 $bid_item->bid_id = $bid->id;
                 $bid_item->pr_item_id = $item['value'];
                 $bid_item->status_id = 9; // set status to "available for award"
                 $bid_item->save();
-
-                dd($bid_item);
 
                 // create initial bid offer
                 $bid_offer = new BidOffer();
@@ -74,14 +70,33 @@ class QuotationRequestClass
         ];
     }
 
-    public function getDateSubmissionNotLaterThan($request){
+     public function destroy($id){
+        // Find the RFQ by ID
+        $quotation_request = QuotationRequest::findOrFail($id);
+
+        // Delete the RFQ
+        $quotation_request->delete();
+        
+        return [
+            'data' => new QuotationRequestResource($quotation_request),
+            'message' => 'Request for Quotations successfuly deleted!', 
+            'info' => "You've successfully deleted the Request for Quotation.",
+        ];
+    }
+
+    public function list_of_existed_rfq($request){
      
         // get the latest RFQ created
-        $submission_not_later_than = QuotationRequest::where('purchase_request_id', $request->purchase_request_id)
+        $list_of_existed_rfq = QuotationRequest::where('purchase_request_id', $request->purchase_request_id)
         ->orderBy('id', 'desc')
-        ->value('submission_not_later_than');
+        ->get()->map(function ($item) {
+            return [
+                'value' => $item->supplier_id,
+                'name' => $item->supplier->name,
+            ];
+        });;
 
-        return  $submission_not_later_than;
+        return  $list_of_existed_rfq;
 
 
     }

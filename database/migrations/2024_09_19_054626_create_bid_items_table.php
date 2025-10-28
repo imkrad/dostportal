@@ -15,7 +15,7 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->Integer('bid_id')->unsigned()->index();
-            $table->foreign('bid_id')->references('id')->on('purchase_requests');
+            $table->foreign('bid_id')->references('id')->on('bids')->onDelete('cascade');;
             $table->Integer('pr_item_id')->unsigned()->index();
             $table->foreign('pr_item_id')->references('id')->on('purchase_request_items');
             $table->tinyInteger('status_id')->unsigned()->index();

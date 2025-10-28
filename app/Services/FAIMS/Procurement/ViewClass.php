@@ -23,7 +23,7 @@ class ViewClass
 
     public function purchase_requests($request){
         $data = PurchaseRequestResource::collection(
-            PurchaseRequest::with('section.division')
+            PurchaseRequest::with('section.division' , 'status')
             ->when($request->keyword, function ($query, $keyword) {
                 $query->where('purchase_request_number', 'LIKE', "%{$keyword}%")
                       ->orWhere('purchase_request_date', 'LIKE', "%{$keyword}%")
@@ -88,11 +88,10 @@ class ViewClass
                 return inertia('Modules/FAIMS/Procurement/Purchase-Request/Components/Bids/Lists', [
                     'dropdowns' => [
                         'suppliers' => $this->dropdown->suppliers(),
-                        'lists' => $this->bids->lists($id,$request),
                     ],
                     'purchase_request' => $purchase_request, 
                     'items' => $this->dropdown->pr_items($id),       
-                    'bid_items' => $this->dropdown->bid_items($id),
+                    'bids' => $this->dropdown->bids($purchase_request->id),
                     'option' => $request->option,
                 ]); 
             break;

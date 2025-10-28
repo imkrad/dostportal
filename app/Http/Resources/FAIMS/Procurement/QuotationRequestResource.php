@@ -23,7 +23,7 @@ class QuotationRequestResource extends JsonResource
             'submission_not_later_than' =>(new \DateTime($this->submission_not_later_than))->format('F j, Y'),
             'supplier'  => $this->supplier,
             'supply_officer'  => $this->supply_officer,
-            'purchase_request'  => $this->purchase_request,
+            'status'  => $this->status,
         ];
     }
 }

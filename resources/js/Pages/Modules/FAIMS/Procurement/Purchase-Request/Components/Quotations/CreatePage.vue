@@ -8,14 +8,17 @@
                     <div>
                         <b-card  class="bg-light">             
                             <BRow>
+
                                 <BCol lg="6" class="mt-2">
                                     <InputLabel for="supplier" value="Supplier" />
-                                    <Multiselect 
-                                    :options="dropdowns.suppliers" 
-                                    v-model="form.supplier_ids"
-                                    :searchable="true" label="name"
-                                    mode="tags"
-                                    placeholder="Select Supplier"/>
+                                    <Multiselect
+                                        :options="filteredSuppliers"
+                                        v-model="form.supplier_ids"
+                                        :searchable="true"
+                                        label="name"
+                                        mode="tags"
+                                        placeholder="Select Supplier"
+                                    />
                                 </BCol>
 
                                 <BCol lg="6" class="mt-2">
@@ -82,10 +85,10 @@
                     </div>
 
                 <BCol lg="3" class="mt-2 mb-2">
-                    <b-button @click="createQuotation(form)"  variant="light" block class="bg-success w-75 text-white">Save</b-button>
+                    <b-button @click="createQuotation(form.purchase_request_id)"  variant="light" block class="bg-success w-75 text-white">Save</b-button>
                 </BCol>
                 <BCol lg="3" class="mt-2 mb-2">
-                    <b-button @click="goBackPage(form)" style="background-color: grey" block class=" w-75 text-white">Back</b-button>
+                    <b-button @click="goBackPage(form.purchase_request_id)" style="background-color: grey" block class=" w-75 text-white">Back</b-button>
                 </BCol>
             </BRow>
 
@@ -126,7 +129,7 @@ export default {
                     items: this.items,
                     option: 'quotation_request',
                 }),
-
+                list_of_existed_rfq: [],
                 showModal: false,
                 sections: [],
                 unit_type : null,
@@ -135,8 +138,29 @@ export default {
 
 
     mounted() {
-        //this.getDateSubmissionNotLaterThan();
+        this.getExistedRFQ();
     },
+
+    computed: {
+        filteredSuppliers() {
+            const allSuppliers = this.dropdowns.suppliers || [];
+
+            const existedIds = (this.list_of_existed_rfq || []).map(item =>
+                typeof item === 'object' ? item.value : item
+            );
+
+            const selectedIds = (this.form.supplier_ids || []).map(item =>
+                typeof item === 'object' ? item.value : item
+            );
+
+            const excludeIds = new Set([...existedIds, ...selectedIds]);
+
+            return allSuppliers.filter(supplier => !excludeIds.has(supplier.value));
+            }
+
+    },
+
+
 
     methods: { 
         openAddItem(){
@@ -171,32 +195,33 @@ export default {
         },
 
 
-        createQuotation(data){
+        createQuotation(purchase_request_id){
             this.form.option = 'save_rfq';
             this.form.post('/faims/quotation-requests');
             
-            // setTimeout(() => {
-            //     this.$inertia.visit('/faims/quotation-requests/'+data.id+'?option=quotations');
-            // }, 2000); // Delay in milliseconds (2000 ms = 2 seconds)
+            setTimeout(() => {
+              this.$inertia.visit('/faims/quotation-requests/'+purchase_request_id+'?option=quotations');
+            }, 2000); // Delay in milliseconds (2000 ms = 2 seconds)
           
             this.form.reset();   
         },
 
-        goBackPage(data){
-            this.$inertia.visit('/faims/quotation-requests/'+data.id+'?option=quotations');
+        goBackPage(purchase_request_id){
+            console.log(purchase_request_id, 999);
+            this.$inertia.visit('/faims/quotation-requests/'+purchase_request_id+'?option=quotations');
         },
 
-        getDateSubmissionNotLaterThan(page_url){
+        getExistedRFQ(page_url){
             page_url = '/faims/quotation-requests' ;
             axios.get(page_url,{
                 params : {
-                    option: 'getDateSubmissionNotLaterThan',
+                    option: 'list_of_existed_rfq',
                     purchase_request_id: this.purchase_request.id,
                 }
             })
             .then(response => {
                 if(response){    
-                    this.form.submission_not_later_than= response.data;
+                    this.list_of_existed_rfq = response.data;
                 }
             })
             .catch(err => console.log(err));

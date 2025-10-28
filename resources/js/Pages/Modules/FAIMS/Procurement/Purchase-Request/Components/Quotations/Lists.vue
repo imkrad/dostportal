@@ -17,6 +17,9 @@
         <b-row class="g-2 mb-3 mt-n2">
             <b-col lg>
                 <div class="input-group mb-1">
+                    <b-button type="button" variant="info" @click="goBackPage(purchase_request)">
+                        <i class="ri-arrow-left-line align-bottom me-1"></i> Back
+                    </b-button>
                     <span class="input-group-text"> <i class="ri-search-line search-icon"></i></span>
                     <input type="text" v-model="filter.keyword" placeholder="Search Quotation Request" class="form-control" style="width: 60%;">
                     <span @click="refresh()" class="input-group-text" v-b-tooltip.hover title="Refresh" style="cursor: pointer;"> 
@@ -37,9 +40,9 @@
                         <th>RFQ No.</th>
                         <th>Submission not later than</th>
                         <th>Supplier</th>
-                        <th>Supply Officer</th>     
-                        <th>Date Created</th>   
-                        <th></th>
+                        <th>Supply Officer</th>       
+                        <th>Status</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
 
@@ -55,12 +58,21 @@
                             </p>
                         </td>
                         <td>{{ list.supply_officer.firstname }} {{ list.supply_officer.middlename[0] }}. {{ list.supply_officer.lastname }} {{ list.supply_officer.suffix }}</td>
-                        <td>{{  list.date }}</td>
-
                         <td>
-                            <b-button @click="printPreview(list)" size="sm">
+                            <b-badge>
+                                {{  list.status.name }}
+                            </b-badge>
+                        </td>
+
+                        <td class="text-center">
+                            <b-button @click="printPreview(list)" size="sm" class="me-2">
                                 <i class="ri-printer-fill align-bottom me-1"></i> <!-- Icon for Print -->
-                                Print
+                            </b-button>
+                                <b-button @click="editRFQ(list)" variant="success" size="sm" class="me-2" >
+                                <i class="ri-edit-2-fill align-bottom me-1"></i> 
+                            </b-button>
+                            <b-button @click="removeRFQ(list.id)" variant="danger" size="sm" >
+                                <i class="ri-delete-bin-line"></i>
                             </b-button>
                         </td>
                     </tr>
@@ -71,10 +83,6 @@
         </div> 
     </div>
 
-
-    <b-button type="button" variant="primary" style=" background: grey; color: white" class="m-3" @click="goBackPage()">
-        <i class="ri-arrow-left-line align-bottom me-1"></i> Back
-    </b-button>
 
 
     
@@ -131,6 +139,12 @@ export default {
             .catch(err => console.log(err));
 
         },
+
+        // remove RFQ
+        removeRFQ(id) {
+            router.delete(`/faims/quotation-requests/${id}`);
+        },
+
 
         goCreatePage(data){
             router.get('/faims/quotation-requests/'+data.id, { option: 'create_rfq'  });

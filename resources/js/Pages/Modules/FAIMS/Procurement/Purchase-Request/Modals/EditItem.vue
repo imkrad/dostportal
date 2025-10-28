@@ -1,23 +1,18 @@
 <template>
-    <b-modal v-model="showModal" header-class="p-3" title="Edit Item" size="lg" class="v-modal-custom" modal-class="zoomIn" centered no-close-on-backdrop >
+    <b-modal v-model="showModal" header-class="p-3" title="Edit Bid Offer" size="lg" class="v-modal-custom" modal-class="zoomIn" centered no-close-on-backdrop >
         <form class="customform">
             <BRow>
-                <BCol lg="12" class="mt-2" v-if="action_type == 'edit_description'">
-                    <ckeditor v-model="form.description" :editor="editor"></ckeditor>
-                </BCol>
-                <BCol lg="6" class="mt-2" v-if="action_type == 'edit_bid_price'">
+                <BCol lg="6" class="mt-2">
                     <InputLabel value="Bid Price"/>
                     <TextInput v-model="form.item_bid_price"  type="Number" class="form-control"  :light="true" />
                 </BCol>
-                <BCol lg="12" class="mt-2" v-if="action_type == 'edit_bid_price'">
-                    <InputLabel value="Remarks"/>
-                    <b-form-textarea
-                    id="textarea"
-                    v-model="form.remarks"
-                    placeholder="Enter your remarks"
-                    rows="5"
-                    max-rows="10"></b-form-textarea>
-                       
+                <BCol lg="12" class="mt-2" >
+                    <InputLabel value="Technical Proposal"/>
+                    <ckeditor v-model="form.technical_proposal" :editor="editor"></ckeditor>
+                </BCol>
+                <BCol lg="12" class="mt-2" >
+                    <InputLabel value="Delivery Term"/>
+                    <TextInput v-model="form.delivery_term"  type="text" class="form-control"  :light="true" />
                 </BCol>
                 <BCol lg="12"><hr class="text-muted mt-4 mb-0"/></BCol>
             </BRow>
@@ -25,8 +20,7 @@
 
           <template v-slot:footer>
             <b-button @click="hide()" variant="light" block>Cancel</b-button>
-            <b-button v-if="action_type == 'edit_description'" @click="updateItemDescription(form)" variant="primary" :disabled="form.processing" block>update</b-button>
-            <b-button v-if="action_type == 'edit_bid_price'" @click="updateItemBidPrice(form)" variant="primary" :disabled="form.processing" block>update</b-button>
+            <b-button  @click="updateItemBidOffer(form)" variant="primary" :disabled="form.processing" block>update</b-button>
         </template>
     </b-modal>
 </template>
@@ -38,8 +32,6 @@ import InputLabel from '@/Shared/Components/Forms/InputLabel.vue';
 import TextInput from '@/Shared/Components/Forms/TextInput.vue';
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { maxBy } from 'lodash';
-import { router } from '@inertiajs/vue3';
 
 
 export default {
@@ -51,10 +43,14 @@ export default {
             form: useForm({
                 id: null,
                 index: null,
-                description: '',
+                item_description: '',
                 item_bid_price: null,
-                remarks: null,
+                technical_proposal: '',
+                delivery_term: '7 days upon received of PO',
+                option: null,
             }),
+            editor: ClassicEditor,
+            editorData: '',
             action_type: null,
             showModal: false,
 		    editor: ClassicEditor,
@@ -66,7 +62,10 @@ export default {
             if(value){
                 this.getItemUnitType(value);
             }
-        }
+        },
+
+
+
     },
 
 
@@ -77,30 +76,35 @@ export default {
             this.showModal = true;
         },
 
-        edit(data, index, action_type){
+        edit(bid_item){
             this.showModal = true;
-            this.action_type = action_type;
-            this.form.id= data.id;
-            this.form.index= index;
-            if(action_type == "edit_description"){
-                this.form.description= data.bids_description;
+            this.form.id= bid_item.bid_item_id;
+            this.form.item_description = bid_item.item_description;
+            if(bid_item.technical_proposal){
+                bid_item.technical_proposal= bid_item.technical_proposal;
             }
-            else if(action_type == "edit_bid_price"){
-                this.form.item_bid_price= data.bids_price;
-                this.form.remarks= data.remarks;
+            else{
+                this.form.technical_proposal= bid_item.item_description;
             }
-         
+           
+            this.form.item_bid_price= bid_item.item_bid_price;
         },
 
-        updateItemDescription(data){
-            router.post('/faims/bids' , { data: data, option: 'save_bids_description'});
-            this.hide();
-        },
     
-        updateItemBidPrice(data){
-            router.post('/faims/bids' , { data: data, option: 'save_bids_price'});
-            this.hide();
+       updateItemBidOffer(data) {
+            this.form.option = 'save_bid_offer';
+
+            this.form.post('/faims/bids', {
+                onSuccess: () => {
+                this.hide(); // Hide only when successful
+                },
+                onError: () => {
+                // Optionally handle errors
+                console.error('Failed to update bid price');
+                },
+            });
         },
+
     
         hide(){
             this.form.reset();

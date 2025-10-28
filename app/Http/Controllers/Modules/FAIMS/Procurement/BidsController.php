@@ -42,26 +42,20 @@ class BidsController extends Controller
     }
 
     public function store(Request $request) {
-     
         switch($request->option){     
             case 'save_award':
                 $result = $this->handleTransaction(function () use ($request) {
                     return $this->bids->save_award($request);
                 });
-            break; 
-            case 'save_bids_description':
+            break;   
+            case 'save_bid_offer':
                 $result = $this->handleTransaction(function () use ($request) {
-                    return $this->bids->save_bids_description($request);
+                    return $this->bids->save_bid_offer($request);
                 });
             break;  
-            case 'save_bids_price':
+            case 'save_bid_for_award':
                 $result = $this->handleTransaction(function () use ($request) {
-                    return $this->bids->save_bids_price($request);
-                });
-            break;  
-            case 'save_bids_for_award':
-                $result = $this->handleTransaction(function () use ($request) {
-                    return $this->bids->save_bids_for_award($request);
+                    return $this->bids->save_bid_for_award($request);
                 });
             break;   
             default:

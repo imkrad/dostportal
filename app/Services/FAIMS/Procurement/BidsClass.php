@@ -2,10 +2,10 @@
 
 namespace App\Services\FAIMS\Procurement;
 
-use App\Models\FAIMS\Procurement\Supplier;
-use App\Models\FAIMS\Procurement\Bids;
 use App\Models\FAIMS\Procurement\PurchaseRequest;
-use App\Models\FAIMS\Procurement\BidsDetail;
+use App\Models\FAIMS\Procurement\Supplier;
+use App\Models\FAIMS\Procurement\BidItem;
+use App\Models\FAIMS\Procurement\BidOffer;
 use App\Http\Resources\FAIMS\Procurement\BidsResource;
 use App\Http\Resources\FAIMS\Procurement\BidsDetailResource;
 use Illuminate\Support\Facades\Auth;
@@ -13,24 +13,6 @@ use App\Models\UserProfile;
 
 class BidsClass
 {
-    public function lists($id, $request){
-        $data = BidsResource::collection(
-            Bids::query()
-            ->with('bids_details','bids_details.unit_type','bids_details.status','status')
-            ->where('purchase_request_id', $id)
-            ->when($request->keyword, function ($query, $keyword) {
-                $query->where('created_at', 'LIKE', "%{$keyword}%")
-                        ->orWhere('updated_at', 'LIKE', "%{$keyword}%");
-            })
-            ->orderBy('created_at','DESC')
-            ->paginate($request->count)
-        );
-
-        return $data;
-    }
-
-
-
     public function save($request)
     {
         $data = Bids::create([
@@ -60,75 +42,65 @@ class BidsClass
             'info' => "You've successfully set the Item Bid Price.",
         ];
     }
-    public function save_bids_description($request){
-        $bid_details = BidsDetail::findOrFail($request->data['id']);
-        if($bid_details){
-            // update bids description for bids details
-            $bid_details->bids_description = $request->data['description'];
-            $bid_details->update();
+
+    public function save_bid_offer($request){
+        $bid_item = BidOffer::where('bid_item_id', $request->id)->firstOrFail();
+        if($bid_item){
+            // update bid offer for bid_item
+            $bid_item->item_bid_price = $request->item_bid_price;
+            $bid_item->technical_proposal = $request->technical_proposal;
+            $bid_item->delivery_term = $request->delivery_term;
+            $bid_item->update();
         }
 
         return [
-            'data' => $bid_details,
-            'message' => 'Bids Description updated successfuly!', 
-            'info' => "You've successfully updated the Bids Description.",
-        ];
-    }
-
-    public function save_bids_price($request){
-        $bid_details = BidsDetail::findOrFail($request->data['id']);
-        if($bid_details){
-            // update bids description for bids details
-            $bid_details->bids_price = $request->data['item_bid_price'];
-            $bid_details->remarks = $request->data['remarks'];
-            $bid_details->update();
-        }
-
-        return [
-            'data' => $bid_details,
-            'message' => 'Bids Data updated successfuly!', 
-            'info' => "You've successfully updated the Bids Data.",
+            'data' => $bid_item,
+            'message' => 'Bid Offer updated successfuly!', 
+            'info' => "You've successfully updated the Bid Offer.",
         ];
     }
     
   
-    public function save_bids_for_award($request){
+    public function save_bid_for_award($request){
+        $purchase_request = PurchaseRequest::findOrFail($request->purchase_request_id);
         foreach ($request->items as $item) {
-            $purchase_request = PurchaseRequest::findOrFail($item['purchase_request_id']);
-            if($purchase_request){
-                 // update status to For BAC Resolution for bids details
-                 $purchase_request->status_id = 7;
-                 $purchase_request->update();
-            }
-            $bids = Bids::where('purchase_request_id',$item['purchase_request_id'] )
-                        ->where('supplier_id',$item['supplier_id'] )
-                        ->update(['status_id' => 11]);
-
-            $bid_details = BidsDetail::findOrFail($item['id']);
-            if($bid_details){
-                // update status to Awarded for bids details
-                $bid_details->status_id = 13;
-                $bid_details->update();
+            $bid_item = BidItem::findOrFail($item['bid_item_id']);
+            if($bid_item){
+                // update bid item status to "Awarded" 
+                $bid_item->status_id = 8;
+                $bid_item->update();
             }
         }
 
         foreach ($request->itemsNotAvailableForAward as $item) {
-            $bids = Bids::where('purchase_request_id',$item['purchase_request_id'] )
-                        ->where('supplier_id',$item['supplier_id'] )
-                        ->update(['status_id' => 11]);;
-
-            $bid_details = BidsDetail::findOrFail($item['id']);
-            if($bid_details){
-                // update status to Awarded for bids details
-                $bid_details->status_id = 12;
-                $bid_details->update();
+            $bid_item = BidItem::findOrFail($item['bid_item_id']);
+            $bid_offer = BidOffer::findOrFail($item['bid_item_id']);
+            if($bid_item && $bid_offer){
+                if (!empty($bid_offer->item_bid_price)) {
+                    // update bid item status to "Available for Re-award" 
+                    $bid_item->status_id = 9;
+                    $bid_item->update();
+                }
+                else{
+                    // update bid item status to "Not Available for Award/Re-award" 
+                    $bid_item->status_id = 11;
+                    $bid_item->update();
+                }
+             
             }
+        }
+
+        // if PR exist
+        if($purchase_request){
+                // update PR status to "For BAC Resolution" 
+                $purchase_request->status_id = 6;
+                $purchase_request->update();
         }
 
         return [
             'data' => $request->items,
-            'message' => 'Items awarded successfuly!', 
-            'info' => "You've successfully awarded the Items.",
+            'message' => 'Bid Items awarded successfuly!', 
+            'info' => "You've successfully awarded the Bid Items.",
         ];
     }
 

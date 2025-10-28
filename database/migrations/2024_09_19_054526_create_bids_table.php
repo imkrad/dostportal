@@ -17,7 +17,7 @@ return new class extends Migration
             $table->Integer('purchase_request_id')->unsigned()->index();
             $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
             $table->integer('quotation_request_id')->unsigned()->index();
-            $table->foreign('quotation_request_id')->references('id')->on('quotation_requests');
+            $table->foreign('quotation_request_id')->references('id')->on('quotation_requests')->onDelete('cascade');;
             $table->timestamps();
         });
     }

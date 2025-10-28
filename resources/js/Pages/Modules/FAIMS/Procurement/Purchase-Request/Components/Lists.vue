@@ -82,12 +82,12 @@
                             Approve
                             </b-dropdown-item>
 
-                            <b-dropdown-item @click="quotationsPR(list)" v-if="list.status.id == 3 || list.status.id == 5">
+                            <b-dropdown-item @click="quotationsPR(list)" v-if="list.status.id == 3 || list.status.id == 4">
                             <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Quotation -->
                             Quotations
                             </b-dropdown-item>
 
-                            <b-dropdown-item @click="bidsPR(list)" v-if="list.status.id == 5 || list.status.id == 7">
+                            <b-dropdown-item @click="bidsPR(list)" v-if="list.status.id == 4 || list.status.id == 7">
                             <i class="ri-check-fill align-bottom me-1"></i> <!-- Icon for Bids -->
                             Abstract of Bids
                             </b-dropdown-item>

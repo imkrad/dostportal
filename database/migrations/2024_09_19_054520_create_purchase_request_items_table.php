@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('item_description')->nullable();
             $table->string('item_quantity')->nullable();
             $table->decimal('item_unit_cost')->nullable();
-            $table->decimal('item_bid_price')->nullable();
             $table->decimal('total_cost')->nullable();
             $table->timestamps();
         });

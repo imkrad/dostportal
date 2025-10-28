@@ -15,9 +15,12 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->tinyIncrements('id');
             $table->Integer('bid_item_id')->unsigned()->index();
-            $table->foreign('bid_item_id')->references('id')->on('bid_items');
+            $table->foreign('bid_item_id')->references('id')->on('bid_items')->onDelete('cascade');
+            $table->decimal('item_bid_price')->nullable();
             $table->text('technical_proposal')->nullable();
             $table->string('delivery_term')->nullable();
+            $table->boolean('is_checked')->default(0);
+            $table->boolean('rank')->nullable();
             $table->timestamps();
         });
     }

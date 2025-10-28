@@ -31,8 +31,8 @@ class QuotationRequestController extends Controller
                 return $this->view->quotation_requests($request);
             break; 
             
-            case 'getDateSubmissionNotLaterThan':
-                return $this->quotation_request->getDateSubmissionNotLaterThan($request);
+            case 'list_of_existed_rfq':
+                return $this->quotation_request->list_of_existed_rfq($request);
             break;  
 
             default:
@@ -70,6 +70,22 @@ class QuotationRequestController extends Controller
             'status' => $result['status'],
         ]);
 
+
+        
+    }
+
+    public function destroy($id)
+    {
+         $result = $this->handleTransaction(function () use ($id) {
+            return $this->quotation_request->destroy($id);
+        });
+
+        return back()->with([
+            'data' => $result['data'],
+            'message' => $result['message'],
+            'info' => $result['info'],
+            'status' => $result['status'],
+        ]);
     }
 
 

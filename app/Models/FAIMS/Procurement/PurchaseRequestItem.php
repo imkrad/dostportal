@@ -22,7 +22,7 @@ class PurchaseRequestItem extends Model
         return $this->belongsTo('App\Models\FAIMS\Procurement\PurchaseRequest', 'purchase_request_id');
     }
 
-    public function unit_type()
+    public function item_unit_type()
     {
         return $this->belongsTo('App\Models\FAIMS\Procurement\UnitType', 'item_unit_type_id');
     }

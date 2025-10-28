@@ -9,7 +9,7 @@ use App\Models\FAIMS\Procurement\Section;
 use App\Models\FAIMS\Procurement\FundCluster;
 use App\Models\FAIMS\Procurement\PurchaseRequestItem;
 use App\Models\FAIMS\Procurement\Supplier;
-use App\Models\FAIMS\Procurement\BidItem;
+use App\Models\FAIMS\Procurement\Bid;
 use App\Models\FAIMS\Procurement\QuotationRequest;
 use App\Models\FAIMS\Libraries\ListPAPCode;
 use App\Models\FAIMS\Libraries\ModeOfProcurement;
@@ -145,12 +145,12 @@ class DropdownClass
 
     public function pr_items($id)
     {
-        $data = PurchaseRequestItem::with('unit_type')->where('purchase_request_id',$id)
+        $data = PurchaseRequestItem::with('item_unit_type')->where('purchase_request_id',$id)
         ->get()->map(function ($item) {
             return [
                 'value' => $item->id,
                 'item_no' => $item->item_no,
-                'item_unit_type' => $item->unit_type,
+                'item_unit_type' => $item->item_unit_type,
                 'item_description' => $item->item_description,
                 'item_quantity' => $item->item_quantity,
                 'item_unit_cost' => $item->item_unit_cost,
@@ -161,6 +161,60 @@ class DropdownClass
 
         return $data;
     }
+
+    public function bids($id)
+    {
+        // Eager-load relationships for efficiency
+       $bids = Bid::with([
+            'quotation_request.supplier',
+            'bid_items.pr_item',
+            'bid_items.bid_offer',
+            'bid_items.status'
+        ])
+        ->where('purchase_request_id', $id)
+        ->get();
+
+        $data = $bids->map(function ($bid) {
+            return [
+                'bid_id' => $bid->id,
+                'supplier' => $bid->quotation_request->supplier 
+                    ? [
+                        'id' => $bid->quotation_request->supplier->id,
+                        'name' => $bid->quotation_request->supplier->name,
+                    ]
+                    : null,
+                'bid_items' => $bid->bid_items->map(function ($bid_item) use ($bid) {
+                    return [
+                        'bid_item_id' => $bid_item->id,
+                        'pr_item_id' => $bid_item->pr_item->id ?? null,
+                        'item_no' => $bid_item->pr_item->item_no ?? null,
+                        'item_unit_type' => $bid_item->pr_item->item_unit_type ?? null,
+                        'item_description' => $bid_item->pr_item->item_description ?? null,
+                        'item_unit_cost' => $bid_item->pr_item->item_unit_cost ?? null,
+                        'item_quantity' => $bid_item->pr_item->item_quantity ?? null,
+                        'total_cost' => $bid_item->pr_item->total_cost ?? null,
+                        'item_bid_price' => $bid_item->bid_offer->item_bid_price ?? null,
+                        'technical_proposal' => $bid_item->bid_offer->technical_proposal ?? null,
+                        'delivery_term' => $bid_item->bid_offer->delivery_term ?? null,
+                        'status_id' => $bid_item->status_id,
+                        'status' => $bid_item->status,
+                        // 👇 include supplier here
+                        'supplier' => $bid->quotation_request->supplier 
+                            ? [
+                                'id' => $bid->quotation_request->supplier->id,
+                                'name' => $bid->quotation_request->supplier->name,
+                            ]
+                            : null,
+                    ];
+                }),
+            ];
+        });
+
+
+
+        return $data;
+    }
+
 
     public function suppliers(){
         $data = Supplier::get()->map(function ($item) {
@@ -173,30 +227,19 @@ class DropdownClass
     }
 
     public function supply_officers(){
-        $data = UserProfile::get()->map(function ($item) {
+        $data = User::with('user_roles' , 'profile')
+        ->whereHas('user_roles', function ($query) {
+            $query->where('role_id', 4);
+        })->get()->map(function ($item) {
             return [
                 'value' => $item->id,
-                'name' => $item->firstname.' '.$item->middlename[0].'. '.$item->lastname.' '.$item->suffix ,
-            ];
-        });
-        return $data;
-    }
-
-
-    public function bid_items($id)
-    {
-        $data = BidItem::with('bids_items', 'bids_items.unit_type')->where('purchase_request_id',$id)
-        ->get()->map(function ($item) {
-            return [
-                'value' => $item->id,
-                'supplier' => $item->supplier,
-                'bids_items' => $item->bids_items,
-                'status' => $item->status,
+                'name' => $item->profile->firstname.' '.$item->profile->middlename[0].'. '.$item->profile->lastname.' '.$item->profile->suffix ,
             ];
         });
 
         return $data;
     }
+
 
 
     public function mode_of_procurements()
